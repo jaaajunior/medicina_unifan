@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evolução da Medicina - Linha do Tempo VR</title>
+  
+  <!-- A-Frame 1.5.0 (versão estável com suporte aprimorado a WebXR e Hand Tracking) -->
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <!-- Biblioteca de ambiente imersivo (céu estrelado e chão estilizado) -->
+  <script src="https://unpkg.com/aframe-environment-component@1.3.3/dist/aframe-environment-component.min.js"></script>
+
+  <script>
+    // Estrutura de dados com suporte a imagens opcionais
+    const timelineData = [
+      {
+        epoca: "1. EGITO ANTIGO",
+        periodo: "3000 a.C.",
+        subtitulo: "Os primeiros conhecimentos médicos",
+        topicos: [
+          "• Plantas medicinais e tratamentos naturais.",
+          "• Praticas cirurgicas rudimentares.",
+          "• Medicina associada a religiao e aos deuses.",
+          "• Registros de doencas em papiros medicos.",
+          "• Conhecimentos anatomicos da mumificacao."
+        ]
+      },
+      {
+        epoca: "2. GRECIA ANTIGA",
+        periodo: "400 a.C.",
+        subtitulo: "O nascimento da medicina racional",
+        topicos: [
+          "• Hipocrates: explicacao natural das doencas.",
+          "• Sistematizacao da observacao clinica.",
+          "• Surgimento dos principios da etica medica.",
+          "• Consolidacao da relacao medico-paciente."
+        ]
+      },
+      {
+        epoca: "3. IDADE MEDIA",
+        periodo: "500 a 1500",
+        subtitulo: "Preservacao e transmissao do saber",
+        topicos: [
+          "• Expansao de hospitais e centros de ensino.",
+          "• Grandes avancos na medicina islamica.",
+          "• Avicena: publicacao do 'Canone da Medicina'.",
+          "• Desenvolvimento continuo da farmacologia."
+        ]
+      },
+      {
+        epoca: "4. RENASCIMENTO",
+        periodo: "1500 a 1600",
+        subtitulo: "A descoberta da anatomia humana",
+        topicos: [
+          "• Andreas Vesalius revoluciona o estudo anatomico.",
+          "• Dissecacoes revelam o funcionamento dos orgaos.",
+          "• Correcao sistematica de erros medicos antigos.",
+          "• Fortalecimento rigoroso do metodo cientifico."
+        ]
+      },
+      {
+        epoca: "5. SECULO XVII",
+        periodo: "1600",
+        subtitulo: "A compreensao da fisiologia",
+        topicos: [
+          "• William Harvey descreve a circulacao sanguinea (1628).",
+          "• Aperfeicoamento do microscopio optico.",
+          "• Robert Hooke cunha o termo 'celula' (1665).",
+          "• Antonie van Leeuwenhoek observa microrganismos (1670)."
+        ]
+      },
+      {
+        epoca: "6. SECULOS XVIII E XIX",
+        periodo: "1700 a 1899",
+        subtitulo: "A revolucao da medicina moderna",
+        topicos: [
+          "• 1796: Edward Jenner cria a 1a vacina (variola).",
+          "• 1846: Demonstracao da anestesia por eter.",
+          "• 1860s: Louis Pasteur e a teoria microbiana.",
+          "• 1867: Joseph Lister introduz a antissepsia cirurgica.",
+          "• 1895: Wilhelm Rontgen descobre os raios X."
+        ]
+      },
+      {
+        epoca: "7. SECULO XX",
+        periodo: "1900 a 1999",
+        subtitulo: "A era das grandes descobertas",
+        topicos: [
+          "• 1928: Alexander Fleming descobre a penicilina.",
+          "• 1953: Estrutura da dupla helice do DNA.",
+          "• 1967: Primeiro transplante de coracao por Barnard.",
+          "• 1970/80: Expansao da Tomografia e Ressonancia Magnetica.",
+          "• 1985: Inicio da robotica em procedimentos cirurgicos."
+        ]
+      },
+      {
+        epoca: "CONCLUSAO",
+        periodo: "Legado",
+        subtitulo: "A Evolucao da Medicina",
+        topicos: [
+          "Da observacao do corpo humano as tecnologias",
+          "que revolucionaram os diagnosticos e tratamentos,",
+          "cada descoberta abriu caminho para uma medicina",
+          "mais precisa, segura e eficaz."
+        ]
+      }
+    ];
+
+    let currentIndex = 0;
+
+    function renderCard(index) {
+      const data = timelineData[index];
+      document.getElementById("card-title").setAttribute("value", `${data.epoca} (${data.periodo})`);
+      document.getElementById("card-subtitle").setAttribute("value", data.subtitulo);
+      document.getElementById("card-content").setAttribute("value", data.topicos.join("\n\n"));
+      document.getElementById("step-indicator").setAttribute("value", `${index + 1} / ${timelineData.length}`);
+    }
+
+    // Componente interativo para controle de eventos no Quest
+    AFRAME.registerComponent('vr-button', {
+      schema: { action: { type: 'string' } },
+      init: function () {
+        const el = this.el;
+        const action = this.data.action;
+
+        // Feedback hover (cursor ou laser da mão)
+        el.addEventListener('mouseenter', () => {
+          el.setAttribute('material', 'color', '#00b4d8');
+        });
+        el.addEventListener('mouseleave', () => {
+          el.setAttribute('material', 'color', '#0077b6');
+        });
+
+        // Ação de clique (gatilho ou pinch das mãos)
+        el.addEventListener('click', () => {
+          if (action === 'next' && currentIndex < timelineData.length - 1) {
+            currentIndex++;
+            renderCard(currentIndex);
+          } else if (action === 'prev' && currentIndex > 0) {
+            currentIndex--;
+            renderCard(currentIndex);
+          }
+        });
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderCard(0);
+    });
+  </script>
+</head>
+<body style="margin: 0; overflow: hidden; background-color: #000;">
+  <a-scene environment="preset: starry; groundColor: #070d1e; groundColor2: #020617; dressingAmount: 20"
+           cursor="rayOrigin: mouse"
+           raycaster="objects: .clickable">
+
+    <!-- CÂMERA & RASTREAMENTO DE MÃOS (Hand Tracking Quest 3) -->
+    <a-entity id="rig" position="0 1.6 0">
+      <a-camera id="camera" look-controls wasd-controls position="0 0 0">
+        <!-- Retículo de olhar (Fallback caso as mãos estejam fora do campo visual) -->
+        <a-cursor fuse="true" fuse-timeout="1200" color="#90e0ef" scale="0.015 0.015 0.015"
+                  raycaster="objects: .clickable" position="0 0 -1">
+        </a-cursor>
+      </a-camera>
+
+      <!-- Mão Esquerda (Pinch / Raycaster) -->
+      <a-entity hand-tracking-controls="hand: left"
+                laser-controls="hand: left"
+                raycaster="objects: .clickable; lineColor: #00b4d8; lineOpacity: 0.8">
+      </a-entity>
+
+      <!-- Mão Direita (Pinch / Raycaster) -->
+      <a-entity hand-tracking-controls="hand: right"
+                laser-controls="hand: right"
+                raycaster="objects: .clickable; lineColor: #00b4d8; lineOpacity: 0.8">
+      </a-entity>
+    </a-entity>
+
+    <!-- PAINEL CENTRAL FLUTUANTE (Posicionado a 3m à frente e 1.6m de altura) -->
+    <a-entity id="main-panel-group" position="0 1.6 -3.0">
+
+      <!-- Fundo Principal (Efeito Acrílico / Vidro Escuro) -->
+      <a-plane width="3.6" height="2.2" color="#051026" 
+               material="opacity: 0.92; transparent: true; roughness: 0.3" position="0 0 0"></a-plane>
+
+      <!-- Moldura Externa de Acabamento -->
+      <a-ring radius-inner="1.8" radius-outer="1.815" color="#0077b6" position="0 0 0.01" rotation="0 0 45" segments-phi="1" segments-theta="4"></a-ring>
+
+      <!-- Cabeçalho Fixo -->
+      <a-text value="HISTORIA DA MEDICINA" align="center" width="3.8" color="#90e0ef"
+              position="0 0.95 0.02" font="kelsonsans"></a-text>
+
+      <!-- Título Dinâmico do Período -->
+      <a-text id="card-title" value="" align="center" width="3.4" color="#00b4d8"
+              position="0 0.7 0.02" font="roboto" style="bold"></a-text>
+
+      <!-- Subtítulo -->
+      <a-text id="card-subtitle" value="" align="center" width="3.0" color="#caf0f8"
+              position="0 0.5 0.02" font="roboto"></a-text>
+
+      <!-- Linha Divisória de Destaque -->
+      <a-plane width="3.0" height="0.006" color="#0077b6" position="0 0.38 0.02"></a-plane>
+
+      <!-- Texto Principal (Tópicos Históricos) -->
+      <a-text id="card-content" value="" align="left" width="3.2" color="#f8f9fa"
+              position="-1.5 0.2 0.02" font="roboto" baseline="top" wrap-count="42" line-height="54"></a-text>
+
+      <!-- Contador de Slides -->
+      <a-text id="step-indicator" value="1 / 8" align="center" width="2.2" color="#6c757d"
+              position="0 -0.85 0.02"></a-text>
+
+      <!-- Botão Voltar -->
+      <a-plane id="btn-prev" class="clickable" vr-button="action: prev"
+               width="0.8" height="0.22" color="#0077b6" position="-1.0 -0.85 0.04"
+               material="roughness: 0.5">
+        <a-text value="< ANTERIOR" align="center" width="2.4" color="#ffffff" position="0 0 0.02"></a-text>
+      </a-plane>
+
+      <!-- Botão Avançar -->
+      <a-plane id="btn-next" class="clickable" vr-button="action: next"
+               width="0.8" height="0.22" color="#0077b6" position="1.0 -0.85 0.04"
+               material="roughness: 0.5">
+        <a-text value="PROXIMO >" align="center" width="2.4" color="#ffffff" position="0 0 0.02"></a-text>
+      </a-plane>
+
+    </a-entity>
+
+    <!-- Iluminação Suave -->
+    <a-light type="ambient" color="#1a2035" intensity="1.4"></a-light>
+    <a-light type="directional" color="#ffffff" intensity="0.5" position="0 4 2"></a-light>
+  </a-scene>
+</body>
+</html>
