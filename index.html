@@ -3,495 +3,870 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Templo da Medicina Ancestral // Egito VR</title>
+  <title>Curadoria Histórica // A Evolução da Medicina</title>
   
-  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-  <script src="https://unpkg.com/aframe-environment-component@1.3.3/dist/aframe-environment-component.min.js"></script>
+  <!-- Tailwind CSS para Estilo Glassmorphism Premium -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Three.js para o Artefato 3D no Centro da Galeria -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
   <style>
-    body { margin: 0; overflow: hidden; background: #000; }
-  </style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
-  <script>
-    // Sintetizador de Áudio Procedural Místico-Cibernético
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function playEgyptianSound(type) {
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      const now = audioCtx.currentTime;
-
-      if (type === 'hover') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(440, now);
-        osc.frequency.exponentialRampToValueAtTime(660, now + 0.1);
-        gain.gain.setValueAtTime(0.04, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-        osc.start(now);
-        osc.stop(now + 0.1);
-      } else if (type === 'portal') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(160, now);
-        osc.frequency.exponentialRampToValueAtTime(440, now + 0.25);
-        gain.gain.setValueAtTime(0.09, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-        osc.start(now);
-        osc.stop(now + 0.25);
-      }
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
-    // Dados com acentuação integral em Português
-    const timelineData = [
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #050508;
+      color: #f3f4f6;
+      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
+    }
+
+    .font-serif-ancient {
+      font-family: 'Cinzel', serif;
+    }
+
+    /* Efeito de Vidro Apple VisionOS */
+    .vision-glass {
+      background: rgba(18, 16, 20, 0.65);
+      backdrop-filter: blur(28px) saturate(160%);
+      -webkit-backdrop-filter: blur(28px) saturate(160%);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    .vision-glass-subtle {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .vision-glass-active {
+      background: rgba(224, 169, 109, 0.16);
+      border: 1px solid rgba(255, 215, 0, 0.4);
+      box-shadow: 0 0 25px rgba(224, 169, 109, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+
+    /* Scrollbars elegantes e invisíveis */
+    ::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(224, 169, 109, 0.4);
+    }
+
+    /* Glows e Efeitos Visuais */
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #fff2cc 0%, #ffd700 50%, #d4a373 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .cyan-glow {
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.25);
+    }
+  </style>
+</head>
+<body class="relative min-h-screen flex flex-col items-center justify-center p-3 md:p-6 overflow-y-auto">
+
+  <!-- PLANO DE FUNDO: Templo Galeria com Deserto do Egito ao Fundo -->
+  <div class="fixed inset-0 pointer-events-none z-0">
+    <!-- Gradiente de Iluminação de Museu -->
+    <div class="absolute inset-0 bg-gradient-to-t from-[#040407] via-[#09070f]/90 to-[#1f100a]/70 z-10"></div>
+    
+    <!-- Dunas Douradas Sutis e Pirâmides em SVG Suave -->
+    <svg class="absolute bottom-0 w-full h-[65vh] opacity-25 z-0 object-cover" viewBox="0 0 1440 600" fill="none" preserveAspectRatio="none">
+      <path d="M0 450L320 220L640 450L980 180L1440 460V600H0V450Z" fill="url(#duneGradient)"/>
+      <!-- Silhueta da Grande Pirâmide -->
+      <polygon points="420,380 580,140 740,380" fill="#2d170a" opacity="0.6"/>
+      <polygon points="580,140 740,380 690,380" fill="#4d2c18" opacity="0.8"/>
+      <defs>
+        <linearGradient id="duneGradient" x1="720" y1="180" x2="720" y2="600" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#c8963e" stop-opacity="0.6"/>
+          <stop offset="1" stop-color="#140a04" stop-opacity="0.95"/>
+        </linearGradient>
+      </defs>
+    </svg>
+
+    <!-- Focos de Luz Ambiente Dourada e Turquesa -->
+    <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-[140px]"></div>
+    <div class="absolute top-1/3 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[140px]"></div>
+  </div>
+
+  <!-- BARRA DE TOPO TIPO VISIONOS: Menu de Status e Ferramentas -->
+  <header class="relative z-20 w-full max-w-7xl flex items-center justify-between px-6 py-3 mb-4 rounded-full vision-glass-subtle">
+    <div class="flex items-center space-x-3">
+      <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-600 to-amber-300 flex items-center justify-center shadow-lg">
+        <span class="text-xs font-bold text-black font-serif-ancient">⚕</span>
+      </div>
+      <div>
+        <h1 class="text-xs uppercase tracking-widest text-amber-200/80 font-semibold">The Medical Pavilion &bull; Grand Archives</h1>
+        <p class="text-[10px] text-gray-400">Curadoria de História Natural e da Medicina &mdash; Meta Quest Edition</p>
+      </div>
+    </div>
+
+    <!-- Indicador de Registro Atual -->
+    <div class="flex items-center space-x-4">
+      <div class="hidden sm:flex items-center space-x-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span id="current-badge-epoch" class="text-gray-300 font-medium">1 de 8 &bull; 3000 a.C.</span>
+      </div>
+      <button id="btn-audio" onclick="toggleAudioDrone()" class="p-2 rounded-full hover:bg-white/10 transition-colors text-xs text-gray-400 hover:text-white" title="Alternar Som Ambiente">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ESPAÇO PANORÂMICO CURVO PRINCIPAL (TRÍPTICO VISIONOS) -->
+  <main class="relative z-10 w-full max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch min-h-[640px]">
+
+    <!-- ============================================== -->
+    <!-- PAINEL 1 (ESQUERDA - 3 COLUNAS): LINHA DO TEMPO -->
+    <!-- ============================================== -->
+    <aside class="lg:col-span-3 vision-glass rounded-3xl p-5 flex flex-col justify-between shadow-2xl">
+      <div>
+        <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
+          <h2 class="font-serif-ancient text-sm font-semibold tracking-wider text-amber-300">LINHA DO TEMPO</h2>
+          <span class="text-[10px] text-gray-400 tracking-wider uppercase font-mono">8 Épocas</span>
+        </div>
+
+        <!-- Lista Rolável das Eras Históricas -->
+        <nav id="timeline-list" class="space-y-2 max-h-[460px] overflow-y-auto pr-1">
+          <!-- Gerado dinamicamente via JS -->
+        </nav>
+      </div>
+
+      <!-- Resumo da Curadoria no Rodapé -->
+      <div class="pt-4 mt-2 border-t border-white/10 text-[11px] text-gray-400 flex items-center justify-between">
+        <span>Curadoria: Imhotep à IA</span>
+        <span class="text-amber-400/80">3000 a.C. &rarr; Séc. XXI</span>
+      </div>
+    </aside>
+
+
+    <!-- ============================================== -->
+    <!-- PAINEL 2 (CENTRO - 6 COLUNAS): SALA PRINCIPAL HERO -->
+    <!-- ============================================== -->
+    <section class="lg:col-span-6 vision-glass rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden shadow-2xl">
+      
+      <!-- Fundo de Efeito de Luz Suave -->
+      <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-80 h-40 bg-amber-500/15 rounded-full blur-[90px] pointer-events-none"></div>
+
+      <!-- Topo: Título Perfeito, Sem Quebras e Sem Encolhimento -->
+      <div class="relative z-10">
+        <div class="flex items-center justify-between text-xs tracking-wider uppercase font-mono text-amber-400 mb-1">
+          <span id="hero-tag">ÉPOCA HISTÓRICA</span>
+          <span id="hero-date" class="px-2 py-0.5 rounded bg-amber-400/10 border border-amber-400/20 text-amber-200">3000 a.C.</span>
+        </div>
+        
+        <h2 id="hero-title" class="font-serif-ancient text-2xl md:text-3xl font-bold tracking-wide text-white leading-tight">
+          I. EGITO PRIMORDIAL
+        </h2>
+        
+        <p id="hero-subtitle" class="text-sm font-medium text-amber-200/80 mt-1 italic">
+          A Aurora da Cura, Tratados em Papiro e a Anatomia Sagrada
+        </p>
+
+        <div class="h-px w-full bg-gradient-to-r from-amber-400/40 via-amber-200/20 to-transparent my-4"></div>
+      </div>
+
+      <!-- Meio: Canvas 3D Interativo do Artefato Holográfico + Tópicos Históricos -->
+      <div class="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-4 items-center my-1">
+        
+        <!-- Lista de Descobertas e Avanços Clínicos (7 Colunas) -->
+        <div class="md:col-span-7 space-y-2.5">
+          <h3 class="text-[11px] uppercase tracking-wider font-semibold text-gray-400 flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+            Marcos e Descobertas Fundamentais
+          </h3>
+          <ul id="hero-bullets" class="space-y-2 text-xs md:text-sm text-gray-200/90 leading-relaxed font-light">
+            <!-- Gerado Dinamicamente -->
+          </ul>
+        </div>
+
+        <!-- Palco do Artefato Tridimensional com WebGL (5 Colunas) -->
+        <div class="md:col-span-5 flex flex-col items-center justify-center relative">
+          <div class="relative w-44 h-44 sm:w-52 sm:h-52 rounded-2xl vision-glass-subtle flex items-center justify-center overflow-hidden border border-amber-400/25">
+            
+            <!-- Canvas do Three.js -->
+            <div id="threejs-canvas-container" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
+
+            <!-- Legenda Flutuante do Artefato -->
+            <div class="absolute bottom-2 inset-x-2 text-center pointer-events-none">
+              <span id="artifact-label" class="inline-block px-2 py-0.5 rounded-full text-[10px] font-mono tracking-wider bg-black/60 backdrop-blur-md text-amber-200 border border-white/10">
+                PIRÂMIDE &bull; ESSÊNCIA SOLAR
+              </span>
+            </div>
+          </div>
+          <span class="text-[10px] text-gray-500 mt-1.5">Gire e explore com as mãos / mouse</span>
+        </div>
+
+      </div>
+
+      <!-- Rodapé: Navegação Primária com Botões Grandes de Fácil Acesso -->
+      <div class="relative z-10 pt-4 border-t border-white/10 flex items-center justify-between gap-4">
+        <button id="btn-prev" onclick="navigateStep(-1)" class="flex-1 py-3 px-4 rounded-2xl vision-glass-subtle hover:bg-white/10 active:scale-95 transition-all text-xs font-semibold tracking-wider flex items-center justify-center gap-2 border border-white/10 hover:border-amber-400/40">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          ÉPOCA ANTERIOR
+        </button>
+
+        <button id="btn-next" onclick="navigateStep(1)" class="flex-1 py-3 px-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 active:scale-95 transition-all text-xs font-bold tracking-wider text-black flex items-center justify-center gap-2 shadow-lg shadow-amber-900/30">
+          PRÓXIMA ÉPOCA
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+
+    </section>
+
+
+    <!-- ============================================== -->
+    <!-- PAINEL 3 (DIREITA - 3 COLUNAS): GALERIA & CARD -->
+    <!-- ============================================== -->
+    <aside class="lg:col-span-3 vision-glass rounded-3xl p-5 flex flex-col justify-between shadow-2xl">
+      <div>
+        <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
+          <h2 class="font-serif-ancient text-sm font-semibold tracking-wider text-amber-300">GALERIA & DESTAQUES</h2>
+          <span class="text-[10px] text-cyan-400 font-mono tracking-widest uppercase">Acervo</span>
+        </div>
+
+        <!-- Card de Imagem Ilustrada da Época -->
+        <div class="rounded-2xl overflow-hidden vision-glass-subtle border border-white/10 mb-3.5 group relative">
+          <!-- Canvas Ilustrativo de Arte Histórica Gerada com Shader/Canvas Procedural -->
+          <canvas id="gallery-illustration-canvas" class="w-full h-36 object-cover transition-transform duration-700 group-hover:scale-105"></canvas>
+          
+          <div class="p-3 bg-gradient-to-t from-black/90 via-black/50 to-transparent">
+            <span id="gallery-tag" class="text-[10px] uppercase font-mono text-amber-300 font-semibold">Peça em Destaque</span>
+            <h4 id="gallery-title" class="text-xs font-bold text-white mt-0.5">Papiro Edwin Smith (c. 1600 a.C.)</h4>
+            <p id="gallery-desc" class="text-[11px] text-gray-300 mt-1 leading-normal line-clamp-3">
+              Primeiro tratado cirúrgico racional conhecido, descrevendo 48 casos com diagnósticos e prognósticos metódicos.
+            </p>
+          </div>
+        </div>
+
+        <!-- Pílula de Citação Histórica -->
+        <div class="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 relative">
+          <span class="text-amber-400 text-lg leading-none font-serif-ancient">“</span>
+          <p id="quote-text" class="text-xs text-gray-300 italic -mt-2 leading-relaxed">
+            A medicina é a mais nobre de todas as artes, mas devido à ignorância dos que a exercem, está muito atrás de todas as outras.
+          </p>
+          <p id="quote-author" class="text-[10px] text-amber-400 font-semibold text-right mt-1.5 uppercase font-mono">
+            &mdash; Hipócrates de Cós
+          </p>
+        </div>
+      </div>
+
+      <!-- Botão de Ação Espacial / VR Fullscreen -->
+      <div class="pt-4 border-t border-white/10">
+        <button onclick="requestSpatialView()" class="w-full py-2.5 px-3 rounded-xl vision-glass-subtle hover:bg-white/15 transition-all text-[11px] font-semibold text-gray-200 flex items-center justify-center gap-2 border border-white/15">
+          <svg class="w-4 h-4 text-cyan-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+          </svg>
+          MODO ESPACIAL IMERSIVO (VR)
+        </button>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <!-- RODAPÉ FINAL COM A FRASE DA LINHA DO TEMPO -->
+  <footer class="relative z-10 w-full max-w-7xl mt-4 px-6 py-3 rounded-2xl vision-glass-subtle text-center text-xs text-amber-100/70 border border-amber-400/20">
+    <span class="font-serif-ancient text-amber-300 font-bold">✨ O LEGADO DA CURA:</span>
+    “Da observação do corpo humano às tecnologias que revolucionaram os diagnósticos e tratamentos, cada descoberta abriu caminho para uma medicina mais precisa, segura e eficaz.”
+  </footer>
+
+
+  <!-- ============================================== -->
+  <!-- SCRIPT DE LÓGICA, THREE.JS E ÁUDIO ESPACIAL    -->
+  <!-- ============================================== -->
+  <script>
+    // BASE DE DADOS COMPLETA COM 100% DE ACENTUAÇÃO EM PORTUGUÊS
+    const erasData = [
       {
-        epoca: "I. EGITO PRIMORDIAL",
+        id: "egypt",
+        tag: "1. EGITO ANTIGO",
         periodo: "3000 a.C.",
-        subtitulo: "A Aurora da Cura e da Anatomia Sagrada",
+        titulo: "I. EGITO PRIMORDIAL",
+        subtitulo: "Os Primeiros Conhecimentos Médicos e Anatomia Sagrada",
         topicos: [
-          "[+] Papiros Edwin Smith e Ebers: primeiros tratados médicos da humanidade.",
-          "[+] Uso refinado de mel, mirra, sais minerais e plantas curativas.",
-          "[+] Mumificação: início da cartografia e estudo dos órgãos vitais.",
-          "[+] Redução de fraturas e traumas ósseos com talas de madeira e linho.",
-          "[+] Imhotep: o pioneiro divinizado e venerado pela arte da medicina."
+          "Utilização pioneira de plantas medicinais e tratamentos naturais sistemáticos.",
+          "Práticas cirúrgicas rudimentares e imobilização de fraturas com talas.",
+          "Medicina e cura associadas à divindade, religião e ao sacerdote Imhotep.",
+          "Registros clínicos de patologias em papiros médicos (Edwin Smith e Ebers).",
+          "Conhecimentos anatômicos precisos desenvolvidos durante o rito de mumificação."
         ],
-        artefato: "egypt"
+        artefatoNome: "PIRÂMIDE & SOL DE IMHOTEP",
+        artefatoTipo: "pyramid",
+        galeriaTitulo: "Papiro Edwin Smith (c. 1600 a.C.)",
+        galeriaDesc: "O documento médico cirúrgico mais antigo preservado, demonstrando raciocínio objetivo em traumas cranianos e torácicos.",
+        citacao: "A arte de curar é tão antiga quanto a própria dor humana.",
+        autor: "Papiro Ebers",
+        corDestaque: 0xffd700
       },
       {
-        epoca: "II. GRÉCIA CLÁSSICA",
+        id: "greece",
+        tag: "2. GRÉCIA ANTIGA",
         periodo: "400 a.C.",
-        subtitulo: "O Nascimento da Medicina Racional",
+        titulo: "II. GRÉCIA CLÁSSICA",
+        subtitulo: "O Nascimento da Medicina Racional e da Ética Clínica",
         topicos: [
-          "[+] Hipócrates: causas naturais em vez de castigos sobrenaturais.",
-          "[+] Método clínico: escuta, inspeção e registro metódico de sintomas.",
-          "[+] Juramento de Hipócrates: fundação e marco ético da profissão.",
-          "[+] Teoria dos quatro humores e o conceito vital de equilíbrio corporal."
+          "Hipócrates desmistifica a doença, atribuindo-a a causas naturais e desequilíbrios.",
+          "Desenvolvimento e consolidação da observação minuciosa dos sintomas.",
+          "Surgimento e formalização dos princípios universais da ética médica.",
+          "Valorização fundamental da relação empática de confiança entre médico e paciente.",
+          "Teoria dos quatro humores fundamentando a busca contínua por homeostase."
         ],
-        artefato: "greece"
+        artefatoNome: "CADUCEU DE ASCLÉPIO",
+        artefatoTipo: "caduceus",
+        galeriaTitulo: "O Juramento de Hipócrates",
+        galeriaDesc: "Texto fundamental de compromisso ético e humanismo praticado em Epidauro, berço dos sanatórios gregos.",
+        citacao: "Onde quer que a arte da medicina seja amada, haverá também um amor pela humanidade.",
+        autor: "Hipócrates de Cós",
+        corDestaque: 0x00f0ff
       },
       {
-        epoca: "III. IDADE MÉDIA & ORIENTE",
+        id: "middle_ages",
+        tag: "3. IDADE MÉDIA",
         periodo: "500 a 1500",
-        subtitulo: "A Luz dos Manuscritos e o Cânone da Medicina",
+        titulo: "III. IDADE MÉDIA & ORIENTE",
+        subtitulo: "A Preservação e a Transmissão do Conhecimento",
         topicos: [
-          "[+] Avicena publica a obra enciclopédica 'Cânone da Medicina'.",
-          "[+] Fundação dos primeiros complexos hospitalares públicos (Bimaristan).",
-          "[+] Preservação minuciosa e tradução dos clássicos greco-romanos.",
-          "[+] Grandes avanços farmacológicos e cirurgias oftalmológicas de catarata."
+          "Expansão contínua de hospitais, casas de acolhimento e instituições de ensino.",
+          "Grandes avanços e refinamento clínico na medicina do mundo islâmico.",
+          "Avicena publica o 'Cânone da Medicina', compilando séculos de saber mundial.",
+          "Desenvolvimento de sofisticadas práticas farmacológicas e síntese de elixires.",
+          "Cirurgias oftalmológicas pioneiras e remoção de catarata com cânulas finas."
         ],
-        artefato: "middle_ages"
+        artefatoNome: "CÂNONE DE AVICENA",
+        artefatoTipo: "codex",
+        galeriaTitulo: "Hospitais Bimaristan (Bagdá & Cairo)",
+        galeriaDesc: "Centros médicos abertos a todas as classes sociais, dispondo de alas separadas por enfermidade e farmácia própria.",
+        citacao: "A imaginação é a metade da doença; a tranquilidade é a metade do remédio.",
+        autor: "Avicena (Ibn Sina)",
+        corDestaque: 0xe0a96d
       },
       {
-        epoca: "IV. O RENASCIMENTO",
+        id: "renaissance",
+        tag: "4. RENASCIMENTO",
         periodo: "1500 a 1600",
-        subtitulo: "A Verdadeira Anatomia Revelada",
+        titulo: "IV. O RENASCIMENTO",
+        subtitulo: "A Descoberta Científica da Anatomia Humana",
         topicos: [
-          "[+] Andreas Vesalius publica a obra 'De Humani Corporis Fabrica'.",
-          "[+] Dissecações cadavéricas corrigem séculos de erros anatômicos.",
-          "[+] Leonardo da Vinci estuda a biomecânica e as válvulas cardíacas.",
-          "[+] O rigor da observação científica supera dogmas medievais."
+          "Andreas Vesalius revoluciona o estudo moderno com 'De Humani Corporis Fabrica'.",
+          "Dissecações humanas sistemáticas permitem desvendar a exata função dos órgãos.",
+          "Correção definitiva e corajosa de antigos erros anatômicos seculares de Galeno.",
+          "Fortalecimento irrefutável do método científico e da observação experimental direta.",
+          "Ilustrações artísticas hiper-realistas integrando a arte renascentista à ciência médica."
         ],
-        artefato: "renaissance"
+        artefatoNome: "ESFERA ANATÔMICA DE VESALIUS",
+        artefatoTipo: "vitruvian",
+        galeriaTitulo: "Ilustrações de Fabrica (1543)",
+        galeriaDesc: "Xilogravuras que uniram o gênio de mestres das oficinas de Ticiano à precisão cirúrgica de dissecação cadavérica.",
+        citacao: "Eu não poderia ter feito nada sem colocar minhas próprias mãos no corpo humano.",
+        autor: "Andreas Vesalius",
+        corDestaque: 0xffa200
       },
       {
-        epoca: "V. SÉCULO XVII",
+        id: "century17",
+        tag: "5. SÉCULO XVII",
         periodo: "1600",
-        subtitulo: "A Máquina Humana e o Infinitamente Pequeno",
+        titulo: "V. SÉCULO XVII",
+        subtitulo: "A Compreensão da Dinâmica do Corpo e o Invisível",
         topicos: [
-          "[+] William Harvey descreve a circulação fechada do sangue (1628).",
-          "[+] Aperfeiçoamento do microscópio óptico com lentes de precisão.",
-          "[+] Robert Hooke cunha formalmente o termo 'célula' em 1665.",
-          "[+] Leeuwenhoek observa microrganismos vivos na água e na saliva."
+          "William Harvey descreve em 1628 a circulação fechada contínua do sangue.",
+          "Invenção, desenvolvimento e aperfeiçoamento das lentes do microscópio óptico.",
+          "Robert Hooke observa estruturas de cortiça e cunha o termo 'célula' em 1665.",
+          "Antonie van Leeuwenhoek observa os primeiros microrganismos vivos na década de 1670.",
+          "O corpo humano passa a ser compreendido sob a ótica da mecânica e da fisiologia."
         ],
-        artefato: "microscope"
+        artefatoNome: "PRISMA MICROSCÓPICO DE HARVEY",
+        artefatoTipo: "microscope",
+        galeriaTitulo: "Tratado 'De Motu Cordis' (1628)",
+        galeriaDesc: "A demonstração matemática pioneira de que o coração atua como uma bomba pulsátil mecânica contínua.",
+        citacao: "O sangue move-se em um círculo contínuo e perpétuo por impulso das pulsações do coração.",
+        autor: "William Harvey",
+        corDestaque: 0x00ffcc
       },
       {
-        epoca: "VI. SÉCULOS XVIII E XIX",
+        id: "century18_19",
+        tag: "6. SÉCULOS XVIII E XIX",
         periodo: "1700 a 1899",
-        subtitulo: "A Tríade: Vacinas, Antissepsia e Raios-X",
+        titulo: "VI. SÉCULOS XVIII E XIX",
+        subtitulo: "A Revolução da Medicina Moderna e da Prevenção",
         topicos: [
-          "[+] 1796: Edward Jenner desenvolve a primeira vacina (contra a varíola).",
-          "[+] 1846: Primeira demonstração pública de cirurgia sob anestesia por éter.",
-          "[+] Louis Pasteur fundamenta e comprova a teoria microbiana das doenças.",
-          "[+] 1867: Joseph Lister revoluciona centros cirúrgicos com antissepsia.",
-          "[+] 1895: Wilhelm Röntgen desvela o interior do corpo com os Raios X."
+          "1796: Edward Jenner desenvolve a primeira vacina da história contra a varíola.",
+          "1846: Demonstração pública e consagração da anestesia cirúrgica por éter etílico.",
+          "Década de 1860: Louis Pasteur consolida a Teoria Microbiana das infecções.",
+          "1867: Joseph Lister difunde a antissepsia cirúrgica com ácido fênico.",
+          "1895: Wilhelm Röntgen desvela o interior esquelético humano ao descobrir os Raios X."
         ],
-        artefato: "xray"
+        artefatoNome: "EMISSOR DE ONDAS RÖNTGEN",
+        artefatoTipo: "xray",
+        galeriaTitulo: "A Primeira Radiografia (1895)",
+        galeriaDesc: "Imagem histórica da mão de Anna Bertha Ludwig exibindo o anel de casamento através da película de raios X.",
+        citacao: "Na área da observação, a sorte só favorece a mente preparada.",
+        autor: "Louis Pasteur",
+        corDestaque: 0x38bdf8
       },
       {
-        epoca: "VII. SÉCULO XX",
+        id: "century20",
+        tag: "7. SÉCULO XX",
         periodo: "1900 a 1999",
-        subtitulo: "Antibióticos, Genoma e Imagens Tridimensionais",
+        titulo: "VII. SÉCULO XX",
+        subtitulo: "A Era das Grandes Descobertas e Biotecnologia",
         topicos: [
-          "[+] 1928: Alexander Fleming descobre a penicilina, salvando milhões de vidas.",
-          "[+] 1953: Watson e Crick decifram a dupla hélice da molécula de DNA.",
-          "[+] 1967: Realizado com sucesso o primeiro transplante cardíaco humano.",
-          "[+] Revolução nos diagnósticos com Tomografia Computadorizada e Ressonância.",
-          "[+] Primeiros robôs auxiliam cirurgiões em biópsias e neurocirurgias."
+          "1928: Alexander Fleming descobre a penicilina, inaugurando a era antibiótica.",
+          "1953: Descrição da estrutura tridimensional de dupla hélice do DNA.",
+          "1967: Christiaan Barnard realiza o primeiro transplante de coração humano com êxito.",
+          "Década de 1970/80: Expansão da Tomografia Computadorizada e Ressonância Magnética.",
+          "1985: Utilização pioneira de um robô para guiar procedimento neurocirúrgico fino."
         ],
-        artefato: "dna"
+        artefatoNome: "DUPLA HÉLICE DO GENOMA",
+        artefatoTipo: "dna",
+        galeriaTitulo: "A Foto 51 de Rosalind Franklin",
+        galeriaDesc: "Difração de raios X histórica que revelou pela primeira vez ao mundo a arquitetura helicoidal do DNA humano.",
+        citacao: "Descobrimos o segredo da vida.",
+        autor: "Francis Crick",
+        corDestaque: 0xa855f7
       },
       {
-        epoca: "SÍNTESE // O LEGADO",
+        id: "conclusion",
+        tag: "SÍNTESE & HORIZONTE",
         periodo: "Século XXI+",
-        subtitulo: "A Nova Fronteira da Saúde Humana",
+        titulo: "VIII. O HORIZONTE DA CURA",
+        subtitulo: "Medicina de Precisão, Inteligência Artificial e Biônica",
         topicos: [
-          "Da observação do corpo humano às tecnologias",
-          "que revolucionaram os diagnósticos e tratamentos,",
-          "cada descoberta abriu caminho para uma medicina",
-          "mais precisa, segura e eficaz."
+          "Sequenciamento genético individualizado e edição gênica precisa com CRISPR.",
+          "Cirurgias robóticas autônomas guiadas por algoritmos preditivos e telessaúde.",
+          "Desenvolvimento acelerado de vacinas de RNA mensageiro em escala planetária.",
+          "Órgãos bioartificiais impressos em impressoras 3D e nanorobótica celular.",
+          "Fusão harmônica entre a empatia do médico e o poder diagnóstico da computação."
         ],
-        artefato: "future"
+        artefatoNome: "ORBE DA MEDICINA QUÂNTICA",
+        artefatoTipo: "future",
+        galeriaTitulo: "Nanomedicina & Terapias Celulares",
+        galeriaDesc: "O futuro onde tratamentos atuam na escala atômica, restaurando tecidos e prevenindo enfermidades antes de seus sintomas.",
+        citacao: "A medicina do futuro consiste em compreender a essência do indivíduo antes mesmo do surgimento da enfermidade.",
+        autor: "Bioética Contemporânea",
+        corDestaque: 0xf59e0b
       }
     ];
 
-    let currentIndex = 0;
+    let currentEraIndex = 0;
 
-    // Componente que renderiza texto em alta definição via Canvas 2D (Suporte 100% a acentos em português)
-    AFRAME.registerComponent('canvas-text-panel', {
-      schema: {
-        width: { type: 'int', default: 1400 },
-        height: { type: 'int', default: 950 }
-      },
-      init: function () {
-        this.canvas = document.createElement('canvas');
-        this.canvas.width = this.data.width;
-        this.canvas.height = this.data.height;
-        this.ctx = this.canvas.getContext('2d');
+    // ==========================================
+    // SISTEMA DE ÁUDIO ESPACIAL / WEB AUDIO API
+    // ==========================================
+    let audioCtx = null;
+    let droneGain = null;
+    let isAudioPlaying = false;
 
-        this.texture = new THREE.CanvasTexture(this.canvas);
-        this.texture.minFilter = THREE.LinearFilter;
-        this.texture.magFilter = THREE.LinearFilter;
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
 
-        const material = new THREE.MeshBasicMaterial({
-          map: this.texture,
-          transparent: true
-        });
+    function playGlassHapticSound(type) {
+      try {
+        initAudio();
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
 
-        const mesh = this.el.getObject3D('mesh');
-        if (mesh) {
-          mesh.material = material;
+        if (type === 'select') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(520, now);
+          osc.frequency.exponentialRampToValueAtTime(880, now + 0.12);
+          gain.gain.setValueAtTime(0.06, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
+          osc.start(now);
+          osc.stop(now + 0.12);
         } else {
-          this.el.addEventListener('loaded', () => {
-            this.el.getObject3D('mesh').material = material;
-            this.draw();
-          });
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(260, now);
+          osc.frequency.exponentialRampToValueAtTime(520, now + 0.2);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.2);
+          osc.start(now);
+          osc.stop(now + 0.2);
         }
-      },
-      draw: function () {
-        const ctx = this.ctx;
-        const w = this.canvas.width;
-        const h = this.canvas.height;
-        const data = timelineData[currentIndex];
-
-        ctx.clearRect(0, 0, w, h);
-
-        // Título Principal da Época
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 50px Arial, sans-serif';
-        ctx.fillText(`${data.epoca} [${data.periodo}]`, 30, 80);
-
-        // Subtítulo
-        ctx.fillStyle = '#e0a96d';
-        ctx.font = 'italic 34px Arial, sans-serif';
-        ctx.fillText(data.subtitulo, 30, 140);
-
-        // Linha divisória fina
-        ctx.strokeStyle = '#ffd700';
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.moveTo(30, 170);
-        ctx.lineTo(w - 60, 170);
-        ctx.stroke();
-
-        // Tópicos com quebra de linha suave
-        ctx.fillStyle = '#fefae0';
-        ctx.font = '31px Arial, sans-serif';
-        let yOffset = 230;
-        const lineHeight = 46;
-        const maxLineWidth = w - 80;
-
-        data.topicos.forEach(text => {
-          const words = text.split(' ');
-          let line = '';
-          for (let n = 0; n < words.length; n++) {
-            const testLine = line + words[n] + ' ';
-            const metrics = ctx.measureText(testLine);
-            if (metrics.width > maxLineWidth && n > 0) {
-              ctx.fillText(line, 30, yOffset);
-              line = '    ' + words[n] + ' ';
-              yOffset += lineHeight;
-            } else {
-              line = testLine;
-            }
-          }
-          ctx.fillText(line, 30, yOffset);
-          yOffset += lineHeight + 22;
-        });
-
-        if (this.texture) this.texture.needsUpdate = true;
+      } catch (e) {
+        // Áudio silenciado por permissão do navegador
       }
-    });
+    }
 
-    function buildArtifact(type) {
-      const stage = document.getElementById("relic-stage");
-      stage.innerHTML = "";
+    function toggleAudioDrone() {
+      initAudio();
+      if (!isAudioPlaying) {
+        const osc1 = audioCtx.createOscillator();
+        const osc2 = audioCtx.createOscillator();
+        droneGain = audioCtx.createGain();
 
-      if (type === "egypt") {
-        stage.innerHTML = `
-          <a-tetrahedron radius="0.55" color="#ffd700" material="metalness: 0.8; roughness: 0.2"
-                         position="0 0 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 9000; easing: linear">
-            <a-ring radius-inner="0.65" radius-outer="0.67" color="#00f0ff" rotation="90 0 0"></a-ring>
-          </a-tetrahedron>
-          <a-sphere radius="0.12" color="#00ffff" position="0 0.5 0"
-                    animation="property: position; to: 0 0.65 0; dir: alternate; loop: true; dur: 1200"></a-sphere>
-        `;
-      } else if (type === "greece") {
-        stage.innerHTML = `
-          <a-cylinder radius="0.04" height="0.9" color="#e2d4b7" position="0 0 0"></a-cylinder>
-          <a-torus radius="0.32" radius-tubular="0.02" color="#00f0ff" rotation="60 30 0"
-                   animation="property: rotation; to: 60 390 0; loop: true; dur: 8000; easing: linear"></a-torus>
-          <a-sphere radius="0.1" color="#ffd700" position="0 0.5 0"></a-sphere>
-        `;
-      } else if (type === "middle_ages") {
-        stage.innerHTML = `
-          <a-box width="0.5" height="0.65" depth="0.12" color="#b08968" position="0 0 0"
-                 animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear">
-            <a-plane width="0.4" height="0.55" color="#00f0ff" position="0 0 0.07" material="wireframe: true"></a-plane>
-          </a-box>
-        `;
-      } else if (type === "renaissance") {
-        stage.innerHTML = `
-          <a-sphere radius="0.4" color="#d4a373" wireframe="true"
-                    animation="property: rotation; to: 360 360 0; loop: true; dur: 12000; easing: linear"></a-sphere>
-          <a-ring radius-inner="0.48" radius-outer="0.5" color="#00f0ff" rotation="45 45 0"
-                  animation="property: rotation; to: 45 405 0; loop: true; dur: 6000; easing: linear"></a-ring>
-        `;
-      } else if (type === "microscope") {
-        stage.innerHTML = `
-          <a-octahedron radius="0.4" color="#00ffff" material="opacity: 0.7; transparent: true; roughness: 0.1"
-                        animation="property: rotation; to: 0 360 360; loop: true; dur: 8000; easing: linear"></a-octahedron>
-        `;
-      } else if (type === "xray") {
-        stage.innerHTML = `
-          <a-dodecahedron radius="0.38" color="#00ff88" wireframe="true"
-                          animation="property: rotation; to: 360 0 360; loop: true; dur: 7000; easing: linear"></a-dodecahedron>
-          <a-sphere radius="0.1" color="#ffffff" animation="property: scale; to: 1.8 1.8 1.8; dir: alternate; loop: true; dur: 900"></a-sphere>
-        `;
-      } else if (type === "dna") {
-        stage.innerHTML = `
-          <a-entity animation="property: rotation; to: 0 360 0; loop: true; dur: 5000; easing: linear">
-            <a-sphere position="0.25 0.35 0" radius="0.09" color="#00f0ff"></a-sphere>
-            <a-sphere position="-0.25 0.35 0" radius="0.09" color="#e63946"></a-sphere>
-            <a-cylinder position="0 0.35 0" rotation="0 0 90" radius="0.02" height="0.5" color="#ffd700"></a-cylinder>
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(110, audioCtx.currentTime); // Nota Lá profunda
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(164.81, audioCtx.currentTime); // Mi suave
 
-            <a-sphere position="0 0 0.25" radius="0.09" color="#00f0ff"></a-sphere>
-            <a-sphere position="0 0 -0.25" radius="0.09" color="#e63946"></a-sphere>
-            <a-cylinder position="0 0 0" rotation="90 0 0" radius="0.02" height="0.5" color="#ffd700"></a-cylinder>
+        droneGain.gain.setValueAtTime(0.015, audioCtx.currentTime);
 
-            <a-sphere position="-0.25 -0.35 0" radius="0.09" color="#00f0ff"></a-sphere>
-            <a-sphere position="0.25 -0.35 0" radius="0.09" color="#e63946"></a-sphere>
-            <a-cylinder position="0 0 90" rotation="0 0 90" radius="0.02" height="0.5" color="#ffd700"></a-cylinder>
-          </a-entity>
-        `;
+        osc1.connect(droneGain);
+        osc2.connect(droneGain);
+        droneGain.connect(audioCtx.destination);
+
+        osc1.start();
+        osc2.start();
+        isAudioPlaying = true;
+        document.getElementById('btn-audio').classList.add('text-amber-400');
       } else {
-        stage.innerHTML = `
-          <a-sphere radius="0.38" color="#ffd700" wireframe="true"
-                    animation="property: rotation; to: 360 360 0; loop: true; dur: 4000; easing: linear"></a-sphere>
-          <a-ring radius-inner="0.45" radius-outer="0.48" color="#00f0ff"
-                  animation="property: rotation; to: 0 360 360; loop: true; dur: 3000; easing: linear"></a-ring>
-        `;
+        if (droneGain) droneGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.5);
+        isAudioPlaying = false;
+        document.getElementById('btn-audio').classList.remove('text-amber-400');
       }
     }
 
-    function renderDisplay(index) {
-      const data = timelineData[index];
-      const panel = document.getElementById("canvas-board");
-      if (panel && panel.components['canvas-text-panel']) {
-        panel.components['canvas-text-panel'].draw();
+    // ==========================================
+    // RENDERIZAÇÃO DA INTERFACE DO USUÁRIO
+    // ==========================================
+    function buildTimelineMenu() {
+      const listEl = document.getElementById('timeline-list');
+      listEl.innerHTML = '';
+
+      erasData.forEach((era, idx) => {
+        const button = document.createElement('button');
+        button.className = `w-full text-left p-3 rounded-2xl transition-all duration-300 flex items-start gap-3 relative group ${
+          idx === currentEraIndex ? 'vision-glass-active' : 'hover:bg-white/5 text-gray-300'
+        }`;
+        button.onclick = () => selectEra(idx);
+
+        button.innerHTML = `
+          <div class="w-2.5 h-2.5 rounded-full mt-1.5 transition-all ${
+            idx === currentEraIndex ? 'bg-amber-400 scale-125 cyan-glow' : 'bg-gray-600 group-hover:bg-gray-400'
+          }"></div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold ${idx === currentEraIndex ? 'text-white' : 'text-gray-300'}">${era.tag}</span>
+              <span class="text-[10px] font-mono text-amber-200/60">${era.periodo}</span>
+            </div>
+            <p class="text-[11px] text-gray-400 mt-0.5 line-clamp-1">${era.subtitulo}</p>
+          </div>
+        `;
+        listEl.appendChild(button);
+      });
+    }
+
+    function selectEra(index) {
+      if (index < 0 || index >= erasData.length) return;
+      currentEraIndex = index;
+      playGlassHapticSound('select');
+
+      const data = erasData[currentEraIndex];
+
+      // Atualiza Hero Central
+      document.getElementById('hero-tag').textContent = data.tag;
+      document.getElementById('hero-date').textContent = data.periodo;
+      document.getElementById('hero-title').textContent = data.titulo;
+      document.getElementById('hero-subtitle').textContent = data.subtitulo;
+      document.getElementById('current-badge-epoch').textContent = `${index + 1} de ${erasData.length} • ${data.periodo}`;
+
+      // Atualiza Tópicos
+      const bulletsEl = document.getElementById('hero-bullets');
+      bulletsEl.innerHTML = '';
+      data.topicos.forEach(topic => {
+        const li = document.createElement('li');
+        li.className = 'flex items-start gap-2.5';
+        li.innerHTML = `
+          <span class="text-amber-400 font-bold leading-tight select-none">&bull;</span>
+          <span>${topic}</span>
+        `;
+        bulletsEl.appendChild(li);
+      });
+
+      // Atualiza Painel Direito
+      document.getElementById('gallery-title').textContent = data.galeriaTitulo;
+      document.getElementById('gallery-desc').textContent = data.galeriaDesc;
+      document.getElementById('quote-text').textContent = data.citacao;
+      document.getElementById('quote-author').textContent = `— ${data.autor}`;
+      document.getElementById('artifact-label').textContent = data.artefatoNome;
+
+      // Atualiza Menus e Artefatos Visuais
+      buildTimelineMenu();
+      update3DArtifact(data.artefatoTipo, data.corDestaque);
+      renderGalleryArt(data.id);
+    }
+
+    function navigateStep(direction) {
+      let nextIndex = currentEraIndex + direction;
+      if (nextIndex < 0) nextIndex = erasData.length - 1;
+      if (nextIndex >= erasData.length) nextIndex = 0;
+      selectEra(nextIndex);
+    }
+
+    // ==========================================
+    // THREE.JS: ARTEFATOS PROCEDURAIS 3D
+    // ==========================================
+    let scene, camera, renderer, currentMeshGroup;
+
+    function initThreeJS() {
+      const container = document.getElementById('threejs-canvas-container');
+      const width = container.clientWidth || 200;
+      const height = container.clientHeight || 200;
+
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+      camera.position.set(0, 0, 3.8);
+
+      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      // Luzes
+      const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+      scene.add(ambientLight);
+
+      const dirLight = new THREE.DirectionalLight(0xffecd2, 2.0);
+      dirLight.position.set(3, 4, 3);
+      scene.add(dirLight);
+
+      const bluePoint = new THREE.PointLight(0x00f0ff, 1.5, 8);
+      bluePoint.position.set(-2, -1, 2);
+      scene.add(bluePoint);
+
+      currentMeshGroup = new THREE.Group();
+      scene.add(currentMeshGroup);
+
+      // Interatividade de rotação com mouse e touch
+      let isDragging = false;
+      let prevMouseX = 0;
+      let prevMouseY = 0;
+
+      container.addEventListener('pointerdown', (e) => {
+        isDragging = true;
+        prevMouseX = e.clientX;
+        prevMouseY = e.clientY;
+      });
+
+      window.addEventListener('pointerup', () => isDragging = false);
+
+      container.addEventListener('pointermove', (e) => {
+        if (!isDragging || !currentMeshGroup) return;
+        const deltaX = e.clientX - prevMouseX;
+        const deltaY = e.clientY - prevMouseY;
+        currentMeshGroup.rotation.y += deltaX * 0.015;
+        currentMeshGroup.rotation.x += deltaY * 0.015;
+        prevMouseX = e.clientX;
+        prevMouseY = e.clientY;
+      });
+
+      // Animação Contínua
+      function animate() {
+        requestAnimationFrame(animate);
+        if (currentMeshGroup) {
+          currentMeshGroup.rotation.y += 0.008;
+        }
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      // Responsividade
+      window.addEventListener('resize', () => {
+        if (!container) return;
+        const newW = container.clientWidth;
+        const newH = container.clientHeight;
+        camera.aspect = newW / newH;
+        camera.updateProjectionMatrix();
+        renderer.setSize(newW, newH);
+      });
+    }
+
+    function update3DArtifact(type, colorHex) {
+      if (!currentMeshGroup) return;
+
+      // Limpa artefato anterior
+      while (currentMeshGroup.children.length > 0) {
+        const obj = currentMeshGroup.children[0];
+        if (obj.geometry) obj.geometry.dispose();
+        if (obj.material) {
+          if (Array.isArray(obj.material)) obj.material.forEach(m => m.dispose());
+          else obj.material.dispose();
+        }
+        currentMeshGroup.remove(obj);
       }
 
-      document.getElementById("status-code").setAttribute("value", `REGISTRO: 0${index + 1} / 0${timelineData.length}`);
-      buildArtifact(data.artefato);
+      const goldMat = new THREE.MeshStandardMaterial({
+        color: colorHex || 0xffd700,
+        metalness: 0.85,
+        roughness: 0.25,
+        wireframe: false
+      });
 
-      for (let i = 0; i < timelineData.length; i++) {
-        const stone = document.getElementById(`stone-${i}`);
-        if (stone) {
-          if (i === index) {
-            stone.setAttribute("color", "#00ffff");
-            stone.setAttribute("scale", "1.4 1.4 1.4");
-          } else {
-            stone.setAttribute("color", "#7f5539");
-            stone.setAttribute("scale", "1 1 1");
-          }
+      const wireMat = new THREE.MeshBasicMaterial({
+        color: 0x00f0ff,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.4
+      });
+
+      if (type === 'pyramid') {
+        const geom = new THREE.TetrahedronGeometry(1.1);
+        const mesh = new THREE.Mesh(geom, goldMat);
+        const wire = new THREE.Mesh(geom, wireMat);
+        wire.scale.set(1.15, 1.15, 1.15);
+        currentMeshGroup.add(mesh);
+        currentMeshGroup.add(wire);
+      } else if (type === 'caduceus') {
+        const stemGeom = new THREE.CylinderGeometry(0.06, 0.06, 1.8, 16);
+        const stem = new THREE.Mesh(stemGeom, goldMat);
+        const ringGeom = new THREE.TorusGeometry(0.55, 0.04, 16, 40);
+        const ring = new THREE.Mesh(ringGeom, wireMat);
+        ring.rotation.x = Math.PI / 3;
+        currentMeshGroup.add(stem);
+        currentMeshGroup.add(ring);
+      } else if (type === 'codex') {
+        const boxGeom = new THREE.BoxGeometry(1.0, 1.3, 0.25);
+        const book = new THREE.Mesh(boxGeom, goldMat);
+        const ring = new THREE.Mesh(new THREE.TorusGeometry(0.8, 0.02, 16, 40), wireMat);
+        currentMeshGroup.add(book);
+        currentMeshGroup.add(ring);
+      } else if (type === 'vitruvian') {
+        const sphereGeom = new THREE.SphereGeometry(0.8, 16, 16);
+        const sphere = new THREE.Mesh(sphereGeom, wireMat);
+        const ring = new THREE.Mesh(new THREE.RingGeometry(0.9, 1.0, 32), goldMat);
+        currentMeshGroup.add(sphere);
+        currentMeshGroup.add(ring);
+      } else if (type === 'microscope') {
+        const knotGeom = new THREE.TorusKnotGeometry(0.6, 0.12, 64, 8, 2, 3);
+        const knot = new THREE.Mesh(knotGeom, goldMat);
+        currentMeshGroup.add(knot);
+      } else if (type === 'xray') {
+        const icosaGeom = new THREE.IcosahedronGeometry(0.9);
+        const icosa = new THREE.Mesh(icosaGeom, wireMat);
+        const center = new THREE.Mesh(new THREE.SphereGeometry(0.35, 16, 16), goldMat);
+        currentMeshGroup.add(icosa);
+        currentMeshGroup.add(center);
+      } else if (type === 'dna') {
+        const dnaGroup = new THREE.Group();
+        for (let i = -6; i <= 6; i++) {
+          const t = i * 0.3;
+          const sphere1 = new THREE.Mesh(new THREE.SphereGeometry(0.09, 12, 12), goldMat);
+          sphere1.position.set(Math.sin(t) * 0.6, t * 0.25, Math.cos(t) * 0.6);
+          const sphere2 = new THREE.Mesh(new THREE.SphereGeometry(0.09, 12, 12), wireMat);
+          sphere2.position.set(-Math.sin(t) * 0.6, t * 0.25, -Math.cos(t) * 0.6);
+          dnaGroup.add(sphere1);
+          dnaGroup.add(sphere2);
+        }
+        currentMeshGroup.add(dnaGroup);
+      } else {
+        const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.8, 24, 24), wireMat);
+        const core = new THREE.Mesh(new THREE.OctahedronGeometry(0.5), goldMat);
+        currentMeshGroup.add(sphere);
+        currentMeshGroup.add(core);
+      }
+    }
+
+    // ==========================================
+    // PINTURA DO CANVAS ILUSTRATIVO DE GALERIA
+    // ==========================================
+    function renderGalleryArt(eraId) {
+      const canvas = document.getElementById('gallery-illustration-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      canvas.width = 400;
+      canvas.height = 200;
+
+      // Gradiente de Fundo de Museu
+      const grad = ctx.createLinearGradient(0, 0, 400, 200);
+      grad.addColorStop(0, '#1c130c');
+      grad.addColorStop(0.5, '#3d2514');
+      grad.addColorStop(1, '#0c0a12');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 400, 200);
+
+      // Desenho procedural temático de alta elegância
+      ctx.strokeStyle = 'rgba(255, 215, 0, 0.4)';
+      ctx.lineWidth = 1.5;
+
+      if (eraId === 'egypt') {
+        // Sol e Olho de Hórus estilizado
+        ctx.beginPath();
+        ctx.arc(200, 90, 45, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(130, 90);
+        ctx.lineTo(270, 90);
+        ctx.moveTo(200, 45);
+        ctx.lineTo(200, 135);
+        ctx.stroke();
+      } else if (eraId === 'greece') {
+        // Colunas e frontão grego
+        ctx.strokeRect(140, 60, 120, 80);
+        ctx.beginPath();
+        ctx.moveTo(120, 60);
+        ctx.lineTo(200, 25);
+        ctx.lineTo(280, 60);
+        ctx.closePath();
+        ctx.stroke();
+      } else {
+        // Anéis concêntricos de geometria sagrada
+        for (let r = 20; r <= 80; r += 20) {
+          ctx.beginPath();
+          ctx.arc(200, 100, r, 0, Math.PI * 2);
+          ctx.stroke();
         }
       }
+
+      // Efeito de vinheta de museu
+      const vignette = ctx.createRadialGradient(200, 100, 50, 200, 100, 180);
+      vignette.addColorStop(0, 'rgba(0,0,0,0)');
+      vignette.addColorStop(1, 'rgba(0,0,0,0.7)');
+      ctx.fillStyle = vignette;
+      ctx.fillRect(0, 0, 400, 200);
     }
 
-    AFRAME.registerComponent('totem-interact', {
-      schema: { action: { type: 'string' }, targetIndex: { type: 'int', default: -1 } },
-      init: function () {
-        const el = this.el;
-        const data = this.data;
-
-        el.addEventListener('mouseenter', () => {
-          playEgyptianSound('hover');
-          el.setAttribute('material', 'color', '#00f0ff');
-          el.setAttribute('scale', '1.04 1.04 1.04');
-        });
-
-        el.addEventListener('mouseleave', () => {
-          el.setAttribute('material', 'color', '#8a5a36');
-          el.setAttribute('scale', '1 1 1');
-        });
-
-        el.addEventListener('click', () => {
-          playEgyptianSound('portal');
-          if (data.action === 'next' && currentIndex < timelineData.length - 1) {
-            currentIndex++;
-            renderDisplay(currentIndex);
-          } else if (data.action === 'prev' && currentIndex > 0) {
-            currentIndex--;
-            renderDisplay(currentIndex);
-          } else if (data.action === 'jump') {
-            currentIndex = data.targetIndex;
-            renderDisplay(currentIndex);
-          }
-        });
+    // ==========================================
+    // REQUISIÇÃO DE MODO IMERSIVO (VR / METABROWSER)
+    // ==========================================
+    function requestSpatialView() {
+      playGlassHapticSound('select');
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
       }
+    }
+
+    // Navegação via Teclado (Setas Esquerda e Direita)
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') navigateStep(1);
+      if (e.key === 'ArrowLeft') navigateStep(-1);
     });
 
+    // Inicialização ao Carregar
     window.addEventListener('DOMContentLoaded', () => {
-      const stoneBar = document.getElementById("stone-bar");
-      const total = timelineData.length;
-      const startX = -1.6;
-      const step = 3.2 / (total - 1);
-
-      for (let i = 0; i < total; i++) {
-        const stone = document.createElement("a-octahedron");
-        stone.setAttribute("id", `stone-${i}`);
-        stone.setAttribute("class", "clickable");
-        stone.setAttribute("radius", "0.07");
-        stone.setAttribute("color", "#7f5539");
-        stone.setAttribute("position", `${startX + (i * step)} 0 0.05`);
-        stone.setAttribute("totem-interact", `action: jump; targetIndex: ${i}`);
-        stoneBar.appendChild(stone);
-      }
-
-      renderDisplay(0);
+      initThreeJS();
+      selectEra(0);
     });
   </script>
-</head>
-<body>
-  <a-scene environment="preset: egypt; ground: hills; groundColor: #c8963e; groundColor2: #996e2a; skyType: gradient; skyColor: #4a154b; horizonColor: #e76f51; dressing: pyramids; dressingAmount: 12; dressingScale: 4"
-           cursor="rayOrigin: mouse"
-           raycaster="objects: .clickable">
-
-    <!-- PLATAFORMA DE PEDRA -->
-    <a-cylinder position="0 0.05 0" radius="3.6" height="0.1" color="#582f0e" material="roughness: 0.9">
-      <a-ring position="0 0.06 0" rotation="-90 0 0" radius-inner="3.3" radius-outer="3.45" color="#ffd700"></a-ring>
-      <a-ring position="0 0.06 0" rotation="-90 0 0" radius-inner="2.0" radius-outer="2.05" color="#00f0ff"></a-ring>
-    </a-cylinder>
-
-    <!-- RIG & CONTROLES DE MÃO -->
-    <a-entity id="rig" position="0 1.6 0">
-      <a-camera id="camera" look-controls wasd-controls position="0 0 0">
-        <a-ring radius-inner="0.007" radius-outer="0.012" color="#ffd700" position="0 0 -1" material="shader: flat; opacity: 0.7"></a-ring>
-      </a-camera>
-
-      <a-entity hand-tracking-controls="hand: left"
-                laser-controls="hand: left"
-                raycaster="objects: .clickable; lineColor: #00f0ff; lineOpacity: 0.9">
-      </a-entity>
-
-      <a-entity hand-tracking-controls="hand: right"
-                laser-controls="hand: right"
-                raycaster="objects: .clickable; lineColor: #ffd700; lineOpacity: 0.9">
-      </a-entity>
-    </a-entity>
-
-    <!-- OBELISCO ESQUERDO -->
-    <a-entity position="-4.2 0 -2.6">
-      <a-box width="0.7" height="4.5" depth="0.7" color="#7f5539" position="0 2.25 0" material="roughness: 0.8">
-        <a-plane width="0.15" height="4.0" color="#00f0ff" position="0 0 0.36" material="shader: flat; opacity: 0.8"></a-plane>
-      </a-box>
-      <a-tetrahedron radius="0.5" color="#ffd700" position="0 4.7 0" rotation="0 45 0"></a-tetrahedron>
-      <a-torus radius="0.8" radius-tubular="0.015" color="#ffd700" rotation="90 0 0" position="0 2.8 0"
-               animation="property: rotation; to: 90 360 0; loop: true; dur: 8000; easing: linear"></a-torus>
-      <a-light type="point" color="#00f0ff" intensity="1.2" distance="6" position="0 4 0"></a-light>
-    </a-entity>
-
-    <!-- OBELISCO DIREITO -->
-    <a-entity position="4.2 0 -2.6">
-      <a-box width="0.7" height="4.5" depth="0.7" color="#7f5539" position="0 2.25 0" material="roughness: 0.8">
-        <a-plane width="0.15" height="4.0" color="#ffd700" position="0 0 0.36" material="shader: flat; opacity: 0.8"></a-plane>
-      </a-box>
-      <a-tetrahedron radius="0.5" color="#ffd700" position="0 4.7 0" rotation="0 45 0"></a-tetrahedron>
-      <a-torus radius="0.8" radius-tubular="0.015" color="#00f0ff" rotation="90 0 0" position="0 2.8 0"
-               animation="property: rotation; to: 90 -360 0; loop: true; dur: 8000; easing: linear"></a-torus>
-      <a-light type="point" color="#ffd700" intensity="1.2" distance="6" position="0 4 0"></a-light>
-    </a-entity>
-
-    <!-- MONÓLITO PRINCIPAL -->
-    <a-entity id="main-sanctuary" position="0 1.6 -3.4">
-
-      <!-- Fundo Escuro -->
-      <a-plane width="5.4" height="3.2" color="#1e100a"
-               material="opacity: 0.94; roughness: 0.7; metalness: 0.2" position="0 0 0"></a-plane>
-
-      <!-- Moldura Dourada -->
-      <a-plane width="5.46" height="0.03" color="#ffd700" position="0 1.61 0.01"></a-plane>
-      <a-plane width="5.46" height="0.03" color="#ffd700" position="0 -1.61 0.01"></a-plane>
-      <a-plane width="0.03" height="3.24" color="#ffd700" position="-2.73 0 0.01"></a-plane>
-      <a-plane width="0.03" height="3.24" color="#ffd700" position="2.73 0 0.01"></a-plane>
-
-      <!-- Friso Ciano -->
-      <a-plane width="5.2" height="0.008" color="#00f0ff" position="0 1.35 0.02"></a-plane>
-
-      <!-- Cabeçalho -->
-      <a-text value="OS ARQUIVOS DE IMHOTEP // LINHA DO TEMPO DA MEDICINA" align="left" width="4.2" color="#ffd700"
-              position="-2.5 1.45 0.03"></a-text>
-
-      <a-text id="status-code" value="REGISTRO: 01 / 08" align="right" width="3.2" color="#00f0ff"
-              position="2.5 1.45 0.03"></a-text>
-
-      <!-- PAINEL CANVAS DE ALTA RESOLUÇÃO COM SUPORTE TOTAL A ACENTUAÇÃO -->
-      <a-plane id="canvas-board" width="3.4" height="2.2" position="-0.85 0.15 0.03"
-               canvas-text-panel="width: 1400; height: 950"></a-plane>
-
-      <!-- PEDESTAL DO ARTEFATO 3D -->
-      <a-entity position="1.6 0.25 0">
-        <a-cylinder radius="0.65" height="0.06" color="#7f5539" material="roughness: 0.9" position="0 -0.65 0">
-          <a-ring radius-inner="0.67" radius-outer="0.70" color="#ffd700" rotation="-90 0 0" position="0 0.04 0"></a-ring>
-        </a-cylinder>
-        <a-entity id="relic-stage" position="0 0 0"></a-entity>
-      </a-entity>
-
-      <!-- TRILHO HORIZONTAL DE GLIFOS -->
-      <a-entity id="stone-bar" position="0 -1.0 0">
-        <a-plane width="3.4" height="0.008" color="#ffd700" position="0 0 0.02"></a-plane>
-      </a-entity>
-
-      <!-- BOTÕES DE NAVEGAÇÃO -->
-      <a-box id="btn-prev" class="clickable" totem-interact="action: prev"
-             width="1.1" height="0.25" depth="0.06" color="#8a5a36" position="-1.5 -1.3 0.04"
-             material="roughness: 0.6">
-        <a-plane width="1.1" height="0.012" color="#ffd700" position="0 0.12 0.04"></a-plane>
-        <a-text value="<<< ANTERIOR" align="center" width="2.8" color="#ffffff" position="0 0 0.04"></a-text>
-      </a-box>
-
-      <a-box id="btn-next" class="clickable" totem-interact="action: next"
-             width="1.1" height="0.25" depth="0.06" color="#8a5a36" position="1.5 -1.3 0.04"
-             material="roughness: 0.6">
-        <a-plane width="1.1" height="0.012" color="#ffd700" position="0 0.12 0.04"></a-plane>
-        <a-text value="PROXIMO >>>" align="center" width="2.8" color="#ffffff" position="0 0 0.04"></a-text>
-      </a-box>
-
-    </a-entity>
-
-    <!-- ILUMINAÇÃO DO DESERTO -->
-    <a-light type="ambient" color="#3d1e11" intensity="1.8"></a-light>
-    <a-light type="directional" color="#ffb703" intensity="1.4" position="5 6 -6"></a-light>
-  </a-scene>
 </body>
 </html>
