@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CYBER-MED // Terminal Histórico Holográfico</title>
+  <title>Templo da Medicina Ancestral // Egito VR</title>
   
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
   <script src="https://unpkg.com/aframe-environment-component@1.3.3/dist/aframe-environment-component.min.js"></script>
@@ -13,9 +13,9 @@
   </style>
 
   <script>
-    // Gerador de Som Sci-Fi procedural via Web Audio API (Dispensa arquivos de MP3)
+    // Sintetizador de Áudio Procedural Místico-Cibernético (Web Audio API)
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function playSciFiSound(type) {
+    function playEgyptianSound(type) {
       if (audioCtx.state === 'suspended') audioCtx.resume();
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
@@ -25,384 +25,412 @@
 
       if (type === 'hover') {
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(800, now);
-        osc.frequency.exponentialRampToValueAtTime(1200, now + 0.08);
-        gain.gain.setValueAtTime(0.04, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+        osc.frequency.setValueAtTime(440, now);
+        osc.frequency.exponentialRampToValueAtTime(660, now + 0.12);
+        gain.gain.setValueAtTime(0.05, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
         osc.start(now);
-        osc.stop(now + 0.08);
-      } else if (type === 'click') {
+        osc.stop(now + 0.12);
+      } else if (type === 'portal') {
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(300, now);
-        osc.frequency.exponentialRampToValueAtTime(900, now + 0.15);
-        gain.gain.setValueAtTime(0.08, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+        osc.frequency.setValueAtTime(140, now);
+        osc.frequency.exponentialRampToValueAtTime(420, now + 0.35);
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
         osc.start(now);
-        osc.stop(now + 0.15);
+        osc.stop(now + 0.35);
       }
     }
 
-    // Base de dados dos períodos
     const timelineData = [
       {
-        epoca: "01 // EGITO ANTIGO",
+        epoca: "I. EGITO PRIMORDIAL",
         periodo: "3000 a.C.",
-        subtitulo: "PRÁTICAS SACRAS E ANATOMIA PRIMORDIAL",
+        subtitulo: "A Aurora da Cura e da Anatomia Sagrada",
         topicos: [
-          "[+] Uso sistemático de fitoterápicos e minerais.",
-          "[+] Primeiras intervenções cirúrgicas documentadas.",
-          "[+] Medicina integrada a deuses e ritos fúnebres.",
-          "[+] Papiros médicos: registros de diagnósticos e traumas.",
-          "[+] Mumificação como base dos primeiros estudos anatômicos."
+          "[+] Papiro de Edwin Smith e Ebers: os primeiros tratados médicos da humanidade.",
+          "[+] Uso refinado de mel, mirra, sais minerais e centenas de plantas curativas.",
+          "[+] A mumificação revelou as primeiras cartografias anatômicas dos órgãos vitais.",
+          "[+] Tratamento de traumas e redução de fraturas com talas de madeira e linho.",
+          "[+] Imhotep: o primeiro médico da história, divinizado pela ciência da cura."
         ],
-        hologramType: "egypt"
+        artefato: "egypt"
       },
       {
-        epoca: "02 // GRÉCIA ANTIGA",
+        epoca: "II. GRÉCIA CLÁSSICA",
         periodo: "400 a.C.",
-        subtitulo: "NASCIMENTO DA MEDICINA RACIONAL",
+        subtitulo: "O Nascimento da Medicina Racional",
         topicos: [
-          "[+] Hipócrates: rompimento com causas sobrenaturais.",
-          "[+] Observação empírica dos sintomas clínicos.",
-          "[+] Teoria humoral e equilíbrio orgânico do corpo.",
-          "[+] Estabelecimento dos primeiros códigos de ética médica.",
-          "[+] Construção do vínculo humanizado médico-paciente."
+          "[+] Hipócrates desmistifica a doença: causas naturais e não punição divina.",
+          "[+] O Método Clínico: ausculta, inspeção e anotação sistemática da evolução.",
+          "[+] Criação do Juramento de Hipócrates e da ética do exercício da cura.",
+          "[+] Teoria dos quatro humores e a busca constante pela homeostase."
         ],
-        hologramType: "greece"
+        artefato: "greece"
       },
       {
-        epoca: "03 // IDADE MÉDIA",
+        epoca: "III. IDADE MÉDIA & ORIENTE",
         periodo: "500 a 1500",
-        subtitulo: "ENCICLOPEDISMO E EXPANSÃO CLÍNICA",
+        subtitulo: "A Luz dos Manuscritos e o Cânone",
         topicos: [
-          "[+] Fundação das primeiras universidades e hospitais formais.",
-          "[+] Idade de ouro da medicina árabe e persa.",
-          "[+] Avicena sistematiza o saber no 'Cânone da Medicina'.",
-          "[+] Farmacopeias complexas e catalogação de compostos.",
-          "[+] Preservação de manuscritos clássicos em mosteiros."
+          "[+] Al-Razi (Rhazes) e Avicena compilam a maior enciclopédia médica da história.",
+          "[+] Fundação das primeiras redes hospitalares organizadas (Bimaristan).",
+          "[+] Tradução e preservação monumental dos tratados clássicos greco-romanos.",
+          "[+] Cirurgias oculares e técnicas de extração de catarata com instrumentos finos."
         ],
-        hologramType: "middle_ages"
+        artefato: "middle_ages"
       },
       {
-        epoca: "04 // RENASCIMENTO",
+        epoca: "IV. O RENASCIMENTO",
         periodo: "1500 a 1600",
-        subtitulo: "A REVOLUÇÃO ANATÔMICA EXPERIMENTAL",
+        subtitulo: "A Verdadeira Anatomia Revelada",
         topicos: [
-          "[+] Andreas Vesalius publica 'De Humani Corporis Fabrica'.",
-          "[+] Dissecações cadavéricas quebram dogmas de Galeno.",
-          "[+] Ilustrações artísticas hiper-realistas da anatomia.",
-          "[+] Valorização da experimentação e do método empírico."
+          "[+] Andreas Vesalius rompe mais de 1000 anos de erros galênicos com dissecações.",
+          "[+] Publicação da obra-prima 'De Humani Corporis Fabrica' (1543).",
+          "[+] Leonardo da Vinci estuda a biomecânica e as válvulas do coração.",
+          "[+] A observação direta suplanta definitivamente os dogmas teológicos."
         ],
-        hologramType: "renaissance"
+        artefato: "renaissance"
       },
       {
-        epoca: "05 // SÉCULO XVII",
+        epoca: "V. SÉCULO XVII",
         periodo: "1600",
-        subtitulo: "MICROCOSMO E HEMODINÂMICA",
+        subtitulo: "A Máquina Humana e o Infinitamente Pequeno",
         topicos: [
-          "[+] William Harvey demonstra a circulação fechada do sangue (1628).",
-          "[+] Nascimento da microscopia com lentes polidas.",
-          "[+] Robert Hooke batiza a 'célula' em 1665.",
-          "[+] Leeuwenhoek descobre os microrganismos vivos (1670)."
+          "[+] William Harvey demonstra que o coração é uma bomba mecânica contínua (1628).",
+          "[+] Invenção do microscópio óptico: o mundo invisível é desvelado.",
+          "[+] Robert Hooke cunha o termo fundamental 'célula' em 1665.",
+          "[+] Antonie van Leeuwenhoek observa 'animálculos' vivos nas águas e saliva."
         ],
-        hologramType: "microscope"
+        artefato: "microscope"
       },
       {
-        epoca: "06 // SÉCULOS XVIII E XIX",
+        epoca: "VI. SÉCULOS XVIII E XIX",
         periodo: "1700 a 1899",
-        subtitulo: "ANTISSEPSIA, ANESTESIA E RAIOS-X",
+        subtitulo: "A Tríade: Vacinas, Antissepsia e Raios-X",
         topicos: [
-          "[+] 1796: Edward Jenner desenvolve a vacina contra a varíola.",
-          "[+] 1846: Primeira demonstração pública da anestesia cirúrgica.",
-          "[+] Pasteur consolida a teoria microbiana das infecções.",
-          "[+] 1867: Lister revoluciona o centro cirúrgico com antissepsia.",
-          "[+] 1895: Wilhelm Röntgen desvela o interior do corpo via Raios X."
+          "[+] 1796: Edward Jenner cria a vacina contra a varíola humana.",
+          "[+] 1846: Morton demonstra publicamente a cirurgia indolor com éter etílico.",
+          "[+] Louis Pasteur consolida a Teoria Germinativa e salva milhões com a pasteurização.",
+          "[+] Joseph Lister institui o uso de antissépticos em salas cirúrgicas.",
+          "[+] 1895: Wilhelm Röntgen descobre os raios invisíveis capazes de fotografar ossos."
         ],
-        hologramType: "industrial"
+        artefato: "xray"
       },
       {
-        epoca: "07 // SÉCULO XX",
+        epoca: "VII. SÉCULO XX",
         periodo: "1900 a 1999",
-        subtitulo: "ERA BIOTECNOLÓGICA E DIAGNÓSTICO AVANÇADO",
+        subtitulo: "Antibióticos, Genoma e Imagem Tridimensional",
         topicos: [
-          "[+] 1928: Fleming descobre a penicilina (início dos antibióticos).",
-          "[+] 1953: Watson & Crick desvendam a dupla hélice do DNA.",
-          "[+] 1967: Christiaan Barnard realiza o 1º transplante cardíaco.",
-          "[+] Tomografia Computadorizada e Ressonância Magnética.",
-          "[+] 1985: Cirurgias minimamente invasivas guiadas por robótica."
+          "[+] 1928: Alexander Fleming descobre a penicilina, derrotando infecções fatais.",
+          "[+] 1953: James Watson e Francis Crick desvendam a dupla hélice do DNA.",
+          "[+] 1967: O primeiro transplante cardíaco com sucesso por Christiaan Barnard.",
+          "[+] Revolução do diagnóstico por Tomografia Computadorizada e Ressonância.",
+          "[+] Primeiros robôs entram em salas cirúrgicas para auxiliar biópsias cerebrais."
         ],
-        hologramType: "dna"
+        artefato: "dna"
       },
       {
-        epoca: "SÍNTESE // HORIZONTE",
+        epoca: "SÍNTESE // O LEGADO",
         periodo: "Século XXI+",
-        subtitulo: "MEDICINA DE PRECISÃO E CIBERNÉTICA",
+        subtitulo: "O Futuro da Cura",
         topicos: [
           "Da observação do corpo humano às tecnologias",
           "que revolucionaram os diagnósticos e tratamentos,",
           "cada descoberta abriu caminho para uma medicina",
           "mais precisa, segura e eficaz."
         ],
-        hologramType: "future"
+        artefato: "future"
       }
     ];
 
     let currentIndex = 0;
 
-    function updateHologram(type) {
-      const container = document.getElementById("hologram-stage");
-      container.innerHTML = "";
+    function buildArtifact(type) {
+      const stage = document.getElementById("relic-stage");
+      stage.innerHTML = "";
 
-      // Renderiza malhas geométricas brilhantes temáticas
       if (type === "egypt") {
-        container.innerHTML = `
-          <a-tetrahedron radius="0.45" color="#00f0ff" wireframe="true" position="0 0 0"
-                         animation="property: rotation; to: 0 360 0; loop: true; dur: 8000; easing: linear"></a-tetrahedron>
-          <a-octahedron radius="0.25" color="#ffd166" position="0 0 0"
-                        animation="property: rotation; to: 360 0 0; loop: true; dur: 6000; easing: linear"></a-octahedron>
+        stage.innerHTML = `
+          <!-- Pirâmide Dourada Flutuante -->
+          <a-tetrahedron radius="0.55" color="#ffd700" material="metalness: 0.8; roughness: 0.2"
+                         position="0 0 0" animation="property: rotation; to: 0 360 0; loop: true; dur: 9000; easing: linear">
+            <a-ring radius-inner="0.65" radius-outer="0.67" color="#00f0ff" rotation="90 0 0"></a-ring>
+          </a-tetrahedron>
+          <a-sphere radius="0.12" color="#00ffff" position="0 0.5 0"
+                    animation="property: position; to: 0 0.65 0; dir: alternate; loop: true; dur: 1200"></a-sphere>
         `;
       } else if (type === "greece") {
-        container.innerHTML = `
-          <a-cylinder radius="0.08" height="0.8" color="#00f0ff" wireframe="true" position="0 0 0"></a-cylinder>
-          <a-torus radius="0.3" radius-tubular="0.015" color="#7000ff" rotation="45 0 0"
-                   animation="property: rotation; to: 405 360 0; loop: true; dur: 10000; easing: linear"></a-torus>
+        stage.innerHTML = `
+          <!-- Cajado de Asclépio Solar -->
+          <a-cylinder radius="0.04" height="0.9" color="#e2d4b7" position="0 0 0"></a-cylinder>
+          <a-torus radius="0.32" radius-tubular="0.02" color="#00f0ff" rotation="60 30 0"
+                   animation="property: rotation; to: 60 390 0; loop: true; dur: 8000; easing: linear"></a-torus>
+          <a-sphere radius="0.1" color="#ffd700" position="0 0.5 0"></a-sphere>
         `;
       } else if (type === "middle_ages") {
-        container.innerHTML = `
-          <a-box width="0.4" height="0.6" depth="0.1" color="#00f0ff" wireframe="true" position="0 0 0"
-                 animation="property: rotation; to: 0 360 0; loop: true; dur: 9000; easing: linear"></a-box>
-          <a-sphere radius="0.18" color="#ff007f" wireframe="true" position="0 0 0"></a-sphere>
+        stage.innerHTML = `
+          <!-- O Livro Sagrado do Cânone Holográfico -->
+          <a-box width="0.5" height="0.65" depth="0.12" color="#b08968" position="0 0 0"
+                 animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear">
+            <a-plane width="0.4" height="0.55" color="#00f0ff" position="0 0 0.07" material="wireframe: true"></a-plane>
+          </a-box>
         `;
       } else if (type === "renaissance") {
-        container.innerHTML = `
-          <a-sphere radius="0.35" color="#00f0ff" wireframe="true" segments-width="12" segments-height="12"
-                    animation="property: rotation; to: 0 360 360; loop: true; dur: 12000; easing: linear"></a-sphere>
-          <a-ring radius-inner="0.42" radius-outer="0.44" color="#ffea00" rotation="90 0 0"
-                  animation="property: rotation; to: 90 360 0; loop: true; dur: 5000; easing: linear"></a-ring>
+        stage.innerHTML = `
+          <!-- Homem Vitruviano em Esfera Armilar -->
+          <a-sphere radius="0.4" color="#d4a373" wireframe="true"
+                    animation="property: rotation; to: 360 360 0; loop: true; dur: 12000; easing: linear"></a-sphere>
+          <a-ring radius-inner="0.48" radius-outer="0.5" color="#00f0ff" rotation="45 45 0"
+                  animation="property: rotation; to: 45 405 0; loop: true; dur: 6000; easing: linear"></a-ring>
         `;
       } else if (type === "microscope") {
-        container.innerHTML = `
-          <a-torus-knot radius="0.25" radius-tubular="0.02" p="2" q="3" color="#00f0ff" wireframe="true"
-                        animation="property: rotation; to: 360 360 0; loop: true; dur: 9000; easing: linear"></a-torus-knot>
+        stage.innerHTML = `
+          <!-- Prisma de Foco e Óptica -->
+          <a-octahedron radius="0.4" color="#00ffff" material="opacity: 0.7; transparent: true; roughness: 0.1"
+                        animation="property: rotation; to: 0 360 360; loop: true; dur: 8000; easing: linear"></a-octahedron>
         `;
-      } else if (type === "industrial") {
-        container.innerHTML = `
-          <a-dodecahedron radius="0.38" color="#00ffcc" wireframe="true"
-                          animation="property: rotation; to: 0 360 0; loop: true; dur: 7000; easing: linear"></a-dodecahedron>
-          <a-sphere radius="0.12" color="#00f0ff" position="0 0 0"
-                    animation="property: scale; to: 1.5 1.5 1.5; dir: alternate; loop: true; dur: 1000"></a-sphere>
+      } else if (type === "xray") {
+        stage.innerHTML = `
+          <!-- Cristais de Tubo de Crookes / Radiação -->
+          <a-dodecahedron radius="0.38" color="#00ff88" wireframe="true"
+                          animation="property: rotation; to: 360 0 360; loop: true; dur: 7000; easing: linear"></a-dodecahedron>
+          <a-sphere radius="0.1" color="#ffffff" animation="property: scale; to: 1.8 1.8 1.8; dir: alternate; loop: true; dur: 900"></a-sphere>
         `;
       } else if (type === "dna") {
-        container.innerHTML = `
-          <a-entity animation="property: rotation; to: 0 360 0; loop: true; dur: 6000; easing: linear">
-            <a-sphere position="0.2 0.3 0" radius="0.08" color="#00f0ff"></a-sphere>
-            <a-sphere position="-0.2 0.3 0" radius="0.08" color="#ff007f"></a-sphere>
-            <a-cylinder position="0 0.3 0" rotation="0 0 90" radius="0.015" height="0.4" color="#fff"></a-cylinder>
-            
-            <a-sphere position="0 0 0.2" radius="0.08" color="#00f0ff"></a-sphere>
-            <a-sphere position="0 0 -0.2" radius="0.08" color="#ff007f"></a-sphere>
-            <a-cylinder position="0 0 0" rotation="90 0 0" radius="0.015" height="0.4" color="#fff"></a-cylinder>
+        stage.innerHTML = `
+          <!-- Dupla Hélice com Matriz de Plasma -->
+          <a-entity animation="property: rotation; to: 0 360 0; loop: true; dur: 5000; easing: linear">
+            <a-sphere position="0.25 0.35 0" radius="0.09" color="#00f0ff"></a-sphere>
+            <a-sphere position="-0.25 0.35 0" radius="0.09" color="#e63946"></a-sphere>
+            <a-cylinder position="0 0.35 0" rotation="0 0 90" radius="0.02" height="0.5" color="#ffd700"></a-cylinder>
 
-            <a-sphere position="-0.2 -0.3 0" radius="0.08" color="#00f0ff"></a-sphere>
-            <a-sphere position="0.2 -0.3 0" radius="0.08" color="#ff007f"></a-sphere>
-            <a-cylinder position="0 -0.3 0" rotation="0 0 90" radius="0.015" height="0.4" color="#fff"></a-cylinder>
+            <a-sphere position="0 0 0.25" radius="0.09" color="#00f0ff"></a-sphere>
+            <a-sphere position="0 0 -0.25" radius="0.09" color="#e63946"></a-sphere>
+            <a-cylinder position="0 0 0" rotation="90 0 0" radius="0.02" height="0.5" color="#ffd700"></a-cylinder>
+
+            <a-sphere position="-0.25 -0.35 0" radius="0.09" color="#00f0ff"></a-sphere>
+            <a-sphere position="0.25 -0.35 0" radius="0.09" color="#e63946"></a-sphere>
+            <a-cylinder position="0 0 90" rotation="0 0 90" radius="0.02" height="0.5" color="#ffd700"></a-cylinder>
           </a-entity>
         `;
       } else {
-        container.innerHTML = `
-          <a-sphere radius="0.35" color="#00f0ff" wireframe="true"
-                    animation="property: rotation; to: 360 360 360; loop: true; dur: 5000; easing: linear"></a-sphere>
-          <a-sphere radius="0.1" color="#ffffff"
-                    animation="property: scale; to: 2 2 2; dir: alternate; loop: true; dur: 800"></a-sphere>
+        stage.innerHTML = `
+          <!-- Orbe da Medicina Quântica -->
+          <a-sphere radius="0.38" color="#ffd700" wireframe="true"
+                    animation="property: rotation; to: 360 360 0; loop: true; dur: 4000; easing: linear"></a-sphere>
+          <a-ring radius-inner="0.45" radius-outer="0.48" color="#00f0ff"
+                  animation="property: rotation; to: 0 360 360; loop: true; dur: 3000; easing: linear"></a-ring>
         `;
       }
     }
 
-    function renderCard(index) {
+    function renderDisplay(index) {
       const data = timelineData[index];
       document.getElementById("card-title").setAttribute("value", `${data.epoca} [${data.periodo}]`);
       document.getElementById("card-subtitle").setAttribute("value", data.subtitulo);
       document.getElementById("card-content").setAttribute("value", data.topicos.join("\n\n"));
-      document.getElementById("step-indicator").setAttribute("value", `REGISTRO: 0${index + 1} // 0${timelineData.length}`);
+      document.getElementById("status-code").setAttribute("value", `INSCRIÇÃO: 0${index + 1} / 0${timelineData.length}`);
 
-      updateHologram(data.hologramType);
+      buildArtifact(data.artefato);
 
-      // Atualiza nós da mini-timeline
+      // Atualiza luzes dos nós na fita sagrada
       for (let i = 0; i < timelineData.length; i++) {
-        const node = document.getElementById(`node-${i}`);
-        if (node) {
+        const stone = document.getElementById(`stone-${i}`);
+        if (stone) {
           if (i === index) {
-            node.setAttribute("color", "#00f0ff");
-            node.setAttribute("scale", "1.4 1.4 1.4");
+            stone.setAttribute("color", "#00ffff");
+            stone.setAttribute("material", "emissive: #00ffff; emissiveIntensity: 0.8");
+            stone.setAttribute("scale", "1.3 1.3 1.3");
           } else {
-            node.setAttribute("color", "#3a506b");
-            node.setAttribute("scale", "1 1 1");
+            stone.setAttribute("color", "#7f5539");
+            stone.setAttribute("material", "emissive: #000; emissiveIntensity: 0");
+            stone.setAttribute("scale", "1 1 1");
           }
         }
       }
     }
 
-    // Componente de botão interativo futurista
-    AFRAME.registerComponent('cyber-button', {
+    AFRAME.registerComponent('totem-interact', {
       schema: { action: { type: 'string' }, targetIndex: { type: 'int', default: -1 } },
       init: function () {
         const el = this.el;
         const data = this.data;
 
         el.addEventListener('mouseenter', () => {
-          playSciFiSound('hover');
+          playEgyptianSound('hover');
           el.setAttribute('material', 'color', '#00f0ff');
-          el.setAttribute('material', 'opacity', '0.9');
+          el.setAttribute('scale', '1.05 1.05 1.05');
         });
 
         el.addEventListener('mouseleave', () => {
-          el.setAttribute('material', 'color', '#0b132b');
-          el.setAttribute('material', 'opacity', '0.6');
+          el.setAttribute('material', 'color', '#b08968');
+          el.setAttribute('scale', '1 1 1');
         });
 
         el.addEventListener('click', () => {
-          playSciFiSound('click');
+          playEgyptianSound('portal');
           if (data.action === 'next' && currentIndex < timelineData.length - 1) {
             currentIndex++;
-            renderCard(currentIndex);
+            renderDisplay(currentIndex);
           } else if (data.action === 'prev' && currentIndex > 0) {
             currentIndex--;
-            renderCard(currentIndex);
+            renderDisplay(currentIndex);
           } else if (data.action === 'jump') {
             currentIndex = data.targetIndex;
-            renderCard(currentIndex);
+            renderDisplay(currentIndex);
           }
         });
       }
     });
 
     window.addEventListener('DOMContentLoaded', () => {
-      // Criação dinâmica da mini-timeline no rodapé do terminal
-      const bar = document.getElementById("timeline-mini-bar");
+      // Monta os glifos de navegação no painel horizontal
+      const stoneBar = document.getElementById("stone-bar");
       const total = timelineData.length;
-      const startX = -1.2;
-      const step = 2.4 / (total - 1);
+      const startX = -1.3;
+      const step = 2.6 / (total - 1);
 
       for (let i = 0; i < total; i++) {
-        const node = document.createElement("a-sphere");
-        node.setAttribute("id", `node-${i}`);
-        node.setAttribute("class", "clickable");
-        node.setAttribute("radius", "0.04");
-        node.setAttribute("color", "#3a506b");
-        node.setAttribute("position", `${startX + (i * step)} 0 0.04`);
-        node.setAttribute("cyber-button", `action: jump; targetIndex: ${i}`);
-        bar.appendChild(node);
+        const stone = document.createElement("a-octahedron");
+        stone.setAttribute("id", `stone-${i}`);
+        stone.setAttribute("class", "clickable");
+        stone.setAttribute("radius", "0.06");
+        stone.setAttribute("color", "#7f5539");
+        stone.setAttribute("position", `${startX + (i * step)} 0 0.05`);
+        stone.setAttribute("totem-interact", `action: jump; targetIndex: ${i}`);
+        stoneBar.appendChild(stone);
       }
 
-      renderCard(0);
+      renderDisplay(0);
     });
   </script>
 </head>
 <body>
-  <a-scene environment="preset: starry; ground: canyon; groundColor: #050510; groundColor2: #020205; skyType: atmosphere; skyColor: #02010a; horizonColor: #0b1a30; dressing: apparatus; dressingAmount: 18; dressingColor: #00f0ff"
+  <!-- AMBIENTE: DESERTO DO EGITO COM DUNA, CÉU CREPUSCULAR E PIRÂMIDES -->
+  <a-scene environment="preset: egypt; ground: hills; groundColor: #c8963e; groundColor2: #996e2a; skyType: gradient; skyColor: #4a154b; horizonColor: #e76f51; dressing: pyramids; dressingAmount: 12; dressingScale: 4"
            cursor="rayOrigin: mouse"
            raycaster="objects: .clickable">
 
-    <!-- RIG DO USUÁRIO & RASTREAMENTO AVANÇADO DE MÃOS NO QUEST 3 -->
+    <!-- PLATAFORMA DE PEDRA DO FARAÓ ONDE O USUÁRIO FICA EM PÉ -->
+    <a-cylinder position="0 0.05 0" radius="3.2" height="0.1" color="#582f0e" material="roughness: 0.9; metalness: 0.1">
+      <a-ring position="0 0.06 0" rotation="-90 0 0" radius-inner="3.0" radius-outer="3.15" color="#ffd700"></a-ring>
+      <a-ring position="0 0.06 0" rotation="-90 0 0" radius-inner="1.8" radius-outer="1.85" color="#00f0ff"></a-ring>
+    </a-cylinder>
+
+    <!-- CÂMERA & RASTREAMENTO DAS MÃOS NO META QUEST 3 -->
     <a-entity id="rig" position="0 1.6 0">
       <a-camera id="camera" look-controls wasd-controls position="0 0 0">
-        <!-- Retículo cibernético para fallback com olhar -->
-        <a-ring radius-inner="0.008" radius-outer="0.014" color="#00f0ff"
-                position="0 0 -1" material="shader: flat; opacity: 0.6"></a-ring>
+        <!-- Retículo sagrado com anel duplo -->
+        <a-ring radius-inner="0.007" radius-outer="0.012" color="#ffd700" position="0 0 -1" material="shader: flat; opacity: 0.7"></a-ring>
       </a-camera>
 
-      <!-- Mão Esquerda (Laser + Pinch) -->
+      <!-- Mão Esquerda (Laser Dourado/Ciano) -->
       <a-entity hand-tracking-controls="hand: left"
                 laser-controls="hand: left"
                 raycaster="objects: .clickable; lineColor: #00f0ff; lineOpacity: 0.9">
       </a-entity>
 
-      <!-- Mão Direita (Laser + Pinch) -->
+      <!-- Mão Direita (Laser Ouro Sagrado) -->
       <a-entity hand-tracking-controls="hand: right"
                 laser-controls="hand: right"
-                raycaster="objects: .clickable; lineColor: #ff007f; lineOpacity: 0.9">
+                raycaster="objects: .clickable; lineColor: #ffd700; lineOpacity: 0.9">
       </a-entity>
     </a-entity>
 
-    <!-- ANÉIS HOLOGRÁFICOS GIROSCÓPICOS AO REDOR DO AMBIENTE -->
-    <a-entity position="0 1.6 -3.2">
-      <a-torus radius="2.4" radius-tubular="0.008" color="#00f0ff" opacity="0.3" rotation="20 45 0"
-               animation="property: rotation; to: 20 405 0; loop: true; dur: 45000; easing: linear"></a-torus>
-      <a-torus radius="2.6" radius-tubular="0.006" color="#7000ff" opacity="0.25" rotation="-30 10 0"
-               animation="property: rotation; to: -30 -350 0; loop: true; dur: 55000; easing: linear"></a-torus>
+    <!-- TOTEM ESQUERDO: OBELISCO DE AREIA COM ANÉIS DE PLASMA -->
+    <a-entity position="-3.5 0 -2.6">
+      <a-box width="0.7" height="4.5" depth="0.7" color="#7f5539" position="0 2.25 0" material="roughness: 0.8">
+        <!-- Runas verticais luminosas -->
+        <a-plane width="0.15" height="4.0" color="#00f0ff" position="0 0 0.36" material="shader: flat; opacity: 0.8"></a-plane>
+      </a-box>
+      <a-tetrahedron radius="0.5" color="#ffd700" position="0 4.7 0" rotation="0 45 0"></a-tetrahedron>
+      <!-- Anel flutuante de energia ao redor do totem -->
+      <a-torus radius="0.8" radius-tubular="0.015" color="#ffd700" rotation="90 0 0" position="0 2.8 0"
+               animation="property: rotation; to: 90 360 0; loop: true; dur: 8000; easing: linear"></a-torus>
+      <!-- Foco de luz do totem -->
+      <a-light type="point" color="#00f0ff" intensity="1.2" distance="6" position="0 4 0"></a-light>
     </a-entity>
 
-    <!-- ESTAÇÃO HOLOGRÁFICA PRINCIPAL (HUD Sci-Fi) -->
-    <a-entity id="terminal" position="0 1.6 -3.0">
+    <!-- TOTEM DIREITO: OBELISCO GÊMEO COM GLIFOS E FOGO HOLOGRÁFICO -->
+    <a-entity position="3.5 0 -2.6">
+      <a-box width="0.7" height="4.5" depth="0.7" color="#7f5539" position="0 2.25 0" material="roughness: 0.8">
+        <a-plane width="0.15" height="4.0" color="#ffd700" position="0 0 0.36" material="shader: flat; opacity: 0.8"></a-plane>
+      </a-box>
+      <a-tetrahedron radius="0.5" color="#ffd700" position="0 4.7 0" rotation="0 45 0"></a-tetrahedron>
+      <a-torus radius="0.8" radius-tubular="0.015" color="#00f0ff" rotation="90 0 0" position="0 2.8 0"
+               animation="property: rotation; to: 90 -360 0; loop: true; dur: 8000; easing: linear"></a-torus>
+      <a-light type="point" color="#ffd700" intensity="1.2" distance="6" position="0 4 0"></a-light>
+    </a-entity>
 
-      <!-- Fundo Holográfico Translúcido -->
-      <a-plane width="4.2" height="2.5" color="#03071e"
-               material="opacity: 0.85; transparent: true; roughness: 0.1; metalness: 0.8"
-               position="0 0 0"></a-plane>
+    <!-- ESTAÇÃO PRINCIPAL: O GRANDE ALTAR DO CONHECIMENTO MÉDICO -->
+    <a-entity id="main-sanctuary" position="0 1.6 -3.1">
 
-      <!-- Moldura Externa de Neon Ciano -->
-      <a-plane width="4.24" height="0.015" color="#00f0ff" position="0 1.25 0.01"></a-plane>
-      <a-plane width="4.24" height="0.015" color="#00f0ff" position="0 -1.25 0.01"></a-plane>
-      <a-plane width="0.015" height="2.5" color="#00f0ff" position="-2.12 0 0.01"></a-plane>
-      <a-plane width="0.015" height="2.5" color="#00f0ff" position="2.12 0 0.01"></a-plane>
+      <!-- Monólito de Arenito Escuro com Borda de Ouro -->
+      <a-plane width="4.4" height="2.6" color="#2b1810"
+               material="opacity: 0.94; roughness: 0.7; metalness: 0.2" position="0 0 0"></a-plane>
 
-      <!-- Linha de Scanline Superior -->
-      <a-plane width="4.1" height="0.003" color="#7000ff" position="0 1.05 0.02"></a-plane>
+      <!-- Moldura Externa de Ouro Maciço Egípcio -->
+      <a-plane width="4.46" height="0.03" color="#ffd700" position="0 1.31 0.01"></a-plane>
+      <a-plane width="4.46" height="0.03" color="#ffd700" position="0 -1.31 0.01"></a-plane>
+      <a-plane width="0.03" height="2.64" color="#ffd700" position="-2.23 0 0.01"></a-plane>
+      <a-plane width="0.03" height="2.64" color="#ffd700" position="2.23 0 0.01"></a-plane>
 
-      <!-- Cabeçalho do HUD -->
-      <a-text value="MED-CORP // ARCHIVAL INTERFACE v4.0" align="left" width="3.4" color="#00f0ff"
-              position="-1.9 1.14 0.03" font="monoid"></a-text>
+      <!-- Friso de Borda Ciano Arcano -->
+      <a-plane width="4.3" height="0.006" color="#00f0ff" position="0 1.1 0.02"></a-plane>
 
-      <a-text id="step-indicator" value="REGISTRO: 01 // 08" align="right" width="3.4" color="#00f0ff"
-              position="1.9 1.14 0.03" font="monoid"></a-text>
+      <!-- Título de Cabeçalho do Templo -->
+      <a-text value="OS ARQUIVOS DE IMHOTEP // LINHA DO TEMPO DA MEDICINA" align="left" width="3.6" color="#ffd700"
+              position="-2.0 1.18 0.03" font="kelsonsans"></a-text>
 
-      <!-- COLUNA DA ESQUERDA: Textos e Diagnósticos Históricos -->
-      <a-text id="card-title" value="" align="left" width="3.6" color="#ffffff"
-              position="-1.9 0.82 0.03" font="kelsonsans"></a-text>
+      <a-text id="status-code" value="INSCRIÇÃO: 01 / 08" align="right" width="3.2" color="#00f0ff"
+              position="2.0 1.18 0.03" font="monoid"></a-text>
 
-      <a-text id="card-subtitle" value="" align="left" width="2.8" color="#00f0ff"
-              position="-1.9 0.62 0.03" font="monoid"></a-text>
+      <!-- COLUNA DA ESQUERDA: Textos da Época Médica -->
+      <a-text id="card-title" value="" align="left" width="3.7" color="#ffffff"
+              position="-2.0 0.85 0.03" font="kelsonsans"></a-text>
 
-      <a-text id="card-content" value="" align="left" width="2.6" color="#e0e1dd"
-              position="-1.9 0.40 0.03" font="monoid" baseline="top" wrap-count="36" line-height="52"></a-text>
+      <a-text id="card-subtitle" value="" align="left" width="2.9" color="#e0a96d"
+              position="-2.0 0.65 0.03" font="roboto" style="bold"></a-text>
 
-      <!-- COLUNA DA DIREITA: Pedestal do Artefato 3D -->
-      <a-entity position="1.1 0.1 0">
-        <!-- Plataforma do Holograma -->
-        <a-cylinder radius="0.55" height="0.04" color="#00f0ff" material="wireframe: true" position="0 -0.5 0"></a-cylinder>
-        <a-ring radius-inner="0.6" radius-outer="0.62" color="#7000ff" rotation="-90 0 0" position="0 -0.49 0"></a-ring>
-        
-        <!-- Recipiente dinâmico dos artefatos -->
-        <a-entity id="hologram-stage" position="0 0 0"></a-entity>
+      <a-text id="card-content" value="" align="left" width="2.7" color="#fefae0"
+              position="-2.0 0.45 0.03" font="monoid" baseline="top" wrap-count="37" line-height="54"></a-text>
+
+      <!-- COLUNA DA DIREITA: Pedestal de Ouro do Artefato -->
+      <a-entity position="1.2 0.05 0">
+        <!-- Altar com Bacia de Fogo Azul -->
+        <a-cylinder radius="0.6" height="0.06" color="#7f5539" material="roughness: 0.9" position="0 -0.55 0">
+          <a-ring radius-inner="0.62" radius-outer="0.65" color="#ffd700" rotation="-90 0 0" position="0 0.04 0"></a-ring>
+        </a-cylinder>
+        <a-entity id="relic-stage" position="0 0 0"></a-entity>
       </a-entity>
 
-      <!-- LINHA DO TEMPO RÁPIDA (Trilho no rodapé) -->
-      <a-entity id="timeline-mini-bar" position="0 -0.75 0">
-        <a-plane width="2.5" height="0.005" color="#1f4068" position="0 0 0.02"></a-plane>
+      <!-- FITA DAS PEDRAS DE GLIFO (Navegação Rápida) -->
+      <a-entity id="stone-bar" position="0 -0.76 0">
+        <a-plane width="2.7" height="0.01" color="#ffd700" position="0 0 0.02"></a-plane>
       </a-entity>
 
-      <!-- BOTÕES HOLOGRÁFICOS INFERIORES -->
-      <a-plane id="btn-prev" class="clickable" cyber-button="action: prev"
-               width="0.85" height="0.22" color="#0b132b" position="-1.2 -1.02 0.04"
-               material="opacity: 0.6; transparent: true">
-        <a-plane width="0.85" height="0.01" color="#00f0ff" position="0 0.11 0.01"></a-plane>
-        <a-text value="<<< VOLTAR" align="center" width="2.4" color="#00f0ff" font="monoid" position="0 0 0.02"></a-text>
-      </a-plane>
+      <!-- TOTENS / BOTÕES DE TRANSIÇÃO -->
+      <a-box id="btn-prev" class="clickable" totem-interact="action: prev"
+             width="0.9" height="0.22" depth="0.06" color="#b08968" position="-1.2 -1.06 0.04"
+             material="roughness: 0.6">
+        <a-plane width="0.9" height="0.01" color="#ffd700" position="0 0.11 0.04"></a-plane>
+        <a-text value="<<< EPOCA ANTERIOR" align="center" width="2.3" color="#ffffff" font="kelsonsans" position="0 0 0.04"></a-text>
+      </a-box>
 
-      <a-plane id="btn-next" class="clickable" cyber-button="action: next"
-               width="0.85" height="0.22" color="#0b132b" position="1.2 -1.02 0.04"
-               material="opacity: 0.6; transparent: true">
-        <a-plane width="0.85" height="0.01" color="#00f0ff" position="0 0.11 0.01"></a-plane>
-        <a-text value="AVANÇAR >>>" align="center" width="2.4" color="#00f0ff" font="monoid" position="0 0 0.02"></a-text>
-      </a-plane>
+      <a-box id="btn-next" class="clickable" totem-interact="action: next"
+             width="0.9" height="0.22" depth="0.06" color="#b08968" position="1.2 -1.06 0.04"
+             material="roughness: 0.6">
+        <a-plane width="0.9" height="0.01" color="#ffd700" position="0 0.11 0.04"></a-plane>
+        <a-text value="PROXIMA EPOCA >>>" align="center" width="2.3" color="#ffffff" font="kelsonsans" position="0 0 0.04"></a-text>
+      </a-box>
 
     </a-entity>
 
-    <!-- ILUMINAÇÃO CYBERPUNK -->
-    <a-light type="ambient" color="#060919" intensity="2.0"></a-light>
-    <a-light type="point" color="#00f0ff" intensity="1.5" position="1.2 2.0 -2.0"></a-light>
-    <a-light type="point" color="#7000ff" intensity="1.2" position="-1.5 1.0 -2.0"></a-light>
-
+    <!-- ILUMINAÇÃO DE PÔR DO SOL NO DESERTO -->
+    <a-light type="ambient" color="#3d1e11" intensity="1.8"></a-light>
+    <!-- Sol Dourado no horizonte -->
+    <a-light type="directional" color="#ffb703" intensity="1.4" position="5 6 -6"></a-light>
   </a-scene>
 </body>
 </html>
