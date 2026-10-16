@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>O Templo Sagrado da Medicina: Do Nilo à Era Cibernética</title>
-  
-  <!-- Tailwind CSS para Estilização VisionOS HUD -->
+  <title>NEURO-SURG XR // Centro Cirúrgico & Estações Espaciais Separadas</title>
+
+  <!-- Tailwind CSS para HUD minimalista e retrátil -->
   <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Three.js e Addons Oficiais para WebXR & OrbitControls -->
+
+  <!-- Three.js e OrbitControls Oficial -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
     * {
       box-sizing: border-box;
@@ -25,274 +25,299 @@
       margin: 0;
       padding: 0;
       overflow: hidden;
-      background-color: #030206;
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      color: #f8fafc;
+      background-color: #020617;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: #f1f5f9;
     }
 
-    .font-cinzel {
-      font-family: 'Cinzel', serif;
+    .font-hud {
+      font-family: 'Chakra Petch', sans-serif;
     }
 
     .font-mono-tech {
       font-family: 'JetBrains Mono', monospace;
     }
 
-    /* Spatial Glassmorphism VisionOS */
-    .spatial-glass {
-      background: rgba(10, 8, 14, 0.72);
-      backdrop-filter: blur(32px) saturate(180%);
-      -webkit-backdrop-filter: blur(32px) saturate(180%);
-      border: 1px solid rgba(255, 215, 0, 0.22);
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 
-                  inset 0 1px 0 rgba(255, 255, 255, 0.2),
-                  0 0 30px rgba(218, 165, 32, 0.12);
+    /* Estilos Espaciais Glassmorphism Translúcidos */
+    .glass-dock {
+      background: rgba(8, 14, 26, 0.85);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7),
+                  0 0 20px rgba(0, 240, 255, 0.15);
     }
 
-    .spatial-glass-subtle {
-      background: rgba(18, 15, 24, 0.55);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+    .btn-spatial {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .spatial-glass-active {
-      background: linear-gradient(135deg, rgba(218, 165, 32, 0.25) 0%, rgba(0, 240, 255, 0.12) 100%);
-      border: 1px solid rgba(255, 215, 0, 0.65);
-      box-shadow: 0 0 25px rgba(255, 215, 0, 0.35), inset 0 0 15px rgba(0, 240, 255, 0.2);
+    .btn-spatial:hover {
+      border-color: #00f0ff;
+      background: rgba(0, 240, 255, 0.2);
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+      transform: translateY(-1px);
     }
 
-    /* Scrollbar personalizada minimalista */
-    ::-webkit-scrollbar {
-      width: 4px;
-    }
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: rgba(255, 215, 0, 0.35);
-      border-radius: 999px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(255, 215, 0, 0.7);
+    .btn-spatial-active {
+      border-color: #00f0ff !important;
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.4) 0%, rgba(14, 165, 233, 0.25) 100%) !important;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.45) !important;
+      color: #ffffff !important;
     }
 
-    /* Animações e Pulsações */
-    @keyframes runeGlow {
-      0%, 100% { opacity: 0.4; filter: drop-shadow(0 0 2px #ffd700); }
-      50% { opacity: 1; filter: drop-shadow(0 0 10px #00f0ff); }
+    .hud-transition {
+      transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .rune-pulse {
-      animation: runeGlow 4s ease-in-out infinite;
+    .hud-hidden {
+      opacity: 0;
+      pointer-events: none !important;
+      transform: translateY(-20px);
     }
   </style>
 </head>
 <body class="w-screen h-screen relative select-none">
 
-  <!-- CANVAS WEBGL PRINCIPAL THREE.JS (Ocupa toda a cena imersiva 3D) -->
-  <div id="webgl-container" class="absolute inset-0 z-0"></div>
+  <!-- ============================================================== -->
+  <!-- CANVAS 3D THREE.JS (CAMPO CIRÚRGICO 100% LIMPO E VISÍVEL)       -->
+  <!-- ============================================================== -->
+  <div id="webgl-container" class="absolute inset-0 z-0 cursor-grab active:cursor-grabbing"></div>
 
-  <!-- HUD SPATIAL UX VISIONOS EM CAMADA FRONTAL -->
-  <div id="ui-overlay" class="absolute inset-0 z-10 pointer-events-none flex flex-col justify-between p-3 md:p-6 overflow-hidden">
+  <!-- ============================================================== -->
+  <!-- HUD SPATIAL DISCRETO & NÃO-OBSTRUTIVO (BORDAS DA TELA)          -->
+  <!-- ============================================================== -->
+  <div id="ui-overlay" class="absolute inset-0 z-10 pointer-events-none flex flex-col justify-between p-3 md:p-5 overflow-hidden">
 
-    <!-- BARRA SUPERIOR: Status da Conexão & Modo VR -->
-    <header class="w-full max-w-7xl mx-auto flex items-center justify-between pointer-events-auto px-5 py-2.5 rounded-full spatial-glass-subtle transition-all duration-300">
+    <!-- BARRA SUPERIOR RETRÁTIL: COMANDOS RÁPIDOS & STATUS -->
+    <header id="top-bar" class="hud-transition w-full max-w-6xl mx-auto flex items-center justify-between pointer-events-auto px-4 py-2 rounded-2xl glass-dock">
+      <!-- Título compacto -->
       <div class="flex items-center space-x-3">
-        <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-600 via-amber-400 to-cyan-300 flex items-center justify-center shadow-lg shadow-amber-500/20">
-          <span class="text-sm font-bold text-black font-cinzel">⚕</span>
+        <div class="w-8 h-8 rounded-lg bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-300">
+          ⚡
         </div>
         <div>
-          <h1 class="text-xs uppercase tracking-widest text-amber-300 font-cinzel font-bold">O Templo Sagrado da Medicina</h1>
-          <p class="text-[10px] text-gray-300 font-mono-tech flex items-center gap-1.5">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-            Santuário Virtual &bull; Do Nilo à Era Cibernética
+          <div class="flex items-center gap-2">
+            <h1 class="text-xs uppercase tracking-wider text-cyan-300 font-hud font-bold">NEURO-SURG XR // CENTRO CIRÚRGICO</h1>
+            <span id="badge-vital" class="px-2 py-0.5 rounded text-[10px] font-mono-tech bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+              ECG 72 BPM • PIC 11 mmHg
+            </span>
+          </div>
+          <p class="text-[10px] text-gray-400 font-mono-tech">
+            Estações separadas: Campo Cirúrgico (Centro), Telão (Direita), Monitor (Esquerda)
           </p>
         </div>
       </div>
 
-      <!-- Ações: Áudio, Reset de Câmera & VR -->
-      <div class="flex items-center space-x-3">
-        <button id="btn-ambient-audio" onclick="toggleAudio()" class="p-2.5 rounded-full hover:bg-white/10 active:scale-95 transition-all text-xs text-amber-200 border border-amber-400/20 flex items-center gap-1.5" title="Ativar Som do Templo">
-          <svg id="audio-icon-muted" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/>
-          </svg>
-          <span class="hidden sm:inline text-[11px] font-mono-tech">ÁUDIO TEMPLO</span>
+      <!-- BOTÕES DE CÂMERA & CONTROLE -->
+      <div class="flex items-center space-x-2">
+        <button onclick="setCameraView('surgery')" id="cam-btn-surgery" class="btn-spatial btn-spatial-active px-3 py-1.5 rounded-xl text-xs font-mono-tech flex items-center gap-1.5" title="Focar na Cabeça do Paciente">
+          <span>🧠 CAMPO CIRÚRGICO</span>
         </button>
 
-        <button onclick="resetCameraView()" class="p-2.5 rounded-full hover:bg-white/10 active:scale-95 transition-all text-xs text-cyan-300 border border-cyan-400/20 flex items-center gap-1" title="Recentrar Visão">
-          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-          </svg>
-          <span class="hidden sm:inline text-[11px] font-mono-tech">RECENTRAR</span>
+        <button onclick="setCameraView('theater')" id="cam-btn-theater" class="btn-spatial px-3 py-1.5 rounded-xl text-xs font-mono-tech text-amber-300 flex items-center gap-1.5" title="Olhar para o Telão 3D na Direita">
+          <span>🎬 TELÃO (DIREITA)</span>
         </button>
 
-        <div id="vr-button-container" class="relative"></div>
+        <button onclick="setCameraView('monitor')" id="cam-btn-monitor" class="btn-spatial px-3 py-1.5 rounded-xl text-xs font-mono-tech text-emerald-300 flex items-center gap-1.5" title="Olhar para o Monitor na Esquerda">
+          <span>📊 MONITOR (ESQUERDA)</span>
+        </button>
+
+        <button onclick="setCameraView('overview')" id="cam-btn-overview" class="btn-spatial px-2.5 py-1.5 rounded-xl text-xs text-gray-300" title="Visão Geral da Sala">
+          <span>🔭 GERAL</span>
+        </button>
+
+        <!-- Áudio do ECG -->
+        <button id="btn-ecg-audio" onclick="toggleEcgAudio()" class="btn-spatial p-2 rounded-xl text-emerald-400" title="Ligar/Desligar Beep do Monitor">
+          🔊
+        </button>
+
+        <!-- Botão VR WebXR -->
+        <div id="vr-button-mount"></div>
       </div>
     </header>
 
-    <!-- TRÍPTICO ESPACIAL CENTRAL (Estilo The Met / VisionOS) -->
-    <main class="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch my-auto min-h-[540px] max-h-[78vh]">
+    <!-- NOTIFICAÇÃO DISCRETA FLUTUANTE -->
+    <div class="pointer-events-none flex justify-center w-full">
+      <div id="action-toast" class="opacity-0 transition-opacity duration-300 px-4 py-1.5 rounded-full bg-cyan-950/90 border border-cyan-400/50 text-cyan-200 text-xs font-mono-tech shadow-lg flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+        <span id="toast-message">Incisão de plasma executada com sucesso.</span>
+      </div>
+    </div>
 
-      <!-- ============================================== -->
-      <!-- PAINEL 1: TIMELINE VERTICAL (3 Colunas)        -->
-      <!-- ============================================== -->
-      <aside class="lg:col-span-3 spatial-glass rounded-3xl p-4 flex flex-col justify-between pointer-events-auto shadow-2xl overflow-hidden border border-amber-500/30">
-        <div>
-          <div class="flex items-center justify-between pb-2.5 border-b border-amber-500/20 mb-3">
-            <span class="text-xs uppercase font-cinzel tracking-wider text-amber-300 font-bold flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-amber-400 shadow-sm shadow-amber-400"></span>
-              Linha do Tempo
-            </span>
-            <span class="text-[10px] font-mono-tech text-cyan-300 bg-cyan-950/60 px-2 py-0.5 rounded-full border border-cyan-500/30">8 Eras</span>
-          </div>
+    <!-- BARRA INFERIOR DE INSTRUMENTOS -->
+    <footer id="bottom-dock" class="hud-transition w-full max-w-5xl mx-auto pointer-events-auto flex items-center justify-between gap-3 px-4 py-2.5 rounded-2xl glass-dock mb-1">
+      
+      <!-- Seletor dos 4 Instrumentos Cirúrgicos -->
+      <div class="flex items-center gap-2">
+        <span class="text-[10px] font-hud uppercase tracking-wider text-gray-400 mr-1 hidden sm:inline">Instrumento:</span>
 
-          <!-- Lista de Épocas -->
-          <nav id="timeline-list" class="space-y-1.5 max-h-[44vh] lg:max-h-[50vh] overflow-y-auto pr-1">
-            <!-- Gerado via JavaScript -->
-          </nav>
-        </div>
+        <button onclick="selectTool('scalpel')" id="tool-scalpel" class="btn-spatial btn-spatial-active px-3 py-1.5 rounded-xl text-xs font-hud font-bold flex items-center gap-1.5">
+          <span>⚡</span>
+          <span>Bisturi Plasma</span>
+        </button>
 
-        <div class="pt-3 border-t border-amber-500/20 text-[11px] text-gray-300 flex items-center justify-between font-mono-tech">
-          <span class="text-amber-400/90">3000 a.C. &rarr; Séc. XXI</span>
-          <span class="text-cyan-400">Hologramas 3D</span>
-        </div>
-      </aside>
+        <button onclick="selectTool('cautery')" id="tool-cautery" class="btn-spatial px-3 py-1.5 rounded-xl text-xs font-hud font-bold flex items-center gap-1.5 text-amber-300">
+          <span>🔥</span>
+          <span>Cautério</span>
+        </button>
 
-      <!-- ============================================== -->
-      <!-- PAINEL 2: SALA HERO CENTRAL & TÓPICOS (6 Col)  -->
-      <!-- ============================================== -->
-      <section class="lg:col-span-6 spatial-glass rounded-3xl p-5 md:p-6 flex flex-col justify-between pointer-events-auto shadow-2xl relative overflow-hidden border border-amber-500/30">
+        <button onclick="selectTool('suction')" id="tool-suction" class="btn-spatial px-3 py-1.5 rounded-xl text-xs font-hud font-bold flex items-center gap-1.5 text-emerald-300">
+          <span>💨</span>
+          <span>Aspirador CUSA</span>
+        </button>
+
+        <button onclick="selectTool('laser')" id="tool-laser" class="btn-spatial px-3 py-1.5 rounded-xl text-xs font-hud font-bold flex items-center gap-1.5 text-pink-300">
+          <span>🎯</span>
+          <span>Cânula Laser</span>
+        </button>
+      </div>
+
+      <!-- Gatilho de Aplicação Manual -->
+      <div class="flex items-center gap-2">
+        <button onclick="executeSurgicalAction()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-400 hover:from-cyan-400 hover:to-emerald-300 active:scale-95 text-black font-hud font-bold text-xs shadow-lg shadow-cyan-500/20 flex items-center gap-1.5">
+          <span>OPERAR TECIDO</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </button>
+
+        <!-- Input Oculto de Vídeo Local e Botão de Carregar -->
+        <input type="file" id="local-video-input" accept="video/mp4,video/webm" class="hidden" onchange="handleUserVideoFile(event)">
         
-        <!-- Fundo de Luz Solar Dourada -->
-        <div class="absolute -top-20 left-1/2 -translate-x-1/2 w-96 h-36 bg-amber-500/10 rounded-full blur-[80px] pointer-events-none"></div>
+        <button onclick="document.getElementById('local-video-input').click()" class="btn-spatial px-3 py-2 rounded-xl text-xs font-mono-tech text-amber-300 flex items-center gap-1" title="Carregar vídeo pessoal no Telão 3D">
+          <span>📁</span>
+          <span class="hidden md:inline">VÍDEO PRÓPRIO</span>
+        </button>
 
-        <!-- Cabeçalho Limpo Sem Sobreposições -->
-        <div class="relative z-10">
-          <div class="flex items-center justify-between mb-1.5">
-            <span id="hero-tag" class="text-[11px] font-mono-tech tracking-wider uppercase text-amber-300 px-2.5 py-0.5 rounded-md bg-amber-500/10 border border-amber-400/20">
-              1. EGITO ANTIGO
-            </span>
-            <span id="hero-date" class="text-xs font-mono-tech text-cyan-300 font-semibold px-2 py-0.5 rounded-md bg-cyan-950/40 border border-cyan-500/30">
-              3000 a.C.
-            </span>
-          </div>
-
-          <h2 id="hero-title" class="text-xl md:text-2xl lg:text-3xl font-cinzel font-bold text-white tracking-wide mt-1 leading-tight">
-            I. EGITO PRIMORDIAL
-          </h2>
-
-          <p id="hero-subtitle" class="text-xs md:text-sm text-amber-200/90 font-medium italic mt-1">
-            A Aurora da Cura, Tratados em Papiro e a Anatomia Sagrada
-          </p>
-
-          <div class="h-px w-full bg-gradient-to-r from-amber-400/60 via-cyan-400/40 to-transparent my-3.5"></div>
-        </div>
-
-        <!-- Conteúdo dos Avanços Clínicos da Época -->
-        <div class="relative z-10 my-1 overflow-y-auto max-h-[35vh]">
-          <div class="flex items-center gap-2 mb-2 text-[11px] uppercase tracking-wider text-cyan-300 font-mono-tech font-semibold">
-            <svg class="w-3.5 h-3.5 text-cyan-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            Descobertas e Avanços Médicos Fundamentais
-          </div>
-
-          <ul id="hero-bullets" class="space-y-2 text-xs md:text-[13px] text-gray-200 leading-relaxed font-light">
-            <!-- Gerado via JavaScript -->
-          </ul>
-        </div>
-
-        <!-- Rodapé do Card com Navegação Espacial -->
-        <div class="relative z-10 pt-4 border-t border-amber-500/20 flex items-center justify-between gap-3">
-          <button onclick="navigateEra(-1)" class="flex-1 py-3 px-4 rounded-2xl spatial-glass-subtle hover:bg-amber-500/20 active:scale-95 transition-all text-xs font-cinzel font-bold text-amber-200 flex items-center justify-center gap-2 border border-amber-400/30">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-            ÉPOCA ANTERIOR
-          </button>
-
-          <button onclick="navigateEra(1)" class="flex-1 py-3 px-4 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 hover:from-amber-400 hover:to-amber-500 active:scale-95 transition-all text-xs font-cinzel font-black text-black flex items-center justify-center gap-2 shadow-lg shadow-amber-500/25">
-            PRÓXIMA ÉPOCA
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-          </button>
-        </div>
-
-      </section>
-
-      <!-- ============================================== -->
-      <!-- PAINEL 3: SIMULADOR ANATÔMICO & CONTROLES (3)  -->
-      <!-- ============================================== -->
-      <aside class="lg:col-span-3 spatial-glass rounded-3xl p-4 flex flex-col justify-between pointer-events-auto shadow-2xl border border-amber-500/30">
-        <div>
-          <div class="flex items-center justify-between pb-2.5 border-b border-amber-500/20 mb-3">
-            <span class="text-xs uppercase font-cinzel tracking-wider text-cyan-300 font-bold flex items-center gap-2">
-              <span class="w-2 h-2 rounded-full bg-cyan-400 shadow-sm shadow-cyan-400 animate-pulse"></span>
-              Simulador Holográfico
-            </span>
-            <span id="artifact-name-badge" class="text-[9px] font-mono-tech text-amber-300 bg-amber-950/60 px-2 py-0.5 rounded-full border border-amber-500/30 truncate max-w-[110px]">
-              CORAÇÃO SOLAR
-            </span>
-          </div>
-
-          <!-- Status do Holograma Ativo -->
-          <div class="p-3 rounded-2xl bg-black/40 border border-white/10 mb-3">
-            <div class="text-[10px] text-gray-400 uppercase font-mono-tech">Modelo 3D em Execução:</div>
-            <div id="hologram-live-title" class="text-xs font-bold text-amber-300 font-cinzel mt-0.5">Anatomia do Pulso Vital</div>
-            <p id="hologram-live-desc" class="text-[11px] text-gray-300 mt-1 leading-snug">
-              Coração de plasma com contração e partículas em fluxo vital contínuo.
-            </p>
-          </div>
-
-          <!-- Controles Interativos da Animação Médica -->
-          <div class="space-y-3 p-3 rounded-2xl bg-white/[0.03] border border-amber-500/20">
-            <div>
-              <div class="flex items-center justify-between text-[11px] font-mono-tech text-gray-300 mb-1">
-                <span>Velocidade da Animação:</span>
-                <span id="speed-label" class="text-cyan-300 font-bold">1.0x</span>
-              </div>
-              <input type="range" id="anim-speed" min="0.2" max="2.5" step="0.1" value="1.0" oninput="updateHologramSpeed(this.value)" class="w-full accent-amber-400 cursor-pointer">
-            </div>
-
-            <div class="flex items-center justify-between pt-1">
-              <span class="text-[11px] font-mono-tech text-gray-300">Scanner de Raio-X:</span>
-              <button id="btn-toggle-scanner" onclick="toggleScannerBeam()" class="px-2.5 py-1 rounded-lg text-[10px] font-mono-tech bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 hover:bg-cyan-500/40 transition-colors">
-                ATIVO
-              </button>
-            </div>
-
-            <div class="flex items-center justify-between pt-1">
-              <span class="text-[11px] font-mono-tech text-gray-300">Anéis de Órbita:</span>
-              <button id="btn-toggle-rings" onclick="toggleHoloRings()" class="px-2.5 py-1 rounded-lg text-[10px] font-mono-tech bg-amber-500/20 text-amber-300 border border-amber-400/40 hover:bg-amber-500/40 transition-colors">
-                VISÍVEL
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Instruções de Controle Espacial -->
-        <div class="p-3 rounded-2xl bg-black/50 border border-cyan-500/20 text-[11px] text-gray-300 font-mono-tech space-y-1">
-          <div class="text-cyan-300 font-semibold flex items-center gap-1">
-            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-            Modo Interativo:
-          </div>
-          <div>&bull; <b>No Meta Quest:</b> Aponte e aperte (Pinch)</div>
-          <div>&bull; <b>No Desktop:</b> Clique e arraste para 360°</div>
-        </div>
-      </aside>
-
-    </main>
-
-    <!-- RODAPÉ EPILOGUE: A FRASE DA LINHA DO TEMPO -->
-    <footer class="w-full max-w-7xl mx-auto px-6 py-2.5 rounded-2xl spatial-glass-subtle text-center text-xs text-amber-100/80 border border-amber-400/25 pointer-events-auto shadow-xl">
-      <span class="font-cinzel text-amber-300 font-bold tracking-wide">✨ O LEGADO DA CURA:</span>
-      <span class="italic">“Da observação do corpo humano às tecnologias que revolucionaram os diagnósticos e tratamentos, cada descoberta abriu caminho para uma medicina mais precisa, segura e eficaz.”</span>
+        <!-- Botão MODO CAMPO LIMPO -->
+        <button onclick="toggleCleanFieldMode()" id="btn-toggle-hud" class="btn-spatial px-3 py-2 rounded-xl text-xs font-mono-tech text-cyan-300" title="Ocultar/Exibir menus 2D da tela">
+          👁️ CAMPO LIMPO
+        </button>
+      </div>
     </footer>
+
+    <!-- BOTÃO FLUTUANTE DE EMERGÊNCIA PARA RESTAURAR O MENU -->
+    <div id="restore-hud-btn" class="hidden absolute top-4 right-4 pointer-events-auto">
+      <button onclick="toggleCleanFieldMode()" class="px-3 py-2 rounded-xl glass-dock text-xs font-mono-tech text-cyan-300 border border-cyan-400 hover:bg-cyan-500/20 shadow-xl">
+        👁️ MOSTRAR INTERFACE
+      </button>
+    </div>
 
   </div>
 
-
   <!-- ============================================================== -->
-  <!-- SISTEMA DE ÁUDIO PROCEDURAL WEB AUDIO API (SEM ARQUIVOS MP3)    -->
+  <!-- SISTEMA DE ÁUDIO PROCEDURAL WEB AUDIO API                       -->
   <!-- ============================================================== -->
   <script>
-    // Implementação direta e autocontida do VRButton compatível com Three.js e WebXR
+    let audioCtx = null;
+    let isEcgAudioActive = true;
+
+    function initAudio() {
+      try {
+        if (!audioCtx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (AudioContextClass) {
+            audioCtx = new AudioContextClass();
+          }
+        }
+        if (audioCtx && audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+      } catch (e) {
+        console.warn('Audio init silent error:', e);
+      }
+    }
+
+    function playBeep(freq = 880) {
+      if (!audioCtx || !isEcgAudioActive) return;
+      try {
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now);
+        osc.frequency.exponentialRampToValueAtTime(freq * 1.05, now + 0.07);
+
+        gain.gain.setValueAtTime(0.025, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
+
+        osc.start(now);
+        osc.stop(now + 0.08);
+      } catch (e) {}
+    }
+
+    function playToolSound(tool) {
+      initAudio();
+      if (!audioCtx) return;
+      try {
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        if (tool === 'scalpel') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(1200, now);
+          osc.frequency.exponentialRampToValueAtTime(600, now + 0.18);
+          gain.gain.setValueAtTime(0.05, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+          osc.start(now);
+          osc.stop(now + 0.18);
+        } else if (tool === 'cautery') {
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(260, now);
+          osc.frequency.linearRampToValueAtTime(320, now + 0.22);
+          gain.gain.setValueAtTime(0.06, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+          osc.start(now);
+          osc.stop(now + 0.22);
+        } else if (tool === 'suction') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(350, now);
+          osc.frequency.linearRampToValueAtTime(180, now + 0.28);
+          gain.gain.setValueAtTime(0.05, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
+          osc.start(now);
+          osc.stop(now + 0.28);
+        } else if (tool === 'laser') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(2400, now);
+          osc.frequency.exponentialRampToValueAtTime(500, now + 0.15);
+          gain.gain.setValueAtTime(0.07, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
+          osc.start(now);
+          osc.stop(now + 0.15);
+        }
+      } catch (e) {}
+    }
+
+    function toggleEcgAudio() {
+      initAudio();
+      isEcgAudioActive = !isEcgAudioActive;
+      const btn = document.getElementById('btn-ecg-audio');
+      if (btn) {
+        btn.textContent = isEcgAudioActive ? '🔊' : '🔇';
+        btn.className = isEcgAudioActive ? 'btn-spatial p-2 rounded-xl text-emerald-400' : 'btn-spatial p-2 rounded-xl text-gray-500';
+      }
+    }
+
+    setInterval(() => {
+      playBeep(880);
+    }, 850);
+
+    window.addEventListener('click', () => {
+      initAudio();
+    }, { once: true });
+  </script>
+
+  <!-- ============================================================== -->
+  <!-- SISTEMA PRINCIPAL THREE.JS: DISPOSIÇÃO ESPACIAL TOTALMENTE SEPARADA -->
+  <!-- ============================================================== -->
+  <script>
     const VRButtonHelper = {
       createButton: function (renderer) {
         const button = document.createElement('button');
@@ -317,18 +342,11 @@
           button.style.cursor = 'pointer';
           button.textContent = 'ENTRAR EM VR';
 
-          button.onmouseenter = function () {
-            button.style.transform = 'scale(1.05)';
-          };
-          button.onmouseleave = function () {
-            button.style.transform = 'scale(1)';
-          };
-
           button.onclick = function () {
             if (currentSession === null) {
               const sessionInit = { optionalFeatures: ['local-floor', 'bounded-floor', 'hand-tracking'] };
               navigator.xr.requestSession('immersive-vr', sessionInit).then(onSessionStarted).catch(function (err) {
-                console.warn('Falha ao iniciar sessão WebXR:', err);
+                console.warn('Falha WebXR:', err);
               });
             } else {
               currentSession.end();
@@ -339,1192 +357,1109 @@
         function disableButton() {
           button.style.display = '';
           button.style.cursor = 'auto';
-          button.textContent = 'VR NÃO SUPORTADO';
-          button.style.opacity = '0.6';
+          button.textContent = 'VR DISPONÍVEL NO QUEST';
+          button.style.opacity = '0.5';
           button.onclick = null;
         }
 
-        function showWebXRNotFound() {
-          disableButton();
-        }
-
-        button.id = 'VRButton';
-        button.style.display = 'none';
+        button.className = "px-3 py-1.5 rounded-xl bg-gradient-to-r from-cyan-500 to-sky-600 text-black font-mono-tech font-bold text-xs shadow-lg shadow-cyan-500/20 active:scale-95";
 
         if ('xr' in navigator) {
           navigator.xr.isSessionSupported('immersive-vr').then(function (supported) {
-            supported ? showEnterVR() : showWebXRNotFound();
-          }).catch(showWebXRNotFound);
+            supported ? showEnterVR() : disableButton();
+          }).catch(disableButton);
         } else {
-          showWebXRNotFound();
+          disableButton();
         }
 
         return button;
       }
     };
 
-    let audioCtx = null;
-    let droneOsc1 = null, droneOsc2 = null, droneGain = null;
-    let heartbeatOsc = null, heartbeatGain = null;
-    let isAudioActive = false;
-
-    function initAudioContext() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
-    }
-
-    function toggleAudio() {
-      initAudioContext();
-      if (!isAudioActive) {
-        startAtmosphericSound();
-        isAudioActive = true;
-        document.getElementById('audio-icon-muted').innerHTML = `
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-        `;
-        playHapticBeep('start');
-      } else {
-        stopAtmosphericSound();
-        isAudioActive = false;
-        document.getElementById('audio-icon-muted').innerHTML = `
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"/>
-        `;
-      }
-    }
-
-    function startAtmosphericSound() {
-      // Ressonância mística do deserto (harmônico profundo em Lá menor)
-      const now = audioCtx.currentTime;
-      droneGain = audioCtx.createGain();
-      droneGain.gain.setValueAtTime(0.001, now);
-      droneGain.gain.exponentialRampToValueAtTime(0.035, now + 2);
-      droneGain.connect(audioCtx.destination);
-
-      droneOsc1 = audioCtx.createOscillator();
-      droneOsc1.type = 'sine';
-      droneOsc1.frequency.setValueAtTime(108, now); // Nota harmônica sagrada
-      droneOsc1.connect(droneGain);
-      droneOsc1.start();
-
-      droneOsc2 = audioCtx.createOscillator();
-      droneOsc2.type = 'triangle';
-      droneOsc2.frequency.setValueAtTime(162, now); // Quinta suave
-      droneOsc2.connect(droneGain);
-      droneOsc2.start();
-    }
-
-    function stopAtmosphericSound() {
-      if (droneGain) {
-        const now = audioCtx.currentTime;
-        droneGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.8);
-        setTimeout(() => {
-          if (droneOsc1) { droneOsc1.stop(); droneOsc1.disconnect(); }
-          if (droneOsc2) { droneOsc2.stop(); droneOsc2.disconnect(); }
-        }, 850);
-      }
-    }
-
-    function playHapticBeep(type) {
-      if (!audioCtx) return;
-      try {
-        const now = audioCtx.currentTime;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-
-        if (type === 'select') {
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(540, now);
-          osc.frequency.exponentialRampToValueAtTime(880, now + 0.09);
-          gain.gain.setValueAtTime(0.05, now);
-          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.09);
-          osc.start(now);
-          osc.stop(now + 0.09);
-        } else if (type === 'pulse') {
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(120, now);
-          osc.frequency.exponentialRampToValueAtTime(60, now + 0.15);
-          gain.gain.setValueAtTime(0.08, now);
-          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
-          osc.start(now);
-          osc.stop(now + 0.15);
-        }
-      } catch (e) {}
-    }
-  </script>
-
-
-  <!-- ============================================================== -->
-  <!-- DADOS HISTÓRICOS COMPLETOS COM 100% DE ACENTOS EM PORTUGUÊS    -->
-  <!-- ============================================================== -->
-  <script>
-    const medicalEras = [
-      {
-        id: "egypt",
-        tag: "1. EGITO ANTIGO",
-        periodo: "3000 a.C.",
-        titulo: "I. EGITO PRIMORDIAL",
-        subtitulo: "A Aurora da Cura, Tratados em Papiro e a Anatomia Sagrada",
-        topicos: [
-          "Papiro Edwin Smith e Ebers: os primeiros tratados médicos da humanidade descrevendo traumas cranianos e fraturas de forma objetiva.",
-          "Utilização pioneira e sistemática de plantas medicinais, mel antisséptico, mirra e compostos minerais.",
-          "Conhecimentos anatômicos precisos desenvolvidos durante os ritos sagrados de mumificação dos órgãos vitais.",
-          "Imhotep: arquiteto e o primeiro médico reconhecido pela história, divinizado pela sublime arte de curar.",
-          "Medicina e espiritualidade integradas na harmonização da energia vital com o corpo humano."
-        ],
-        hologramaNome: "CORAÇÃO DE PLASMA SOLAR",
-        hologramaTitulo: "Anatomia e Pulso Cardíaco Sagrado",
-        hologramaDesc: "Simulação do órgão vital com contração sistólica/diastólica procedural, partículas sanguíneas e anéis de cura."
-      },
-      {
-        id: "greece",
-        tag: "2. GRÉCIA ANTIGA",
-        periodo: "400 a.C.",
-        titulo: "II. GRÉCIA CLÁSSICA",
-        subtitulo: "O Nascimento da Medicina Racional e da Ética Clínica",
-        topicos: [
-          "Hipócrates desmistifica a doença: enfermidades possuem causas naturais e desequilíbrios físicos, rompendo com superstições.",
-          "Criação e formalização do método clínico baseado na escuta atenta, inspeção minuciosa e prognóstico metódico.",
-          "Estabelecimento do célebre Juramento de Hipócrates, eternizando os princípios deontológicos e a ética médica universal.",
-          "Teoria dos quatro humores (sangue, fleugma, bílis amarela e bílis negra) buscando o equilíbrio permanente (homeostase).",
-          "Valorização sagrada do vínculo empático, respeito mútuo e confiança entre o médico e o enfermo."
-        ],
-        hologramaNome: "CADUCEU DE ASCLÉPIO",
-        hologramaTitulo: "As Serpentes da Regeneração e os 4 Humores",
-        hologramaDesc: "Cajado volumétrico com serpentes de plasma espirais em órbita perpétua e as 4 esferas elementares harmonizadas."
-      },
-      {
-        id: "middle_ages",
-        tag: "3. IDADE MÉDIA",
-        periodo: "500 a 1500",
-        titulo: "III. IDADE MÉDIA & ORIENTE",
-        subtitulo: "A Luz dos Manuscritos e as Grandes Redes Hospitalares",
-        topicos: [
-          "Avicena (Ibn Sina) publica a obra colossal 'Cânone da Medicina', compilando séculos de saber grego, persa e indiano.",
-          "Fundação das primeiras grandes redes de hospitais públicos e universitários (Bimaristan) em Bagdá, Cairo e Córdova.",
-          "Desenvolvimento e refinamento da farmacopeia com destilação de óleos essenciais, elixires e compostos terapêuticos.",
-          "Cirurgias oftalmológicas pioneiras, remoção de catarata com agulhas ocas e tratamento metódico de feridas infecciosas.",
-          "Preservação cuidadosa dos textos clássicos greco-romanos por monges copistas e sábios do oriente."
-        ],
-        hologramaNome: "ALAMBIQUE ALQUÍMICO & CÂNONE",
-        hologramaTitulo: "Farmacopeia e Destilação Curativa",
-        hologramaDesc: "Alambique de vidro com fluidos térmicos borbulhantes, folhas de ervas levitando e o livro de Avicena em rotação."
-      },
-      {
-        id: "renaissance",
-        tag: "4. RENASCIMENTO",
-        periodo: "1500 a 1600",
-        titulo: "IV. O RENASCIMENTO",
-        subtitulo: "A Revolução Anatômica e a Ciência Experimental",
-        topicos: [
-          "Andreas Vesalius publica 'De Humani Corporis Fabrica' (1543), corrigindo mais de 200 equívocos anatômicos milenares de Galeno.",
-          "Dissecações cadavéricas públicas e sistemáticas transformam o estudo dos órgãos, músculos e ossos em evidência irrefutável.",
-          "Leonardo da Vinci une arte e precisão ao desenhar a biomecânica humana, as cavidades cerebrais e o movimento das válvulas do coração.",
-          "Consolidação definitiva do método científico experimental: a verdade clínica reside na observação direta do corpo.",
-          "Ilustrações anatômicas primorosas gravadas em xilogravura integram o Renascimento das artes à ciência médica."
-        ],
-        hologramaNome: "ESFERA ANATÔMICA DE VESALIUS",
-        hologramaTitulo: "Morfologia e Biomecânica Humana",
-        hologramaDesc: "Estrutura do esqueleto com feixes de nervos transparentes iluminados por eixos de revolução vitruviana."
-      },
-      {
-        id: "century17",
-        tag: "5. SÉCULO XVII",
-        periodo: "1600",
-        subtitulo: "A Máquina Humana e o Infinitamente Pequeno",
-        topicos: [
-          "William Harvey demonstra em 1628 que o sistema circulatório é fechado e que o coração funciona como uma bomba mecânica contínua.",
-          "Invenção e aprimoramento das lentes de aumento, dando origem aos primeiros microscópios compostos de precisão.",
-          "Robert Hooke analisa lâminas de cortiça em 1665 e cunha pela primeira vez na história o termo biológico 'célula'.",
-          "Antonie van Leeuwenhoek constrói microscópios caseiros e descobre os primeiros microrganismos vivos na água e na saliva.",
-          "O corpo humano deixa de ser visto por conceitos abstratos e passa a ser compreendido pela mecânica e pela fisiologia."
-        ],
-        hologramaNome: "CIRCUITO HEMODINÂMICO DE HARVEY",
-        hologramaTitulo: "Circulação Fechada & Microscopia",
-        hologramaDesc: "Fluxo pulsátil contínuo de células vermelhas e azuis em artérias e veias com lente microscópica em foco."
-      },
-      {
-        id: "century18_19",
-        tag: "6. SÉCULOS XVIII E XIX",
-        periodo: "1700 a 1899",
-        titulo: "VI. SÉCULOS XVIII E XIX",
-        subtitulo: "A Tríade de Ouro: Vacinas, Antissepsia e Raios X",
-        topicos: [
-          "1796: Edward Jenner formula a primeira vacina da humanidade, imunizando com sucesso contra o flagelo da varíola.",
-          "1846: Primeira demonstração pública da anestesia cirúrgica por inalação de éter etílico, erradicando a dor nas operações.",
-          "Década de 1860: Louis Pasteur consolida a Teoria Germinativa, provando que microrganismos causam doenças e fermentações.",
-          "1867: Joseph Lister introduz a antissepsia cirúrgica com ácido carbólico, reduzindo drasticamente a mortalidade hospitalar.",
-          "1895: Wilhelm Röntgen descobre os Raios X, permitindo aos médicos enxergar o interior dos ossos sem cortes cirúrgicos."
-        ],
-        hologramaNome: "EMISSOR DE ONDAS RÖNTGEN & VACINA",
-        hologramaTitulo: "Diagnóstico por Radiação e Antissepsia",
-        hologramaDesc: "Tubo catódico disparando feixes de raios X com esqueleto em radiografia e partículas neutralizando patógenos."
-      },
-      {
-        id: "century20",
-        tag: "7. SÉCULO XX",
-        periodo: "1900 a 1999",
-        titulo: "VII. SÉCULO XX",
-        subtitulo: "A Era dos Antibióticos, Genoma e Imagens Tridimensionais",
-        topicos: [
-          "1928: Alexander Fleming descobre acidentalmente a penicilina, inaugurando a era dourada dos antibióticos que salvou milhões.",
-          "1953: James Watson, Francis Crick e Rosalind Franklin elucidam a arquitetura molecular em dupla hélice do DNA.",
-          "1967: O cirurgião Christiaan Barnard realiza o primeiro transplante cardíaco entre humanos com pleno êxito na África do Sul.",
-          "Décadas de 1970 e 1980: Advento da Tomografia Computadorizada (TC) e Ressonância Magnética (RM), revolucionando a radiologia.",
-          "1985: A robótica estreia em salas cirúrgicas, abrindo caminho para procedimentos minimamente invasivos e de alta precisão."
-        ],
-        hologramaNome: "DUPLA HÉLICE DE DNA CIBERNÉTICA",
-        hologramaTitulo: "Arquitetura Genômica & Braço Robótico",
-        hologramaDesc: "Macromolécula tridimensional de DNA giratória com pares de bases coloridas e braço cirúrgico com laser ativo."
-      },
-      {
-        id: "conclusion",
-        tag: "8. SÍNTESE // O FUTURO",
-        periodo: "Século XXI+",
-        titulo: "VIII. O HORIZONTE DA CURA",
-        subtitulo: "Medicina de Precisão, Inteligência Artificial e Nanotecnologia",
-        topicos: [
-          "Sequenciamento genético individualizado e edição gênica ultraprecisa através de ferramentas CRISPR-Cas9.",
-          "Cirurgias robóticas guiadas por modelos de Inteligência Artificial preditiva com transmissão holográfica remota.",
-          "Desenvolvimento e produção de vacinas de RNA mensageiro (mRNA) em escala global em tempo recorde.",
-          "Nanomedicina: cápsulas microscópicas navegando na corrente sanguínea para eliminar tumores em nível celular.",
-          "A fusão sublime entre a inteligência computacional e a compaixão humana na preservação da vida."
-        ],
-        hologramaNome: "AVATAR BIOMÉTRICO QUÂNTICO",
-        hologramaTitulo: "Diagnóstico Integral por IA & Nanobots",
-        hologramaDesc: "Avatar translúcido sob varredura de tomografia volumétrica contínua e nanocápsulas celulares em órbita holográfica."
-      }
-    ];
-
-    let currentEraIdx = 0;
-  </script>
-
-
-  <!-- ============================================================== -->
-  <!-- SISTEMA PRINCIPAL 3D: THREE.JS, WEBXR & AMBIENTE DO TEMPLO      -->
-  <!-- ============================================================== -->
-  <script>
     let scene, camera, renderer, controls;
-    let templeGroup, hologramGroup, activeArtifactGroup;
     let clock = new THREE.Clock();
-    let animSpeed = 1.0;
-    let showScanner = true;
-    let showRings = true;
 
-    // Componentes de Animação Procedural dos Hologramas
-    let holoParts = [];
-    let scannerMesh = null;
-    let holoRingsGroup = null;
+    // Entidades do Cenário
+    let surgicalFieldGroup, brainTumorMesh, craniotomyRingMesh, tool3DMesh;
+    let telemetryBoardGroup, telemetryCanvas, telemetryCtx, telemetryTexture;
+    let videoTheaterGroup, videoTexture, videoElement, videoScreenMesh;
+    let patientChestMesh, patientHeadMesh;
+    let currentTool = 'scalpel';
+    let tumorHealth = 100;
 
-    function initThreeEngine() {
+    // Raycaster para cliques no paciente ou telas
+    let raycaster = new THREE.Raycaster();
+    let mouse = new THREE.Vector2();
+
+    function setupORLighting() {
+      // Luz ambiente cirúrgica fria e difusa
+      const ambientLight = new THREE.AmbientLight(0x0f1d36, 1.4);
+      scene.add(ambientLight);
+
+      // Foco Cirúrgico Central (Scialytic Light - Temperatura 4500K / Branca Neutra Estéril)
+      const surgicalLight = new THREE.SpotLight(0xfff8ee, 4.2);
+      surgicalLight.position.set(0.2, 3.4, 0.4);
+      surgicalLight.target.position.set(0, 1.16, 0);
+      surgicalLight.angle = Math.PI / 4.8;
+      surgicalLight.penumbra = 0.35;
+      surgicalLight.castShadow = true;
+      scene.add(surgicalLight);
+      scene.add(surgicalLight.target);
+
+      // Foco Cirúrgico Secundário de Contorno (Rim Light Ciano Médico)
+      const secondaryLight = new THREE.SpotLight(0x38bdf8, 2.2);
+      secondaryLight.position.set(-0.8, 3.0, 0.2);
+      secondaryLight.target.position.set(0, 1.16, 0);
+      secondaryLight.angle = Math.PI / 4.2;
+      secondaryLight.penumbra = 0.5;
+      scene.add(secondaryLight);
+      scene.add(secondaryLight.target);
+
+      // Luz suave de fundo
+      const theaterLight = new THREE.PointLight(0x0284c7, 1.2, 9);
+      theaterLight.position.set(2.6, 2.2, -0.6);
+      scene.add(theaterLight);
+
+      const telemetryLight = new THREE.PointLight(0x10b981, 1.0, 9);
+      telemetryLight.position.set(-2.6, 2.2, -0.6);
+      scene.add(telemetryLight);
+    }
+
+    function buildArchitecturalRoom() {
+      // Piso vinílico condutivo com reflexos sutis de centro cirúrgico
+      const floorGeo = new THREE.PlaneGeometry(18, 18);
+      const floorMat = new THREE.MeshStandardMaterial({
+        color: 0x050b14,
+        roughness: 0.18,
+        metalness: 0.65
+      });
+      const floor = new THREE.Mesh(floorGeo, floorMat);
+      floor.rotation.x = -Math.PI / 2;
+      floor.position.y = 0;
+      scene.add(floor);
+
+      const grid = new THREE.GridHelper(18, 36, 0x0ea5e9, 0x1e293b);
+      grid.position.y = 0.005;
+      scene.add(grid);
+
+      // Cúpula Scialítica Moderna
+      const domeArm = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.04, 0.04, 1.2, 16),
+        new THREE.MeshStandardMaterial({ color: 0x64748b, metalness: 0.9, roughness: 0.2 })
+      );
+      domeArm.rotation.z = Math.PI / 3;
+      domeArm.position.set(-0.5, 3.4, 0.4);
+      scene.add(domeArm);
+
+      const scialyticMount = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.55, 0.65, 0.1, 32),
+        new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.85, roughness: 0.2 })
+      );
+      scialyticMount.position.set(0.2, 3.4, 0.4);
+      scene.add(scialyticMount);
+
+      // Emissores LED Cirúrgicos circulares
+      for (let i = 0; i < 6; i++) {
+        const angle = (i / 6) * Math.PI * 2;
+        const led = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.1, 0.1, 0.02, 16),
+          new THREE.MeshBasicMaterial({ color: 0xffffff })
+        );
+        led.position.set(0.2 + Math.cos(angle) * 0.32, 3.34, 0.4 + Math.sin(angle) * 0.32);
+        scene.add(led);
+      }
+    }
+
+    function createProceduralSkinTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 512;
+      canvas.height = 512;
+      const ctx = canvas.getContext('2d');
+
+      ctx.fillStyle = '#e5b89a';
+      ctx.fillRect(0, 0, 512, 512);
+
+      for (let i = 0; i < 12000; i++) {
+        const x = Math.random() * 512;
+        const y = Math.random() * 512;
+        const radius = Math.random() * 1.5;
+        const shade = Math.random() > 0.5 ? 'rgba(180, 110, 90, 0.06)' : 'rgba(255, 235, 220, 0.08)';
+        ctx.fillStyle = shade;
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      const grad = ctx.createRadialGradient(256, 256, 40, 256, 256, 250);
+      grad.addColorStop(0, 'rgba(235, 160, 140, 0.12)');
+      grad.addColorStop(1, 'rgba(180, 115, 95, 0.18)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 512, 512);
+
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+      return texture;
+    }
+
+    function createProceduralCortexTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 512;
+      canvas.height = 512;
+      const ctx = canvas.getContext('2d');
+
+      ctx.fillStyle = '#cf6f7e';
+      ctx.fillRect(0, 0, 512, 512);
+
+      ctx.strokeStyle = '#7c2533';
+      ctx.lineWidth = 9;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      for (let i = 0; i < 45; i++) {
+        ctx.beginPath();
+        let px = Math.random() * 512;
+        let py = Math.random() * 512;
+        ctx.moveTo(px, py);
+        for (let j = 0; j < 6; j++) {
+          px += (Math.random() - 0.5) * 80;
+          py += (Math.random() - 0.5) * 80;
+          ctx.quadraticCurveTo(px + (Math.random() - 0.5) * 30, py + (Math.random() - 0.5) * 30, px, py);
+        }
+        ctx.stroke();
+      }
+
+      ctx.strokeStyle = '#b91c1c';
+      ctx.lineWidth = 2.5;
+      for (let i = 0; i < 35; i++) {
+        ctx.beginPath();
+        let vx = Math.random() * 512;
+        let vy = Math.random() * 512;
+        ctx.moveTo(vx, vy);
+        for (let k = 0; k < 4; k++) {
+          vx += (Math.random() - 0.5) * 60;
+          vy += (Math.random() - 0.5) * 60;
+          ctx.lineTo(vx, vy);
+        }
+        ctx.stroke();
+      }
+
+      const texture = new THREE.CanvasTexture(canvas);
+      return texture;
+    }
+
+    function buildRealisticHead() {
+      const headMasterGroup = new THREE.Group();
+      headMasterGroup.position.set(0, 1.18, 0.04);
+
+      const skinTex = createProceduralSkinTexture();
+      const skinMaterial = new THREE.MeshStandardMaterial({
+        color: 0xdeb89e,
+        roughness: 0.55,
+        metalness: 0.04,
+        map: skinTex
+      });
+
+      // 1. Crânio Humano Orgânico com Escultura Anatômica por Vértices
+      const craniumGeo = new THREE.SphereGeometry(0.18, 48, 48);
+      craniumGeo.scale(0.82, 1.05, 0.98);
+
+      const pos = craniumGeo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        let x = pos.getX(i);
+        let y = pos.getY(i);
+        let z = pos.getZ(i);
+
+        if (y < -0.04 && z > 0) {
+          x *= 0.88;
+          if (y < -0.1) z += 0.025;
+        }
+        if (Math.abs(x) > 0.11 && y > 0.02 && z < 0.06) {
+          x *= 0.94;
+        }
+        if (z < -0.05 && y > 0.0) {
+          z -= 0.015;
+        }
+
+        pos.setXYZ(i, x, y, z);
+      }
+      craniumGeo.computeVertexNormals();
+
+      patientHeadMesh = new THREE.Mesh(craniumGeo, skinMaterial);
+      headMasterGroup.add(patientHeadMesh);
+
+      // 2. Nariz Orgânico Modelado
+      const noseGeo = new THREE.CylinderGeometry(0.012, 0.026, 0.085, 16);
+      noseGeo.scale(1.0, 1.0, 1.6);
+      const nose = new THREE.Mesh(noseGeo, skinMaterial);
+      nose.rotation.x = Math.PI / 2.25;
+      nose.position.set(0, 0.012, 0.18);
+      headMasterGroup.add(nose);
+
+      // Narinas seguras sem clone defeituoso
+      const nostrilMat = new THREE.MeshStandardMaterial({ color: 0x3d1a14, roughness: 0.9 });
+      const nostrilL = new THREE.Mesh(new THREE.SphereGeometry(0.005, 8, 8), nostrilMat);
+      nostrilL.position.set(-0.012, -0.022, 0.178);
+      headMasterGroup.add(nostrilL);
+
+      const nostrilR = new THREE.Mesh(new THREE.SphereGeometry(0.005, 8, 8), nostrilMat);
+      nostrilR.position.set(0.012, -0.022, 0.178);
+      headMasterGroup.add(nostrilR);
+
+      // 3. Olhos Fechados com Pálpebras
+      const eyeLidGeo = new THREE.TorusGeometry(0.024, 0.006, 12, 24, Math.PI * 0.95);
+      const eyelidMat = new THREE.MeshStandardMaterial({ color: 0xc99c82, roughness: 0.7 });
+      
+      const leftEye = new THREE.Mesh(eyeLidGeo, eyelidMat);
+      leftEye.rotation.z = Math.PI * 0.04;
+      leftEye.position.set(-0.055, 0.042, 0.145);
+      headMasterGroup.add(leftEye);
+
+      const rightEye = new THREE.Mesh(eyeLidGeo, eyelidMat);
+      rightEye.rotation.z = -Math.PI * 0.04;
+      rightEye.position.set(0.055, 0.042, 0.145);
+      headMasterGroup.add(rightEye);
+
+      // Sobrancelhas sutis
+      const browMat = new THREE.MeshStandardMaterial({ color: 0x6e4934, roughness: 0.9 });
+      const browL = new THREE.Mesh(new THREE.BoxGeometry(0.055, 0.006, 0.01), browMat);
+      browL.rotation.z = -0.08;
+      browL.position.set(-0.058, 0.068, 0.146);
+      headMasterGroup.add(browL);
+
+      const browR = new THREE.Mesh(new THREE.BoxGeometry(0.055, 0.006, 0.01), browMat);
+      browR.rotation.z = 0.08;
+      browR.position.set(0.058, 0.068, 0.146);
+      headMasterGroup.add(browR);
+
+      // 4. Lábios Anatômicos Sedados
+      const lipMat = new THREE.MeshStandardMaterial({ color: 0xbe756c, roughness: 0.65 });
+      const upperLip = new THREE.Mesh(new THREE.TorusGeometry(0.028, 0.006, 8, 16, Math.PI), lipMat);
+      upperLip.rotation.x = Math.PI / 2;
+      upperLip.position.set(0, -0.055, 0.165);
+      headMasterGroup.add(upperLip);
+
+      const lowerLip = new THREE.Mesh(new THREE.CylinderGeometry(0.007, 0.007, 0.04, 12), lipMat);
+      lowerLip.rotation.z = Math.PI / 2;
+      lowerLip.position.set(0, -0.068, 0.16);
+      headMasterGroup.add(lowerLip);
+
+      // 5. Orelhas Esculpidas
+      const earGeo = new THREE.TorusGeometry(0.032, 0.011, 10, 20, Math.PI * 1.2);
+      const earL = new THREE.Mesh(earGeo, skinMaterial);
+      earL.rotation.y = Math.PI / 2.1;
+      earL.rotation.z = -Math.PI / 12;
+      earL.position.set(-0.165, 0.01, 0.01);
+      headMasterGroup.add(earL);
+
+      const earR = new THREE.Mesh(earGeo, skinMaterial);
+      earR.rotation.y = -Math.PI / 2.1;
+      earR.rotation.z = -Math.PI / 12;
+      earR.position.set(0.165, 0.01, 0.01);
+      headMasterGroup.add(earR);
+
+      // 6. Tubo Orotraqueal Médico Anestésico
+      const tubeMat = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        roughness: 0.2,
+        transparent: true,
+        opacity: 0.8
+      });
+      const tube = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.32, 16), tubeMat);
+      tube.rotation.x = Math.PI / 2.8;
+      tube.position.set(0.015, -0.075, 0.26);
+      headMasterGroup.add(tube);
+
+      const tubeConnector = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.014, 0.012, 0.05, 16),
+        new THREE.MeshStandardMaterial({ color: 0x0284c7, roughness: 0.3 })
+      );
+      tubeConnector.rotation.x = Math.PI / 2.8;
+      tubeConnector.position.set(0.02, -0.11, 0.32);
+      headMasterGroup.add(tubeConnector);
+
+      // Circuito do ventilador
+      const circuitTube = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.015, 0.015, 0.9, 16),
+        new THREE.MeshStandardMaterial({ color: 0x93c5fd, transparent: true, opacity: 0.7 })
+      );
+      circuitTube.rotation.z = Math.PI / 2;
+      circuitTube.rotation.y = Math.PI / 6;
+      circuitTube.position.set(0.42, -0.12, 0.45);
+      headMasterGroup.add(circuitTube);
+
+      // 7. Fixador de Mayfield em Titânio
+      const mayfieldGroup = new THREE.Group();
+      const titaniumMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.96, roughness: 0.15 });
+
+      const clampArc = new THREE.Mesh(
+        new THREE.TorusGeometry(0.24, 0.022, 16, 40, Math.PI * 1.15),
+        titaniumMat
+      );
+      clampArc.rotation.x = Math.PI / 2;
+      clampArc.rotation.z = -Math.PI * 0.075;
+      clampArc.position.set(0, -0.01, -0.01);
+      mayfieldGroup.add(clampArc);
+
+      const pinMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, metalness: 0.98, roughness: 0.1 });
+      const pinLeft = new THREE.Mesh(new THREE.ConeGeometry(0.007, 0.06, 16), pinMat);
+      pinLeft.rotation.z = Math.PI / 2.6;
+      pinLeft.position.set(-0.165, 0.02, 0.0);
+      mayfieldGroup.add(pinLeft);
+
+      const pinRight = new THREE.Mesh(new THREE.ConeGeometry(0.007, 0.06, 16), pinMat);
+      pinRight.rotation.z = -Math.PI / 2.6;
+      pinRight.position.set(0.165, 0.02, 0.0);
+      mayfieldGroup.add(pinRight);
+
+      const pinBack = new THREE.Mesh(new THREE.ConeGeometry(0.007, 0.06, 16), pinMat);
+      pinBack.rotation.x = -Math.PI / 2.6;
+      pinBack.position.set(0.0, -0.03, -0.16);
+      mayfieldGroup.add(pinBack);
+
+      const armSupport = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.35, 16), titaniumMat);
+      armSupport.position.set(0, -0.18, -0.18);
+      mayfieldGroup.add(armSupport);
+
+      headMasterGroup.add(mayfieldGroup);
+
+      return headMasterGroup;
+    }
+
+    function buildRealisticDrapedBody() {
+      const bodyGroup = new THREE.Group();
+      bodyGroup.position.set(0, 1.05, -0.6);
+
+      const fabricCanvas = document.createElement('canvas');
+      fabricCanvas.width = 256;
+      fabricCanvas.height = 256;
+      const fCtx = fabricCanvas.getContext('2d');
+      fCtx.fillStyle = '#0284c7';
+      fCtx.fillRect(0, 0, 256, 256);
+      fCtx.fillStyle = '#0369a1';
+      for (let i = 0; i < 256; i += 4) {
+        fCtx.fillRect(i, 0, 1, 256);
+        fCtx.fillRect(0, i, 256, 1);
+      }
+      const drapeTexture = new THREE.CanvasTexture(fabricCanvas);
+      drapeTexture.wrapS = THREE.RepeatWrapping;
+      drapeTexture.wrapT = THREE.RepeatWrapping;
+      drapeTexture.repeat.set(12, 18);
+
+      const drapeMaterial = new THREE.MeshStandardMaterial({
+        color: 0x0284c7,
+        roughness: 0.88,
+        metalness: 0.02,
+        map: drapeTexture,
+        side: THREE.DoubleSide
+      });
+
+      const drapeWidth = 1.1;
+      const drapeLength = 2.1;
+      const drapeGeo = new THREE.PlaneGeometry(drapeWidth, drapeLength, 48, 64);
+      drapeGeo.rotation.x = -Math.PI / 2;
+
+      const vPos = drapeGeo.attributes.position;
+      for (let i = 0; i < vPos.count; i++) {
+        let x = vPos.getX(i);
+        let y = vPos.getY(i);
+        let z = vPos.getZ(i);
+
+        const normalizedZ = y;
+        let height = 0;
+
+        if (normalizedZ > 0.4 && normalizedZ < 1.0) {
+          const chestCenterDist = Math.abs(x);
+          if (chestCenterDist < 0.3) {
+            height = 0.17 * Math.cos((chestCenterDist / 0.3) * (Math.PI / 2.2));
+          } else if (chestCenterDist < 0.46) {
+            height = 0.11 * Math.cos(((chestCenterDist - 0.3) / 0.16) * (Math.PI / 2.2));
+          }
+        } else if (normalizedZ > 0.1 && normalizedZ <= 0.4) {
+          const abdDist = Math.abs(x);
+          if (abdDist < 0.28) {
+            height = 0.13 * Math.cos((abdDist / 0.28) * (Math.PI / 2.2));
+          }
+        } else if (normalizedZ > -0.2 && normalizedZ <= 0.1) {
+          const pelvDist = Math.abs(x);
+          if (pelvDist < 0.3) {
+            height = 0.14 * Math.cos((pelvDist / 0.3) * (Math.PI / 2.2));
+          }
+        } else if (normalizedZ > -0.85 && normalizedZ <= -0.2) {
+          const legLX = Math.abs(x + 0.16);
+          const legRX = Math.abs(x - 0.16);
+          const legDist = Math.min(legLX, legRX);
+          if (legDist < 0.14) {
+            height = 0.13 * Math.cos((legDist / 0.14) * (Math.PI / 2.2));
+          }
+        } else if (normalizedZ <= -0.85) {
+          const footLX = Math.abs(x + 0.14);
+          const footRX = Math.abs(x - 0.14);
+          const footDist = Math.min(footLX, footRX);
+          if (footDist < 0.1) {
+            height = 0.16 * (1.0 - footDist / 0.1);
+          }
+        }
+
+        if (Math.abs(x) > 0.44) {
+          const falloff = (Math.abs(x) - 0.44) / (drapeWidth / 2 - 0.44);
+          height -= falloff * 0.28;
+        }
+
+        const microFold = Math.sin(normalizedZ * 28.0 + x * 10.0) * 0.006 + Math.cos(x * 32.0) * 0.004;
+        height += microFold;
+
+        vPos.setZ(i, height);
+      }
+      drapeGeo.computeVertexNormals();
+
+      const drapeMesh = new THREE.Mesh(drapeGeo, drapeMaterial);
+      drapeMesh.position.set(0, 0, 0);
+      patientChestMesh = drapeMesh;
+      bodyGroup.add(drapeMesh);
+
+      // Braço lateral e mãos
+      const skinTex = createProceduralSkinTexture();
+      const armSkinMat = new THREE.MeshStandardMaterial({ color: 0xdeb89e, roughness: 0.6, map: skinTex });
+
+      const handLeft = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.03, 0.14), armSkinMat);
+      handLeft.position.set(-0.48, -0.04, 0.0);
+      bodyGroup.add(handLeft);
+
+      const handRight = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.03, 0.14), armSkinMat);
+      handRight.position.set(0.48, -0.04, 0.0);
+      bodyGroup.add(handRight);
+
+      // Oxímetro de pulso SpO2
+      const oximeterClip = new THREE.Mesh(
+        new THREE.BoxGeometry(0.026, 0.022, 0.045),
+        new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.3 })
+      );
+      oximeterClip.position.set(-0.48, -0.025, -0.06);
+      bodyGroup.add(oximeterClip);
+
+      const oximeterLed = new THREE.Mesh(
+        new THREE.SphereGeometry(0.007, 8, 8),
+        new THREE.MeshBasicMaterial({ color: 0xef4444 })
+      );
+      oximeterLed.position.set(-0.48, -0.015, -0.06);
+      bodyGroup.add(oximeterLed);
+
+      const cable = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.003, 0.003, 0.6, 8),
+        new THREE.MeshStandardMaterial({ color: 0x475569 })
+      );
+      cable.rotation.x = Math.PI / 4;
+      cable.position.set(-0.48, -0.15, -0.2);
+      bodyGroup.add(cable);
+
+      return bodyGroup;
+    }
+
+    function buildCentralSurgicalField() {
+      surgicalFieldGroup = new THREE.Group();
+      surgicalFieldGroup.position.set(0, 0, 0);
+
+      // Base da Mesa Cirúrgica
+      const tableBase = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.32, 0.45, 0.9, 32),
+        new THREE.MeshStandardMaterial({ color: 0x0f172a, metalness: 0.9, roughness: 0.2 })
+      );
+      tableBase.position.set(0, 0.45, -0.6);
+      surgicalFieldGroup.add(tableBase);
+
+      const tableColumn = new THREE.Mesh(
+        new THREE.BoxGeometry(0.36, 0.2, 0.6),
+        new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.95, roughness: 0.15 })
+      );
+      tableColumn.position.set(0, 0.88, -0.6);
+      surgicalFieldGroup.add(tableColumn);
+
+      const mattress = new THREE.Mesh(
+        new THREE.BoxGeometry(0.92, 0.14, 2.3),
+        new THREE.MeshStandardMaterial({ color: 0x111827, roughness: 0.6, metalness: 0.2 })
+      );
+      mattress.position.set(0, 0.96, -0.65);
+      surgicalFieldGroup.add(mattress);
+
+      // Suportes de Braço
+      const armBoardL = new THREE.Mesh(
+        new THREE.BoxGeometry(0.18, 0.05, 0.7),
+        new THREE.MeshStandardMaterial({ color: 0x1f2937, roughness: 0.5 })
+      );
+      armBoardL.position.set(-0.54, 0.96, -0.55);
+      surgicalFieldGroup.add(armBoardL);
+
+      const armBoardR = new THREE.Mesh(
+        new THREE.BoxGeometry(0.18, 0.05, 0.7),
+        new THREE.MeshStandardMaterial({ color: 0x1f2937, roughness: 0.5 })
+      );
+      armBoardR.position.set(0.54, 0.96, -0.55);
+      surgicalFieldGroup.add(armBoardR);
+
+      // Trilhos de Aço Cirúrgico
+      const railMat = new THREE.MeshStandardMaterial({ color: 0xcbd5e1, metalness: 0.98, roughness: 0.1 });
+      const sideRailL = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 2.2, 16), railMat);
+      sideRailL.rotation.x = Math.PI / 2;
+      sideRailL.position.set(-0.47, 0.94, -0.65);
+      surgicalFieldGroup.add(sideRailL);
+
+      const sideRailR = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 2.2, 16), railMat);
+      sideRailR.rotation.x = Math.PI / 2;
+      sideRailR.position.set(0.47, 0.94, -0.65);
+      surgicalFieldGroup.add(sideRailR);
+
+      // 1. Cabeça Anatômica
+      const realisticHead = buildRealisticHead();
+      surgicalFieldGroup.add(realisticHead);
+
+      // 2. Corpo com Caimento Realista
+      const realisticDrape = buildRealisticDrapedBody();
+      surgicalFieldGroup.add(realisticDrape);
+
+      // 3. CAMPO CIRÚRGICO FENESTRADO & ACESSO DE CRANIOTOMIA
+      const iobanFilm = new THREE.Mesh(
+        new THREE.RingGeometry(0.08, 0.22, 32),
+        new THREE.MeshStandardMaterial({
+          color: 0xd97706,
+          roughness: 0.2,
+          transparent: true,
+          opacity: 0.68,
+          side: THREE.DoubleSide
+        })
+      );
+      iobanFilm.rotation.x = -Math.PI / 2;
+      iobanFilm.position.set(0.03, 1.348, 0.01);
+      surgicalFieldGroup.add(iobanFilm);
+
+      const boneMat = new THREE.MeshStandardMaterial({
+        color: 0xfdf6e2,
+        roughness: 0.45,
+        metalness: 0.05
+      });
+      const boneRing = new THREE.Mesh(new THREE.TorusGeometry(0.076, 0.008, 12, 32), boneMat);
+      boneRing.rotation.x = Math.PI / 2;
+      boneRing.position.set(0.03, 1.35, 0.01);
+      surgicalFieldGroup.add(boneRing);
+
+      craniotomyRingMesh = new THREE.Mesh(
+        new THREE.TorusGeometry(0.07, 0.007, 12, 32),
+        new THREE.MeshStandardMaterial({
+          color: 0x991b1b,
+          roughness: 0.35,
+          emissive: 0x7f1d1d,
+          emissiveIntensity: 0.3
+        })
+      );
+      craniotomyRingMesh.rotation.x = Math.PI / 2;
+      craniotomyRingMesh.position.set(0.03, 1.346, 0.01);
+      surgicalFieldGroup.add(craniotomyRingMesh);
+
+      // Micro-afastadores Metálicos
+      const clipMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.95, roughness: 0.1 });
+      for (let i = 0; i < 4; i++) {
+        const cAngle = (i / 4) * Math.PI * 2;
+        const clip = new THREE.Mesh(new THREE.BoxGeometry(0.006, 0.012, 0.03), clipMat);
+        clip.position.set(0.03 + Math.cos(cAngle) * 0.075, 1.354, 0.01 + Math.sin(cAngle) * 0.075);
+        clip.rotation.y = -cAngle;
+        surgicalFieldGroup.add(clip);
+      }
+
+      // Córtex Cerebral
+      const cortexTex = createProceduralCortexTexture();
+      const cortexGeo = new THREE.SphereGeometry(0.068, 32, 24);
+      cortexGeo.scale(1.0, 0.52, 0.95);
+
+      const cortexMat = new THREE.MeshStandardMaterial({
+        color: 0xf472b6,
+        roughness: 0.38,
+        metalness: 0.1,
+        map: cortexTex
+      });
+      const cortexMesh = new THREE.Mesh(cortexGeo, cortexMat);
+      cortexMesh.position.set(0.03, 1.332, 0.01);
+      surgicalFieldGroup.add(cortexMesh);
+
+      // Glioma / Tumor com fluorescência 5-ALA
+      const tumorGeo = new THREE.DodecahedronGeometry(0.032, 2);
+      const tumorMat = new THREE.MeshStandardMaterial({
+        color: 0x10b981,
+        emissive: 0x059669,
+        emissiveIntensity: 0.85,
+        roughness: 0.25,
+        metalness: 0.15
+      });
+      brainTumorMesh = new THREE.Mesh(tumorGeo, tumorMat);
+      brainTumorMesh.position.set(0.03, 1.356, 0.01);
+      brainTumorMesh.name = "brain_tumor_target";
+      surgicalFieldGroup.add(brainTumorMesh);
+
+      buildActive3DTool();
+      scene.add(surgicalFieldGroup);
+    }
+
+    function buildActive3DTool() {
+      if (tool3DMesh && surgicalFieldGroup) {
+        surgicalFieldGroup.remove(tool3DMesh);
+      }
+      tool3DMesh = new THREE.Group();
+      tool3DMesh.position.set(0.2, 1.48, 0.08);
+      tool3DMesh.rotation.z = -Math.PI / 4;
+
+      const handle = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.012, 0.012, 0.22, 16),
+        new THREE.MeshStandardMaterial({ color: 0x94a3b8, metalness: 0.9, roughness: 0.1 })
+      );
+      tool3DMesh.add(handle);
+
+      const colorHex = currentTool === 'scalpel' ? 0x00f0ff : (currentTool === 'cautery' ? 0xf59e0b : (currentTool === 'suction' ? 0x10b981 : 0xec4899));
+      const tip = new THREE.Mesh(
+        new THREE.ConeGeometry(0.012, 0.06, 12),
+        new THREE.MeshBasicMaterial({ color: colorHex })
+      );
+      tip.position.y = -0.13;
+      tip.rotation.x = Math.PI;
+      tool3DMesh.add(tip);
+
+      const beam = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.002, 0.004, 0.1, 8),
+        new THREE.MeshBasicMaterial({ color: colorHex, transparent: true, opacity: 0.75 })
+      );
+      beam.position.y = -0.18;
+      tool3DMesh.add(beam);
+
+      if (surgicalFieldGroup) {
+        surgicalFieldGroup.add(tool3DMesh);
+      }
+    }
+
+    function buildRightSideTheaterScreen() {
+      videoTheaterGroup = new THREE.Group();
+      videoTheaterGroup.position.set(2.4, 1.8, -0.6);
+      videoTheaterGroup.rotation.y = -Math.PI / 4.5;
+
+      videoElement = document.createElement('video');
+      videoElement.crossOrigin = "anonymous";
+      videoElement.playsInline = true;
+      videoElement.loop = true;
+      videoElement.muted = true;
+      videoElement.src = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+
+      videoTexture = new THREE.VideoTexture(videoElement);
+      videoTexture.minFilter = THREE.LinearFilter;
+      videoTexture.magFilter = THREE.LinearFilter;
+
+      const w = 2.8;
+      const h = 1.6;
+      const screenGeo = new THREE.PlaneGeometry(w, h, 24, 1);
+      const pos = screenGeo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const x = pos.getX(i);
+        pos.setZ(i, -Math.pow(x / w, 2) * 0.25);
+      }
+      screenGeo.computeVertexNormals();
+
+      const screenMat = new THREE.MeshBasicMaterial({ map: videoTexture, side: THREE.DoubleSide });
+      videoScreenMesh = new THREE.Mesh(screenGeo, screenMat);
+      videoTheaterGroup.add(videoScreenMesh);
+
+      const frameMat = new THREE.MeshStandardMaterial({ color: 0x00f0ff, emissive: 0x0284c7, emissiveIntensity: 0.5, metalness: 0.8 });
+      const topBar = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, w + 0.08, 16), frameMat);
+      topBar.rotation.z = Math.PI / 2;
+      topBar.position.y = h / 2 + 0.02;
+      videoTheaterGroup.add(topBar);
+
+      const bottomBar = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, w + 0.08, 16), frameMat);
+      bottomBar.rotation.z = Math.PI / 2;
+      bottomBar.position.y = -h / 2 - 0.02;
+      videoTheaterGroup.add(bottomBar);
+
+      const playBtnMesh = new THREE.Mesh(
+        new THREE.BoxGeometry(0.5, 0.12, 0.04),
+        new THREE.MeshStandardMaterial({ color: 0x0284c7, metalness: 0.7 })
+      );
+      playBtnMesh.position.set(-0.35, -h / 2 - 0.15, 0);
+      playBtnMesh.name = "btn_video_toggle";
+      videoTheaterGroup.add(playBtnMesh);
+
+      const muteBtnMesh = new THREE.Mesh(
+        new THREE.BoxGeometry(0.5, 0.12, 0.04),
+        new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.7 })
+      );
+      muteBtnMesh.position.set(0.35, -h / 2 - 0.15, 0);
+      muteBtnMesh.name = "btn_video_mute";
+      videoTheaterGroup.add(muteBtnMesh);
+
+      scene.add(videoTheaterGroup);
+    }
+
+    function buildLeftSideTelemetryMonitor() {
+      telemetryBoardGroup = new THREE.Group();
+      telemetryBoardGroup.position.set(-2.4, 1.8, -0.6);
+      telemetryBoardGroup.rotation.y = Math.PI / 4.5;
+
+      telemetryCanvas = document.createElement('canvas');
+      telemetryCanvas.width = 1024;
+      telemetryCanvas.height = 768;
+      telemetryCtx = telemetryCanvas.getContext('2d');
+
+      telemetryTexture = new THREE.CanvasTexture(telemetryCanvas);
+      telemetryTexture.minFilter = THREE.LinearFilter;
+
+      const boardGeo = new THREE.PlaneGeometry(2.4, 1.8);
+      const boardMat = new THREE.MeshBasicMaterial({ map: telemetryTexture, side: THREE.DoubleSide, transparent: true, opacity: 0.95 });
+      const boardMesh = new THREE.Mesh(boardGeo, boardMat);
+      telemetryBoardGroup.add(boardMesh);
+
+      const frame = new THREE.Mesh(
+        new THREE.BoxGeometry(2.46, 1.86, 0.04),
+        new THREE.MeshStandardMaterial({ color: 0x0f172a, metalness: 0.8, roughness: 0.3 })
+      );
+      frame.position.z = -0.025;
+      telemetryBoardGroup.add(frame);
+
+      scene.add(telemetryBoardGroup);
+      updateTelemetryCanvas();
+    }
+
+    let ecgTick = 0;
+    function updateTelemetryCanvas() {
+      if (!telemetryCtx) return;
+      const ctx = telemetryCtx;
+      const w = telemetryCanvas.width;
+      const h = telemetryCanvas.height;
+
+      ctx.fillStyle = '#060d1f';
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.fillStyle = '#00f0ff';
+      ctx.font = 'bold 36px "JetBrains Mono", monospace';
+      ctx.fillText("TELEMETRIA CIRÚRGICA // PACIENTE ID-894", 40, 60);
+
+      ctx.fillStyle = '#64748b';
+      ctx.font = '24px "JetBrains Mono", monospace';
+      ctx.fillText("UTI NEUROCIRÚRGICA • NAVEGAÇÃO ATIVA", 40, 100);
+
+      ctx.strokeStyle = '#00f0ff';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(40, 120);
+      ctx.lineTo(w - 40, 120);
+      ctx.stroke();
+
+      ctx.fillStyle = '#10b981';
+      ctx.font = 'bold 48px "JetBrains Mono", monospace';
+      ctx.fillText("ECG DERIVAÇÃO II", 40, 180);
+      ctx.fillText("72 BPM", w - 240, 180);
+
+      ctx.strokeStyle = '#10b981';
+      ctx.lineWidth = 4;
+      ctx.shadowColor = '#00f0ff';
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      ctx.moveTo(40, 270);
+
+      ecgTick += 4;
+      if (ecgTick > w - 80) ecgTick = 0;
+
+      for (let x = 40; x < w - 40; x += 10) {
+        const relX = (x + ecgTick) % 240;
+        let y = 270;
+        if (relX > 60 && relX < 80) y -= 15;
+        else if (relX >= 90 && relX < 100) y += 10;
+        else if (relX >= 100 && relX < 115) y -= 75;
+        else if (relX >= 115 && relX < 125) y += 25;
+        else if (relX >= 150 && relX < 180) y -= 25;
+        ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = 'bold 34px "JetBrains Mono", monospace';
+      ctx.fillText("PA: 120/80 mmHg", 40, 380);
+      ctx.fillText("SpO₂: 99%", 440, 380);
+      ctx.fillText("PIC: 11.4 mmHg", 720, 380);
+
+      ctx.fillStyle = '#f8fafc';
+      ctx.font = 'bold 30px "Chakra Petch", sans-serif';
+      ctx.fillText(`VOLUME DA LESÃO (GLIOMA): ${tumorHealth}%`, 40, 480);
+
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(40, 510, w - 80, 40);
+      ctx.fillStyle = tumorHealth > 30 ? '#10b981' : '#00f0ff';
+      ctx.fillRect(40, 510, (w - 80) * (tumorHealth / 100), 40);
+
+      ctx.fillStyle = '#e2e8f0';
+      ctx.font = '28px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText("Conduta: Mantenha a hemostasia e aspire a margem com CUSA.", 40, 620);
+      ctx.fillText("Status da Hemostasia: 100% sob controle estéril.", 40, 670);
+
+      telemetryTexture.needsUpdate = true;
+    }
+
+    function buildInstrumentTrayAtWaist() {
+      const trayGroup = new THREE.Group();
+      trayGroup.position.set(0, 0.85, 0.65);
+      trayGroup.rotation.x = -Math.PI / 6;
+
+      const table = new THREE.Mesh(
+        new THREE.BoxGeometry(0.9, 0.28, 0.04),
+        new THREE.MeshStandardMaterial({ color: 0x0f172a, metalness: 0.8, roughness: 0.2 })
+      );
+      trayGroup.add(table);
+
+      const tableGlow = new THREE.Mesh(
+        new THREE.BoxGeometry(0.92, 0.3, 0.01),
+        new THREE.MeshBasicMaterial({ color: 0x00f0ff })
+      );
+      tableGlow.position.z = -0.02;
+      trayGroup.add(tableGlow);
+
+      scene.add(trayGroup);
+    }
+
+    function selectTool(toolKey) {
+      currentTool = toolKey;
+
+      ['scalpel', 'cautery', 'suction', 'laser'].forEach(key => {
+        const btn = document.getElementById(`tool-${key}`);
+        if (btn) {
+          if (key === toolKey) btn.className = 'btn-spatial btn-spatial-active px-3 py-1.5 rounded-xl text-xs font-hud font-bold flex items-center gap-1.5';
+          else btn.className = 'btn-spatial px-3 py-1.5 rounded-xl text-xs font-hud font-bold flex items-center gap-1.5 text-gray-300';
+        }
+      });
+
+      buildActive3DTool();
+      playToolSound(toolKey);
+      showToast(`Instrumento Ativo: ${toolKey.toUpperCase()}`);
+    }
+
+    function executeSurgicalAction() {
+      playToolSound(currentTool);
+
+      if (tool3DMesh) {
+        tool3DMesh.position.y -= 0.06;
+        setTimeout(() => {
+          if (tool3DMesh) tool3DMesh.position.y += 0.06;
+        }, 140);
+      }
+
+      tumorHealth = Math.max(0, tumorHealth - 25);
+      if (brainTumorMesh) {
+        const s = Math.max(0.1, tumorHealth / 100);
+        brainTumorMesh.scale.set(s, s, s);
+        if (tumorHealth === 0) {
+          brainTumorMesh.visible = false;
+          showToast("✨ LESÃO RESSECADA COM SUCESSO! MARGEM PRESERVADA.");
+        } else {
+          showToast(`Ação aplicada [Tumor restante: ${tumorHealth}%]`);
+        }
+      }
+
+      updateTelemetryCanvas();
+    }
+
+    function onScenePointerClick(event) {
+      if (!camera) return;
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+
+      if (surgicalFieldGroup) {
+        const hits = raycaster.intersectObjects(surgicalFieldGroup.children, true);
+        if (hits.length > 0) {
+          executeSurgicalAction();
+          return;
+        }
+      }
+
+      if (videoTheaterGroup) {
+        const hits = raycaster.intersectObjects(videoTheaterGroup.children, true);
+        if (hits.length > 0) {
+          const hitObj = hits[0].object;
+          if (hitObj.name === "btn_video_toggle") toggleVideoPlayback();
+          else if (hitObj.name === "btn_video_mute") toggleVideoMute();
+        }
+      }
+    }
+
+    function handleUserVideoFile(event) {
+      const file = event.target.files[0];
+      if (!file || !videoElement) return;
+
+      const url = URL.createObjectURL(file);
+      videoElement.src = url;
+      videoElement.muted = false;
+      videoElement.load();
+      videoElement.play();
+
+      setCameraView('theater');
+      showToast(`Vídeo carregado: ${file.name.substring(0, 20)}...`);
+    }
+
+    function toggleVideoPlayback() {
+      if (!videoElement) return;
+      initAudio();
+      if (videoElement.paused) {
+        videoElement.play();
+        showToast("🎬 Telão: Reproduzindo vídeo");
+      } else {
+        videoElement.pause();
+        showToast("⏸️ Telão: Pausado");
+      }
+    }
+
+    function toggleVideoMute() {
+      if (!videoElement) return;
+      videoElement.muted = !videoElement.muted;
+      showToast(videoElement.muted ? "🔇 Telão no Mudo" : "🔊 Áudio do Telão Ativado");
+    }
+
+    let toastTimeout = null;
+    function showToast(msg) {
+      const toast = document.getElementById('action-toast');
+      const text = document.getElementById('toast-message');
+      if (!toast || !text) return;
+
+      text.textContent = msg;
+      toast.classList.remove('opacity-0');
+
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.add('opacity-0');
+      }, 2600);
+    }
+
+    let isCleanField = false;
+    function toggleCleanFieldMode() {
+      isCleanField = !isCleanField;
+      const topBar = document.getElementById('top-bar');
+      const bottomDock = document.getElementById('bottom-dock');
+      const restoreBtn = document.getElementById('restore-hud-btn');
+
+      if (isCleanField) {
+        if (topBar) topBar.classList.add('hud-hidden');
+        if (bottomDock) bottomDock.classList.add('hud-hidden');
+        if (restoreBtn) restoreBtn.classList.remove('hidden');
+      } else {
+        if (topBar) topBar.classList.remove('hud-hidden');
+        if (bottomDock) bottomDock.classList.remove('hud-hidden');
+        if (restoreBtn) restoreBtn.classList.add('hidden');
+      }
+    }
+
+    function setCameraView(viewKey) {
+      ['surgery', 'theater', 'monitor', 'overview'].forEach(k => {
+        const btn = document.getElementById(`cam-btn-${k}`);
+        if (btn) {
+          if (k === viewKey) btn.className = 'btn-spatial btn-spatial-active px-3 py-1.5 rounded-xl text-xs font-mono-tech flex items-center gap-1.5';
+          else btn.className = 'btn-spatial px-3 py-1.5 rounded-xl text-xs font-mono-tech text-gray-300 flex items-center gap-1.5';
+        }
+      });
+
+      if (!camera || !controls) return;
+
+      if (viewKey === 'surgery') {
+        camera.position.set(0, 1.6, 1.4);
+        controls.target.set(0, 1.18, 0);
+      } else if (viewKey === 'theater') {
+        camera.position.set(0.6, 1.7, 0.8);
+        controls.target.set(2.4, 1.8, -0.6);
+      } else if (viewKey === 'monitor') {
+        camera.position.set(-0.6, 1.7, 0.8);
+        controls.target.set(-2.4, 1.8, -0.6);
+      } else if (viewKey === 'overview') {
+        camera.position.set(0, 2.4, 3.2);
+        controls.target.set(0, 1.2, 0);
+      }
+    }
+
+    function initSpatialOperatingRoom() {
       const container = document.getElementById('webgl-container');
       const width = window.innerWidth;
       const height = window.innerHeight;
 
-      // Cena 3D
       scene = new THREE.Scene();
-      scene.fog = new THREE.FogExp2(0x0a060f, 0.025);
+      scene.fog = new THREE.FogExp2(0x020617, 0.04);
 
-      // Câmera
-      camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
-      camera.position.set(0, 1.8, 4.8);
+      camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 100);
+      camera.position.set(0, 1.6, 1.4);
 
-      // Renderizador com suporte nativo a WebXR
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" });
       renderer.setSize(width, height);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1.25;
-      renderer.xr.enabled = true; // Habilita WebXR para o Meta Quest 3
+      renderer.xr.enabled = true;
       container.appendChild(renderer.domElement);
 
-      // Adiciona o Botão WebXR customizado e estável
       const vrBtn = VRButtonHelper.createButton(renderer);
-      vrBtn.style.position = 'relative';
-      vrBtn.style.left = 'auto';
-      vrBtn.style.top = 'auto';
-      vrBtn.style.bottom = 'auto';
-      vrBtn.style.right = 'auto';
-      vrBtn.style.padding = '8px 16px';
-      vrBtn.style.borderRadius = '9999px';
-      vrBtn.style.background = 'linear-gradient(135deg, #ffd700, #ff8c00)';
-      vrBtn.style.color = '#000';
-      vrBtn.style.fontWeight = 'bold';
-      vrBtn.style.fontSize = '11px';
-      vrBtn.style.fontFamily = "'JetBrains Mono', monospace";
-      vrBtn.style.border = 'none';
-      vrBtn.style.boxShadow = '0 0 15px rgba(255, 215, 0, 0.5)';
-      vrBtn.style.transition = 'all 0.2s ease';
-      document.getElementById('vr-button-container').appendChild(vrBtn);
+      const vrMount = document.getElementById('vr-button-mount');
+      if (vrMount) vrMount.appendChild(vrBtn);
 
-      // Controles Orbitais para Emulação Desktop/Touch
       controls = new THREE.OrbitControls(camera, renderer.domElement);
       controls.enableDamping = true;
       controls.dampingFactor = 0.05;
-      controls.maxPolarAngle = Math.PI / 2 + 0.05; // Não passar por baixo do chão
-      controls.minDistance = 1.5;
-      controls.maxDistance = 18;
-      controls.target.set(0, 1.3, 0);
+      controls.maxPolarAngle = Math.PI / 2 + 0.08;
+      controls.minDistance = 0.4;
+      controls.maxDistance = 10;
+      controls.target.set(0, 1.15, 0);
 
-      // Iluminação do Santuário
-      setupLighting();
+      setupORLighting();
+      buildArchitecturalRoom();
+      buildCentralSurgicalField();
+      buildRightSideTheaterScreen();
+      buildLeftSideTelemetryMonitor();
+      buildInstrumentTrayAtWaist();
 
-      // Montagem do Monumental Templo Egípcio
-      buildMonumentalEgyptianTemple();
-
-      // Pedestal e Grupo do Holograma Central
-      buildHologramStage();
-
-      // Constrói o Primeiro Holograma Médico
-      renderActiveHologram(0);
-
-      // Loop de Animação Contínua (Compatível com WebXR Session)
-      renderer.setAnimationLoop(animate);
-
-      // Responsividade
       window.addEventListener('resize', onWindowResize);
+      window.addEventListener('click', onScenePointerClick);
+
+      renderer.setAnimationLoop(renderLoop);
     }
 
-    // ==========================================
-    // ILUMINAÇÃO DO TEMPLO
-    // ==========================================
-    function setupLighting() {
-      // Luz ambiente noturna do deserto
-      const ambientLight = new THREE.AmbientLight(0x2d172e, 1.4);
-      scene.add(ambientLight);
+    let lastEcgUpdate = 0;
+    function renderLoop(timestamp) {
+      const time = clock.getElapsedTime();
 
-      // Luz do Sol Poente / Lua Dourada
-      const moonSunLight = new THREE.DirectionalLight(0xffb703, 1.8);
-      moonSunLight.position.set(10, 18, -12);
-      scene.add(moonSunLight);
-
-      // Foco de Luz Celeste Ciano
-      const cyanSkyLight = new THREE.DirectionalLight(0x00f0ff, 0.9);
-      cyanSkyLight.position.set(-8, 12, 10);
-      scene.add(cyanSkyLight);
-
-      // Luz Pontual no Altar
-      const altarLight = new THREE.PointLight(0xffd700, 2.0, 12);
-      altarLight.position.set(0, 2.2, 0);
-      scene.add(altarLight);
-    }
-
-    // ==========================================
-    // CENÁRIO: TEMPLO EGÍPCIO NO DESERTO
-    // ==========================================
-    function buildMonumentalEgyptianTemple() {
-      templeGroup = new THREE.Group();
-
-      // 1. Dunas Douradas do Deserto em 360 Graus
-      const desertGeo = new THREE.PlaneGeometry(160, 160, 48, 48);
-      const pos = desertGeo.attributes.position;
-      for (let i = 0; i < pos.count; i++) {
-        const x = pos.getX(i);
-        const y = pos.getY(i);
-        const dist = Math.sqrt(x * x + y * y);
-        if (dist > 14) {
-          const z = Math.sin(x * 0.08) * 3.5 + Math.cos(y * 0.08) * 3.5;
-          pos.setZ(i, z);
-        }
-      }
-      desertGeo.computeVertexNormals();
-      const desertMat = new THREE.MeshStandardMaterial({
-        color: 0xc8963e,
-        roughness: 0.9,
-        metalness: 0.05
-      });
-      const desertMesh = new THREE.Mesh(desertGeo, desertMat);
-      desertMesh.rotation.x = -Math.PI / 2;
-      desertMesh.position.y = -0.05;
-      templeGroup.add(desertMesh);
-
-      // 2. Piso de Pedra Ritual com Círculos Alquímicos Dourados
-      const ritualFloorGeo = new THREE.CylinderGeometry(8.5, 8.8, 0.25, 48);
-      const ritualFloorMat = new THREE.MeshStandardMaterial({
-        color: 0x1a0f0a,
-        roughness: 0.7,
-        metalness: 0.25
-      });
-      const ritualFloor = new THREE.Mesh(ritualFloorGeo, ritualFloorMat);
-      ritualFloor.position.y = 0.05;
-      templeGroup.add(ritualFloor);
-
-      // Círculos Dourados no Piso
-      const ringOuterMat = new THREE.MeshBasicMaterial({ color: 0xffd700, side: THREE.DoubleSide });
-      const ringCyanMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, side: THREE.DoubleSide });
-
-      const ring1 = new THREE.Mesh(new THREE.RingGeometry(8.1, 8.25, 64), ringOuterMat);
-      ring1.rotation.x = -Math.PI / 2;
-      ring1.position.y = 0.18;
-      templeGroup.add(ring1);
-
-      const ring2 = new THREE.Mesh(new THREE.RingGeometry(4.8, 4.9, 48), ringCyanMat);
-      ring2.rotation.x = -Math.PI / 2;
-      ring2.position.y = 0.18;
-      templeGroup.add(ring2);
-
-      const ring3 = new THREE.Mesh(new THREE.RingGeometry(2.0, 2.08, 36), ringOuterMat);
-      ring3.rotation.x = -Math.PI / 2;
-      ring3.position.y = 0.18;
-      templeGroup.add(ring3);
-
-      // 3. Céu Estrelado com Domo de Nebulosa
-      const skyGeo = new THREE.SphereGeometry(80, 32, 32);
-      const skyMat = new THREE.MeshBasicMaterial({
-        color: 0x07040d,
-        side: THREE.BackSide
-      });
-      const skyDome = new THREE.Mesh(skyGeo, skyMat);
-      templeGroup.add(skyDome);
-
-      // Estrelas Cintilantes
-      const starsGeo = new THREE.BufferGeometry();
-      const starCount = 1200;
-      const starPos = new Float32Array(starCount * 3);
-      for (let i = 0; i < starCount * 3; i += 3) {
-        starPos[i] = (Math.random() - 0.5) * 120;
-        starPos[i + 1] = Math.random() * 50 + 5;
-        starPos[i + 2] = (Math.random() - 0.5) * 120;
-      }
-      starsGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
-      const starMat = new THREE.PointsMaterial({ color: 0xfff7d6, size: 0.35, transparent: true, opacity: 0.85 });
-      const starField = new THREE.Points(starsGeo, starMat);
-      templeGroup.add(starField);
-
-      // 4. Silhuetas de Pirâmides no Horizonte
-      const pyrMat = new THREE.MeshStandardMaterial({ color: 0x241208, roughness: 0.95 });
-      const pyr1 = new THREE.Mesh(new THREE.ConeGeometry(24, 28, 4), pyrMat);
-      pyr1.position.set(-45, 12, -55);
-      pyr1.rotation.y = Math.PI / 4;
-      templeGroup.add(pyr1);
-
-      const pyr2 = new THREE.Mesh(new THREE.ConeGeometry(18, 22, 4), pyrMat);
-      pyr2.position.set(38, 9, -60);
-      pyr2.rotation.y = Math.PI / 6;
-      templeGroup.add(pyr2);
-
-      // 5. Obeliscos Colossais com Hieróglifos Pulsantes e Tochas de Plasma
-      buildObelisk(-5.5, -4.5, true);
-      buildObelisk(5.5, -4.5, false);
-      buildObelisk(-6.5, 3.5, false);
-      buildObelisk(6.5, 3.5, true);
-
-      scene.add(templeGroup);
-    }
-
-    function buildObelisk(x, z, hasBlueGlow) {
-      const group = new THREE.Group();
-      group.position.set(x, 0, z);
-
-      // Base escalonada de granito
-      const base1 = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.4, 1.6), new THREE.MeshStandardMaterial({ color: 0x3d2012, roughness: 0.8 }));
-      base1.position.y = 0.2;
-      group.add(base1);
-
-      const base2 = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.4, 1.2), new THREE.MeshStandardMaterial({ color: 0x4a2817, roughness: 0.7 }));
-      base2.position.y = 0.5;
-      group.add(base2);
-
-      // Coluna do Obelisco (afilamento piramidal)
-      const obeliskGeo = new THREE.CylinderGeometry(0.35, 0.55, 6.2, 4);
-      const obeliskMat = new THREE.MeshStandardMaterial({ color: 0x2c170d, roughness: 0.75, metalness: 0.2 });
-      const column = new THREE.Mesh(obeliskGeo, obeliskMat);
-      column.rotation.y = Math.PI / 4;
-      column.position.y = 3.8;
-      group.add(column);
-
-      // Ponta Dourada (Pirâmide de Eletrum)
-      const tipGeo = new THREE.ConeGeometry(0.5, 1.0, 4);
-      const tipMat = new THREE.MeshStandardMaterial({ color: 0xffd700, metalness: 0.9, roughness: 0.2 });
-      const tip = new THREE.Mesh(tipGeo, tipMat);
-      tip.rotation.y = Math.PI / 4;
-      tip.position.y = 7.3;
-      group.add(tip);
-
-      // Hieróglifos Verticais Luminosos Pulsantes
-      const runeColor = hasBlueGlow ? 0x00f0ff : 0xffd700;
-      const runeStripMat = new THREE.MeshBasicMaterial({ color: runeColor, transparent: true, opacity: 0.85 });
-      const runeStrip = new THREE.Mesh(new THREE.PlaneGeometry(0.12, 5.2), runeStripMat);
-      runeStrip.position.set(0, 3.8, 0.4);
-      group.add(runeStrip);
-
-      // Anel de Plasma que orbita o obelisco
-      const ringOrbit = new THREE.Mesh(
-        new THREE.TorusGeometry(0.9, 0.025, 16, 48),
-        new THREE.MeshBasicMaterial({ color: runeColor, transparent: true, opacity: 0.75 })
-      );
-      ringOrbit.rotation.x = Math.PI / 2;
-      ringOrbit.position.y = 4.2;
-      group.add(ringOrbit);
-
-      // Tocha de Luz Superior
-      const torchLight = new THREE.PointLight(runeColor, 1.4, 9);
-      torchLight.position.set(0, 7.5, 0);
-      group.add(torchLight);
-
-      templeGroup.add(group);
-    }
-
-    // ==========================================
-    // ALTAR DO HOLOGRAMA CENTRAL
-    // ==========================================
-    function buildHologramStage() {
-      hologramGroup = new THREE.Group();
-      hologramGroup.position.set(0, 1.3, 0);
-
-      // Pedestal do Altar
-      const basePedestal = new THREE.Mesh(
-        new THREE.CylinderGeometry(1.3, 1.5, 0.4, 32),
-        new THREE.MeshStandardMaterial({ color: 0x24140b, metalness: 0.4, roughness: 0.6 })
-      );
-      basePedestal.position.y = -1.1;
-      hologramGroup.add(basePedestal);
-
-      const goldBorder = new THREE.Mesh(
-        new THREE.TorusGeometry(1.32, 0.04, 16, 48),
-        new THREE.MeshStandardMaterial({ color: 0xffd700, metalness: 0.9, roughness: 0.2 })
-      );
-      goldBorder.rotation.x = Math.PI / 2;
-      goldBorder.position.y = -0.9;
-      hologramGroup.add(goldBorder);
-
-      // Emissor de Plasma Central
-      const emitter = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.4, 0.5, 0.15, 32),
-        new THREE.MeshBasicMaterial({ color: 0x00f0ff })
-      );
-      emitter.position.y = -0.85;
-      hologramGroup.add(emitter);
-
-      // Anéis de Giroscópio Holográfico ao redor do Artefato
-      holoRingsGroup = new THREE.Group();
-      const ringMat1 = new THREE.MeshBasicMaterial({ color: 0xffd700, wireframe: true, transparent: true, opacity: 0.45 });
-      const ringMat2 = new THREE.MeshBasicMaterial({ color: 0x00f0ff, wireframe: true, transparent: true, opacity: 0.45 });
-
-      const ringA = new THREE.Mesh(new THREE.TorusGeometry(1.15, 0.015, 12, 48), ringMat1);
-      const ringB = new THREE.Mesh(new THREE.TorusGeometry(1.25, 0.015, 12, 48), ringMat2);
-      ringA.rotation.x = Math.PI / 3;
-      ringB.rotation.y = Math.PI / 4;
-      holoRingsGroup.add(ringA);
-      holoRingsGroup.add(ringB);
-      hologramGroup.add(holoRingsGroup);
-
-      // Disco de Varredura Scanner de Raio-X
-      const scannerGeo = new THREE.RingGeometry(0.1, 1.1, 32);
-      const scannerMat = new THREE.MeshBasicMaterial({
-        color: 0x00f0ff,
-        side: THREE.DoubleSide,
-        transparent: true,
-        opacity: 0.22
-      });
-      scannerMesh = new THREE.Mesh(scannerGeo, scannerMat);
-      scannerMesh.rotation.x = -Math.PI / 2;
-      scannerMesh.position.y = 0;
-      hologramGroup.add(scannerMesh);
-
-      // Ponto de montagem para os artefatos específicos das épocas
-      activeArtifactGroup = new THREE.Group();
-      hologramGroup.add(activeArtifactGroup);
-
-      scene.add(hologramGroup);
-    }
-
-    // ==========================================
-    // CRIAÇÃO PROCEDURAL DOS 8 HOLOGRAMAS MÉDICOS
-    // ==========================================
-    function renderActiveHologram(index) {
-      currentEraIdx = index;
-      holoParts = []; // Limpa referências de animação do loop
-
-      // Esvazia artefatos anteriores
-      while (activeArtifactGroup.children.length > 0) {
-        const obj = activeArtifactGroup.children[0];
-        if (obj.geometry) obj.geometry.dispose();
-        if (obj.material) {
-          if (Array.isArray(obj.material)) obj.material.forEach(m => m.dispose());
-          else obj.material.dispose();
-        }
-        activeArtifactGroup.remove(obj);
-      }
-
-      const era = medicalEras[index];
-
-      // Materiais Padrão dos Hologramas
-      const goldGlowMat = new THREE.MeshStandardMaterial({
-        color: 0xffd700,
-        emissive: 0xffaa00,
-        emissiveIntensity: 0.4,
-        roughness: 0.3,
-        metalness: 0.8
-      });
-
-      const cyanGlowMat = new THREE.MeshStandardMaterial({
-        color: 0x00f0ff,
-        emissive: 0x00a8ff,
-        emissiveIntensity: 0.5,
-        roughness: 0.2,
-        metalness: 0.7
-      });
-
-      const glassMat = new THREE.MeshPhysicalMaterial({
-        color: 0xffffff,
-        transparent: true,
-        opacity: 0.5,
-        roughness: 0.1,
-        transmission: 0.9,
-        thickness: 0.5
-      });
-
-      // -------------------------------------------------------------
-      // 1. EGITO ANTIGO: CORAÇÃO DE PLASMA SOLAR & ANATOMIA SAGRADA
-      // -------------------------------------------------------------
-      if (era.id === "egypt") {
-        const heartGroup = new THREE.Group();
-
-        // Ventrículos e Átrios estilizados com geometria de plasma
-        const leftVent = new THREE.Mesh(new THREE.DodecahedronGeometry(0.42), cyanGlowMat);
-        leftVent.scale.set(0.9, 1.2, 0.9);
-        leftVent.position.set(-0.15, 0, 0);
-
-        const rightVent = new THREE.Mesh(new THREE.DodecahedronGeometry(0.38), goldGlowMat);
-        rightVent.scale.set(0.85, 1.1, 0.85);
-        rightVent.position.set(0.18, 0.05, 0);
-
-        // Aorta e Artérias Superiores
-        const aorta = new THREE.Mesh(new THREE.TorusGeometry(0.28, 0.06, 12, 24, Math.PI), goldGlowMat);
-        aorta.position.set(0, 0.38, 0);
-        aorta.rotation.z = -Math.PI / 6;
-
-        heartGroup.add(leftVent);
-        heartGroup.add(rightVent);
-        heartGroup.add(aorta);
-
-        // Papiro Holográfico com Escrita Sagrada
-        const papyrus = new THREE.Mesh(
-          new THREE.CylinderGeometry(0.08, 0.08, 0.9, 16),
-          new THREE.MeshStandardMaterial({ color: 0xd4a373, metalness: 0.3 })
-        );
-        papyrus.position.set(0, -0.6, 0);
-        papyrus.rotation.z = Math.PI / 2;
-        heartGroup.add(papyrus);
-
-        // Partículas de Fluxo Vital Sanguíneo
-        const bloodPartsGeo = new THREE.BufferGeometry();
-        const bCount = 90;
-        const bPos = new Float32Array(bCount * 3);
-        for (let i = 0; i < bCount * 3; i += 3) {
-          bPos[i] = (Math.random() - 0.5) * 1.0;
-          bPos[i + 1] = (Math.random() - 0.5) * 1.0;
-          bPos[i + 2] = (Math.random() - 0.5) * 1.0;
-        }
-        bloodPartsGeo.setAttribute('position', new THREE.BufferAttribute(bPos, 3));
-        const bloodCloud = new THREE.Points(bloodPartsGeo, new THREE.PointsMaterial({ color: 0xff3366, size: 0.05 }));
-        heartGroup.add(bloodCloud);
-
-        activeArtifactGroup.add(heartGroup);
-        holoParts.push({ type: 'heart', mesh: heartGroup, blood: bloodCloud });
-      }
-
-      // -------------------------------------------------------------
-      // 2. GRÉCIA ANTIGA: CADUCEU DE ASCLÉPIO & OS 4 HUMORES
-      // -------------------------------------------------------------
-      else if (era.id === "greece") {
-        const caduceusGroup = new THREE.Group();
-
-        // Cajado Central de Madeira e Ouro
-        const rod = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.05, 1.5, 16), goldGlowMat);
-        caduceusGroup.add(rod);
-
-        // Orbe Solar Superior
-        const sunOrb = new THREE.Mesh(new THREE.SphereGeometry(0.14, 24, 24), goldGlowMat);
-        sunOrb.position.y = 0.8;
-        caduceusGroup.add(sunOrb);
-
-        // Dupla Serpente de Luz Espiral
-        const snakePts1 = [];
-        const snakePts2 = [];
-        for (let t = -0.6; t <= 0.6; t += 0.03) {
-          const angle = t * 10;
-          snakePts1.push(new THREE.Vector3(Math.cos(angle) * 0.22, t, Math.sin(angle) * 0.22));
-          snakePts2.push(new THREE.Vector3(Math.cos(angle + Math.PI) * 0.22, t, Math.sin(angle + Math.PI) * 0.22));
-        }
-        const snakeCurve1 = new THREE.CatmullRomCurve3(snakePts1);
-        const snakeCurve2 = new THREE.CatmullRomCurve3(snakePts2);
-        const snakeMesh1 = new THREE.Mesh(new THREE.TubeGeometry(snakeCurve1, 48, 0.025, 8, false), cyanGlowMat);
-        const snakeMesh2 = new THREE.Mesh(new THREE.TubeGeometry(snakeCurve2, 48, 0.025, 8, false), goldGlowMat);
-        caduceusGroup.add(snakeMesh1);
-        caduceusGroup.add(snakeMesh2);
-
-        // Os 4 Humores Corporais em Órbita Circular
-        const humorsGroup = new THREE.Group();
-        const colors = [0xd90429, 0xffd000, 0x00f0ff, 0x2b2d42]; // Sangue, Bílis Amarela, Fleugma, Bílis Negra
-        const humorSpheres = [];
-        for (let i = 0; i < 4; i++) {
-          const sp = new THREE.Mesh(new THREE.SphereGeometry(0.09, 16, 16), new THREE.MeshStandardMaterial({
-            color: colors[i],
-            emissive: colors[i],
-            emissiveIntensity: 0.6,
-            roughness: 0.2
-          }));
-          humorsGroup.add(sp);
-          humorSpheres.push(sp);
-        }
-        caduceusGroup.add(humorsGroup);
-
-        activeArtifactGroup.add(caduceusGroup);
-        holoParts.push({ type: 'caduceus', mesh: caduceusGroup, humors: humorSpheres });
-      }
-
-      // -------------------------------------------------------------
-      // 3. IDADE MÉDIA: ALAMBIQUE DE DESTILAÇÃO & CÂNONE DE AVICENA
-      // -------------------------------------------------------------
-      else if (era.id === "middle_ages") {
-        const medGroup = new THREE.Group();
-
-        // Balão de Alambique de Vidro Translúcido
-        const alembicBody = new THREE.Mesh(new THREE.SphereGeometry(0.45, 24, 24), glassMat);
-        alembicBody.position.y = -0.1;
-        medGroup.add(alembicBody);
-
-        // Bico Condensador em Serpentina
-        const alembicNeck = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.12, 0.5, 16), glassMat);
-        alembicNeck.position.set(0, 0.4, 0);
-        medGroup.add(alembicNeck);
-
-        // Fluido Medicinal em Ebulição com Bolhas de Plasma
-        const fluidMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.38, 0.25, 24), new THREE.MeshStandardMaterial({
-          color: 0x00f5d4,
-          emissive: 0x00bbf9,
-          emissiveIntensity: 0.7,
-          roughness: 0.3
-        }));
-        fluidMesh.position.y = -0.15;
-        medGroup.add(fluidMesh);
-
-        // O Livro 'Cânone da Medicina' Flutuando ao Redor
-        const bookGroup = new THREE.Group();
-        const cover = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.7, 0.1), new THREE.MeshStandardMaterial({ color: 0x582f0e, roughness: 0.8 }));
-        const pages = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.65, 0.08), new THREE.MeshBasicMaterial({ color: 0xfffae0 }));
-        pages.position.z = 0.02;
-        bookGroup.add(cover);
-        bookGroup.add(pages);
-        bookGroup.position.set(0.7, 0.2, 0);
-        medGroup.add(bookGroup);
-
-        activeArtifactGroup.add(medGroup);
-        holoParts.push({ type: 'alembic', mesh: medGroup, book: bookGroup });
-      }
-
-      // -------------------------------------------------------------
-      // 4. RENASCIMENTO: HOMEM VITRUVIANO & ESQUELETO ANATÔMICO
-      // -------------------------------------------------------------
-      else if (era.id === "renaissance") {
-        const anatGroup = new THREE.Group();
-
-        // Crânio e Coluna Vertebral
-        const skull = new THREE.Mesh(new THREE.SphereGeometry(0.18, 16, 16), goldGlowMat);
-        skull.position.y = 0.65;
-        anatGroup.add(skull);
-
-        const spine = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.04, 0.6, 12), cyanGlowMat);
-        spine.position.y = 0.25;
-        anatGroup.add(spine);
-
-        // Caixa Torácica (Costelas Elípticas)
-        for (let i = 0; i < 5; i++) {
-          const rib = new THREE.Mesh(new THREE.TorusGeometry(0.24 - i * 0.02, 0.015, 8, 24), goldGlowMat);
-          rib.rotation.x = Math.PI / 2;
-          rib.position.y = 0.45 - i * 0.08;
-          anatGroup.add(rib);
-        }
-
-        // Membros Superiores e Inferiores em Posição de Harmonia Geométrica
-        const armL = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.6), cyanGlowMat);
-        armL.position.set(-0.35, 0.35, 0);
-        armL.rotation.z = Math.PI / 4;
-        const armR = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.6), cyanGlowMat);
-        armR.position.set(0.35, 0.35, 0);
-        armR.rotation.z = -Math.PI / 4;
-        anatGroup.add(armL);
-        anatGroup.add(armR);
-
-        // Círculo Vitruviano e Esfera Armilar em Torno da Anatomia
-        const vitruvianRing = new THREE.Mesh(
-          new THREE.RingGeometry(0.95, 0.98, 48),
-          new THREE.MeshBasicMaterial({ color: 0xffd700, side: THREE.DoubleSide })
-        );
-        anatGroup.add(vitruvianRing);
-
-        activeArtifactGroup.add(anatGroup);
-        holoParts.push({ type: 'anatomy', mesh: anatGroup, ring: vitruvianRing });
-      }
-
-      // -------------------------------------------------------------
-      // 5. SÉCULO XVII: SISTEMA CIRCULATÓRIO & MICROSCÓPIO DE HARVEY
-      // -------------------------------------------------------------
-      else if (era.id === "century17") {
-        const circGroup = new THREE.Group();
-
-        // Circuito Fechado Duplo (Arterial Vermelho e Venoso Azul)
-        const arteryCurve = new THREE.CatmullRomCurve3([
-          new THREE.Vector3(0, 0.4, 0),
-          new THREE.Vector3(0.5, 0.1, 0.2),
-          new THREE.Vector3(0.3, -0.4, 0),
-          new THREE.Vector3(0, -0.1, 0)
-        ]);
-        const veinCurve = new THREE.CatmullRomCurve3([
-          new THREE.Vector3(0, -0.1, 0),
-          new THREE.Vector3(-0.3, -0.4, 0),
-          new THREE.Vector3(-0.5, 0.1, -0.2),
-          new THREE.Vector3(0, 0.4, 0)
-        ]);
-
-        const arteryMesh = new THREE.Mesh(new THREE.TubeGeometry(arteryCurve, 32, 0.04, 8, true), new THREE.MeshStandardMaterial({ color: 0xff1e56, emissive: 0xff1e56, emissiveIntensity: 0.6 }));
-        const veinMesh = new THREE.Mesh(new THREE.TubeGeometry(veinCurve, 32, 0.04, 8, true), new THREE.MeshStandardMaterial({ color: 0x0077b6, emissive: 0x0077b6, emissiveIntensity: 0.6 }));
-        circGroup.add(arteryMesh);
-        circGroup.add(veinMesh);
-
-        // Microscópio Clássico Primitivo com Lentes Polidas
-        const scopeGroup = new THREE.Group();
-        const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.06, 0.45, 16), goldGlowMat);
-        const lens = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.04, 16), cyanGlowMat);
-        lens.position.y = -0.25;
-        scopeGroup.add(barrel);
-        scopeGroup.add(lens);
-        scopeGroup.position.set(0.65, 0.3, 0);
-        circGroup.add(scopeGroup);
-
-        activeArtifactGroup.add(circGroup);
-        holoParts.push({ type: 'circulatory', mesh: circGroup, scope: scopeGroup });
-      }
-
-      // -------------------------------------------------------------
-      // 6. SÉCULOS XVIII E XIX: TUBO DE RAIOS X & ANTISSEPSIA
-      // -------------------------------------------------------------
-      else if (era.id === "century18_19") {
-        const xrayGroup = new THREE.Group();
-
-        // Tubo de Emissão Catódica de Crookes (Ampola de Vidro com Eletrodos)
-        const tubeGlass = new THREE.Mesh(new THREE.SphereGeometry(0.45, 24, 24), glassMat);
-        tubeGlass.scale.set(1.4, 0.8, 0.8);
-        xrayGroup.add(tubeGlass);
-
-        const cathode = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.3), cyanGlowMat);
-        cathode.rotation.z = Math.PI / 2;
-        cathode.position.x = -0.4;
-        const anode = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.3), goldGlowMat);
-        anode.rotation.z = Math.PI / 2;
-        anode.position.x = 0.4;
-        xrayGroup.add(cathode);
-        xrayGroup.add(anode);
-
-        // Feixe de Radiação Röntgen Verde Esmeralda Fluorescente
-        const rayBeam = new THREE.Mesh(new THREE.ConeGeometry(0.35, 1.2, 16, 1, true), new THREE.MeshBasicMaterial({
-          color: 0x39ff14,
-          transparent: true,
-          opacity: 0.45,
-          side: THREE.DoubleSide
-        }));
-        rayBeam.rotation.z = -Math.PI / 2;
-        rayBeam.position.x = 0.6;
-        xrayGroup.add(rayBeam);
-
-        // Mão Humana Esquelética com o Anel da Esposa de Röntgen
-        const handBones = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.55, 0.04), new THREE.MeshBasicMaterial({
-          color: 0xffffff,
-          wireframe: true
-        }));
-        handBones.position.set(0.9, 0, 0);
-        xrayGroup.add(handBones);
-
-        activeArtifactGroup.add(xrayGroup);
-        holoParts.push({ type: 'xray', mesh: xrayGroup, beam: rayBeam });
-      }
-
-      // -------------------------------------------------------------
-      // 7. SÉCULO XX: DUPLA HÉLICE DO DNA & ROBÓTICA CIRÚRGICA
-      // -------------------------------------------------------------
-      else if (era.id === "century20") {
-        const dnaGroup = new THREE.Group();
-        const basePairs = [];
-
-        // Hélice Dupla com Pares de Bases Nitrogenadas Coloridas
-        for (let i = -10; i <= 10; i++) {
-          const t = i * 0.18;
-          const x1 = Math.sin(t * 2) * 0.45;
-          const z1 = Math.cos(t * 2) * 0.45;
-          const y = i * 0.07;
-
-          const sugar1 = new THREE.Mesh(new THREE.SphereGeometry(0.045, 12, 12), cyanGlowMat);
-          sugar1.position.set(x1, y, z1);
-          dnaGroup.add(sugar1);
-
-          const sugar2 = new THREE.Mesh(new THREE.SphereGeometry(0.045, 12, 12), goldGlowMat);
-          sugar2.position.set(-x1, y, -z1);
-          dnaGroup.add(sugar2);
-
-          // Ponte de Hidrogênio
-          const bridgeCurve = new THREE.LineCurve3(new THREE.Vector3(x1, y, z1), new THREE.Vector3(-x1, y, -z1));
-          const bridge = new THREE.Mesh(
-            new THREE.TubeGeometry(bridgeCurve, 4, 0.015, 6, false),
-            new THREE.MeshBasicMaterial({ color: i % 2 === 0 ? 0xff0055 : 0x00f0ff })
-          );
-          dnaGroup.add(bridge);
-          basePairs.push(bridge);
-        }
-
-        // Braço Cirúrgico Robótico com Ponteira de Laser
-        const robotArm = new THREE.Group();
-        const armSegment = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.06, 0.8), goldGlowMat);
-        armSegment.rotation.z = Math.PI / 3;
-        const laserEmitter = new THREE.Mesh(new THREE.SphereGeometry(0.08), cyanGlowMat);
-        laserEmitter.position.set(0.4, 0.25, 0);
-        robotArm.add(armSegment);
-        robotArm.add(laserEmitter);
-        robotArm.position.set(-0.7, 0.4, 0);
-        dnaGroup.add(robotArm);
-
-        activeArtifactGroup.add(dnaGroup);
-        holoParts.push({ type: 'dna', mesh: dnaGroup, bases: basePairs });
-      }
-
-      // -------------------------------------------------------------
-      // 8. SÍNTESE // O FUTURO: AVATAR QUÂNTICO & NANOMEDICINA
-      // -------------------------------------------------------------
-      else {
-        const futureGroup = new THREE.Group();
-
-        // Avatar Humanoide Translúcido Quântico
-        const humanBody = new THREE.Mesh(
-          new THREE.CylinderGeometry(0.2, 0.1, 0.8, 16),
-          new THREE.MeshStandardMaterial({ color: 0x00f0ff, transparent: true, opacity: 0.6, wireframe: true })
-        );
-        const head = new THREE.Mesh(new THREE.SphereGeometry(0.18, 16, 16), cyanGlowMat);
-        head.position.y = 0.55;
-        futureGroup.add(humanBody);
-        futureGroup.add(head);
-
-        // Nanocápsulas em Órbita Atômica Contínua
-        const nanobots = [];
-        for (let i = 0; i < 6; i++) {
-          const nb = new THREE.Mesh(new THREE.OctahedronGeometry(0.06), goldGlowMat);
-          futureGroup.add(nb);
-          nanobots.push(nb);
-        }
-
-        activeArtifactGroup.add(futureGroup);
-        holoParts.push({ type: 'future', mesh: futureGroup, bots: nanobots });
-      }
-
-      // Atualiza os Textos da Interface
-      updateHUDInterface(era);
-    }
-
-    // ==========================================
-    // LOOP DE ANIMAÇÃO E ATUALIZAÇÃO PROCEDURAL
-    // ==========================================
-    function animate() {
-      const delta = clock.getDelta();
-      const time = clock.getElapsedTime() * animSpeed;
-
-      // Atualiza Controles
       if (controls) controls.update();
 
-      // Rotação dos Anéis Giroscópicos
-      if (holoRingsGroup && showRings) {
-        holoRingsGroup.visible = true;
-        holoRingsGroup.children[0].rotation.z += delta * 0.4 * animSpeed;
-        holoRingsGroup.children[1].rotation.x += delta * 0.3 * animSpeed;
-      } else if (holoRingsGroup) {
-        holoRingsGroup.visible = false;
+      if (patientChestMesh) {
+        const breathCycle = Math.sin(time * 1.5) * 0.015;
+        patientChestMesh.position.y = breathCycle;
+        patientChestMesh.scale.y = 1.0 + breathCycle * 0.35;
       }
 
-      // Varredura Vertical do Scanner de Raio-X
-      if (scannerMesh && showScanner) {
-        scannerMesh.visible = true;
-        scannerMesh.position.y = Math.sin(time * 2.2) * 0.65;
-        scannerMesh.material.opacity = 0.15 + Math.abs(Math.sin(time * 2.2)) * 0.2;
-      } else if (scannerMesh) {
-        scannerMesh.visible = false;
+      if (brainTumorMesh && brainTumorMesh.visible) {
+        const pulse = (tumorHealth / 100) * (1.0 + Math.sin(time * 4.0) * 0.08);
+        brainTumorMesh.scale.set(pulse, pulse, pulse);
       }
 
-      // Animações dos Hologramas Ativos
-      holoParts.forEach(p => {
-        // Rotação sutil geral de exibição
-        p.mesh.rotation.y += delta * 0.35 * animSpeed;
+      if (craniotomyRingMesh) {
+        craniotomyRingMesh.rotation.z += 0.005;
+      }
 
-        if (p.type === 'heart') {
-          // Batimento Cardíaco Sistólico / Diastólico Realista (Lubb-Dubb)
-          const beat = Math.sin(time * 4) * 0.12 + Math.sin(time * 8) * 0.05;
-          const scale = 1.0 + Math.max(0, beat);
-          p.mesh.scale.set(scale, scale, scale);
-        } 
-        else if (p.type === 'caduceus') {
-          // Órbita dos 4 Humores
-          p.humors.forEach((sp, i) => {
-            const angle = time * 2.0 + (i * Math.PI / 2);
-            sp.position.set(Math.cos(angle) * 0.65, Math.sin(time * 3 + i) * 0.15, Math.sin(angle) * 0.65);
-          });
-        }
-        else if (p.type === 'alembic') {
-          // Livro folheando e fluidos ondulando
-          p.book.rotation.y = Math.sin(time) * 0.4;
-          p.book.position.y = 0.2 + Math.cos(time * 1.5) * 0.1;
-        }
-        else if (p.type === 'anatomy') {
-          // Eixos de revolução vitruviana
-          p.ring.rotation.z += delta * 0.8 * animSpeed;
-        }
-        else if (p.type === 'circulatory') {
-          // Microscópio focando
-          p.scope.position.y = 0.3 + Math.sin(time * 2) * 0.06;
-        }
-        else if (p.type === 'xray') {
-          // Pulso de feixe de raios X
-          p.beam.scale.set(1.0 + Math.sin(time * 6) * 0.15, 1.0, 1.0 + Math.cos(time * 6) * 0.15);
-        }
-        else if (p.type === 'dna') {
-          // Aceleração harmônica do genoma
-          p.mesh.rotation.y += delta * 0.6 * animSpeed;
-        }
-        else if (p.type === 'future') {
-          // Nanocápsulas orbitando em hélice
-          p.bots.forEach((b, i) => {
-            const angle = time * 2.5 + (i * (Math.PI * 2 / p.bots.length));
-            b.position.set(Math.sin(angle) * 0.7, Math.sin(time * 4 + i) * 0.4, Math.cos(angle) * 0.7);
-          });
-        }
-      });
+      if (timestamp - lastEcgUpdate > 80) {
+        updateTelemetryCanvas();
+        lastEcgUpdate = timestamp;
+      }
 
-      // Renderiza Cena
       renderer.render(scene, camera);
     }
 
     function onWindowResize() {
+      if (!camera || !renderer) return;
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
     }
 
-    function resetCameraView() {
-      playHapticBeep('select');
-      camera.position.set(0, 1.8, 4.8);
-      controls.target.set(0, 1.3, 0);
-    }
-  </script>
-
-
-  <!-- ============================================================== -->
-  <!-- SISTEMA DE INTERFACE HUD & NAVEGAÇÃO ESPACIAL                   -->
-  <!-- ============================================================== -->
-  <script>
-    function buildTimelineNav() {
-      const container = document.getElementById('timeline-list');
-      container.innerHTML = '';
-
-      medicalEras.forEach((era, idx) => {
-        const item = document.createElement('button');
-        item.className = `w-full text-left p-2.5 rounded-2xl transition-all duration-300 flex items-start gap-2.5 group ${
-          idx === currentEraIdx ? 'spatial-glass-active' : 'hover:bg-white/5 text-gray-300'
-        }`;
-        item.onclick = () => selectEra(idx);
-
-        item.innerHTML = `
-          <div class="w-2 h-2 rounded-full mt-1.5 transition-all ${
-            idx === currentEraIdx ? 'bg-amber-400 shadow-sm shadow-amber-400 scale-125' : 'bg-gray-600 group-hover:bg-amber-300'
-          }"></div>
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-semibold truncate ${idx === currentEraIdx ? 'text-white font-bold' : 'text-gray-300'}">${era.tag}</span>
-              <span class="text-[9px] font-mono-tech text-amber-300/80 ml-1">${era.periodo}</span>
-            </div>
-            <p class="text-[10px] text-gray-400 truncate mt-0.5">${era.subtitulo}</p>
-          </div>
-        `;
-        container.appendChild(item);
-      });
-    }
-
-    function updateHUDInterface(era) {
-      document.getElementById('hero-tag').textContent = era.tag;
-      document.getElementById('hero-date').textContent = era.periodo;
-      document.getElementById('hero-title').textContent = era.titulo;
-      document.getElementById('hero-subtitle').textContent = era.subtitulo;
-      document.getElementById('artifact-name-badge').textContent = era.hologramaNome;
-      document.getElementById('hologram-live-title').textContent = era.hologramaTitulo;
-      document.getElementById('hologram-live-desc').textContent = era.hologramaDesc;
-
-      // Renderiza Tópicos Históricos
-      const listEl = document.getElementById('hero-bullets');
-      listEl.innerHTML = '';
-      era.topicos.forEach(topic => {
-        const li = document.createElement('li');
-        li.className = 'flex items-start gap-2';
-        li.innerHTML = `
-          <span class="text-amber-400 font-bold select-none leading-tight">&bull;</span>
-          <span>${topic}</span>
-        `;
-        listEl.appendChild(li);
-      });
-
-      buildTimelineNav();
-    }
-
-    function selectEra(index) {
-      if (index < 0 || index >= medicalEras.length) return;
-      playHapticBeep('select');
-      renderActiveHologram(index);
-    }
-
-    function navigateEra(direction) {
-      let next = currentEraIdx + direction;
-      if (next < 0) next = medicalEras.length - 1;
-      if (next >= medicalEras.length) next = 0;
-      selectEra(next);
-    }
-
-    // Controles do Simulador
-    function updateHologramSpeed(val) {
-      animSpeed = parseFloat(val);
-      document.getElementById('speed-label').textContent = `${animSpeed.toFixed(1)}x`;
-    }
-
-    function toggleScannerBeam() {
-      showScanner = !showScanner;
-      const btn = document.getElementById('btn-toggle-scanner');
-      btn.textContent = showScanner ? 'ATIVO' : 'DESLIGADO';
-      btn.className = showScanner 
-        ? 'px-2.5 py-1 rounded-lg text-[10px] font-mono-tech bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 hover:bg-cyan-500/40 transition-colors'
-        : 'px-2.5 py-1 rounded-lg text-[10px] font-mono-tech bg-gray-700/40 text-gray-400 border border-white/10 hover:bg-gray-700/60 transition-colors';
-      playHapticBeep('select');
-    }
-
-    function toggleHoloRings() {
-      showRings = !showRings;
-      const btn = document.getElementById('btn-toggle-rings');
-      btn.textContent = showRings ? 'VISÍVEL' : 'OCULTO';
-      btn.className = showRings 
-        ? 'px-2.5 py-1 rounded-lg text-[10px] font-mono-tech bg-amber-500/20 text-amber-300 border border-amber-400/40 hover:bg-amber-500/40 transition-colors'
-        : 'px-2.5 py-1 rounded-lg text-[10px] font-mono-tech bg-gray-700/40 text-gray-400 border border-white/10 hover:bg-gray-700/60 transition-colors';
-      playHapticBeep('select');
-    }
-
-    // Atalhos de Teclado
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') navigateEra(1);
-      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') navigateEra(-1);
-      if (e.key === 'r' || e.key === 'R') resetCameraView();
-    });
-
-    // Inicialização ao Carregar
-    window.addEventListener('DOMContentLoaded', () => {
-      initThreeEngine();
-    });
+    window.onload = function () {
+      initSpatialOperatingRoom();
+      setCameraView('surgery');
+    };
   </script>
 </body>
 </html>
