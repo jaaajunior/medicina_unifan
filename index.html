@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>NEURO-SURG XR // Simulador Cirúrgico de Precisão</title>
+  <title>NEURO-SURG XR // Cirurgia no Antigo Egito</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -12,7 +12,7 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Chakra+Petch:wght@500;700&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');
 
     * { box-sizing: border-box; user-select: none; -webkit-user-select: none; }
 
@@ -54,6 +54,28 @@
 
     .hud-transition { transition: opacity 0.3s ease, transform 0.3s ease; }
     .hud-hidden { opacity: 0; pointer-events: none !important; transform: translateY(-20px); }
+    /* ===== Tema Egito Antigo ===== */
+    html, body { background-color: #0d0805 !important; }
+    .font-hud { font-family: 'Cinzel', 'Chakra Petch', serif !important; letter-spacing: 0.04em; }
+    .glass-dock { background: rgba(22,13,6,0.86) !important; border: 1px solid rgba(224,176,64,0.4) !important; box-shadow: 0 10px 30px rgba(0,0,0,0.65), 0 0 16px rgba(224,176,64,0.12) !important; }
+    .btn-spatial { background: rgba(34,20,9,0.88) !important; border: 1px solid rgba(224,176,64,0.28) !important; }
+    .btn-spatial:hover { border-color: #f3cf6b !important; background: rgba(224,176,64,0.2) !important; }
+    .btn-spatial-active { border-color: #f3cf6b !important; background: linear-gradient(135deg, rgba(224,176,64,0.45) 0%, rgba(150,95,30,0.3) 100%) !important; color: #fff7de !important; box-shadow: 0 0 12px rgba(224,176,64,0.4) !important; }
+    .text-cyan-300, .text-cyan-200 { color: #f3cf6b !important; }
+    .text-emerald-300, .text-emerald-400 { color: #5fd3c4 !important; }
+    .text-pink-300 { color: #ffd166 !important; }
+    .text-amber-300 { color: #f0a24a !important; }
+    .bg-cyan-500\/20 { background-color: rgba(224,176,64,.2) !important; }
+    .border-cyan-400\/40, .border-cyan-400\/50 { border-color: rgba(224,176,64,.5) !important; }
+    .bg-cyan-950\/90 { background-color: rgba(40,24,8,.92) !important; }
+    .bg-cyan-400 { background-color: #f3cf6b !important; }
+    .bg-emerald-500\/20 { background-color: rgba(31,143,134,.2) !important; }
+    .border-emerald-400\/30 { border-color: rgba(95,211,196,.35) !important; }
+    .from-cyan-500 { --tw-gradient-from: #c9972b !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(201,151,43,0)) !important; }
+    .to-emerald-400 { --tw-gradient-to: #f3cf6b !important; }
+    .to-sky-600 { --tw-gradient-to: #8a5a1a !important; }
+    .hover\:from-cyan-400:hover { --tw-gradient-from: #d9a62e !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(217,166,46,0)) !important; }
+    .hover\:to-emerald-300:hover { --tw-gradient-to: #ffe08a !important; }
   </style>
 </head>
 <body class="w-full h-full relative select-none">
@@ -64,16 +86,16 @@
 
     <header id="top-bar" class="hud-transition w-full max-w-6xl mx-auto flex items-center justify-between pointer-events-auto px-4 py-2.5 rounded-2xl glass-dock">
       <div class="flex items-center space-x-3">
-        <div class="w-8 h-8 rounded-lg bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-300 font-bold">⚡</div>
+        <div class="w-8 h-8 rounded-lg bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-300 font-bold">☥</div>
         <div>
           <div class="flex items-center gap-2">
-            <h1 class="text-xs uppercase tracking-wider text-cyan-300 font-hud font-bold">NEURO-SURG XR // CENTRO CIRÚRGICO</h1>
+            <h1 class="text-xs uppercase tracking-wider text-cyan-300 font-hud font-bold">TEMPLO DO EMBALSAMADOR // CIRURGIA NO ANTIGO EGITO</h1>
             <span id="badge-vital" class="px-2 py-0.5 rounded text-[10px] font-mono-tech bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
-              ECG 72 BPM • ESTÁVEL
+              CORAÇÃO (IB) 72 • SERENO
             </span>
           </div>
           <p class="text-[10px] text-gray-400 font-mono-tech">
-            Estações: Campo Cirúrgico (Centro) | Telão (Direita) | Telemetria (Esquerda)
+            Estações: Campo Cirúrgico (Centro) | Telão (Direita) | Papiro (Esquerda)
           </p>
         </div>
       </div>
@@ -86,16 +108,18 @@
           <span>🎬 TELÃO (DIREITA)</span>
         </button>
         <button onclick="setCameraView('monitor')" id="cam-btn-monitor" class="btn-spatial px-3 py-1.5 rounded-xl text-xs font-mono-tech text-emerald-300 flex items-center gap-1.5">
-          <span>📊 MONITOR VITAL</span>
+          <span>📜 PAPIRO DE REGISTRO</span>
         </button>
         <button onclick="setCameraView('overview')" id="cam-btn-overview" class="btn-spatial px-2.5 py-1.5 rounded-xl text-xs text-gray-300">
-          <span>🔭 SALA GERAL</span>
+          <span>🏛️ TEMPLO</span>
         </button>
         <button onclick="setCameraView('patient')" id="cam-btn-patient" class="btn-spatial px-2.5 py-1.5 rounded-xl text-xs text-gray-300">
           <span>🧍 PACIENTE</span>
         </button>
 
-        <button id="btn-ecg-audio" onclick="toggleEcgAudio()" class="btn-spatial p-2 rounded-xl text-emerald-400" title="Ligar/Desligar Beep do Monitor">🔊</button>
+        <button id="btn-ecg-audio" onclick="toggleEcgAudio()" class="btn-spatial px-3 py-1.5 rounded-xl text-xs font-mono-tech text-emerald-400" title="Ligar/Desligar o som do batimento">BATIMENTO: LIGADO</button>
+        <button id="btn-vid-play" onclick="toggleVideoPlayback()" class="btn-spatial px-3 py-1.5 rounded-xl text-xs font-mono-tech text-amber-300" title="Play/Pause do vídeo do telão">VÍDEO: PAUSAR</button>
+        <button id="btn-vid-mute" onclick="toggleVideoMute()" class="btn-spatial px-3 py-1.5 rounded-xl text-xs font-mono-tech text-amber-300" title="Ligar/Desligar o áudio do vídeo">ÁUDIO DO VÍDEO: LIGADO</button>
 
         <div id="vr-button-mount"></div>
       </div>
@@ -113,16 +137,16 @@
         <span class="text-[10px] font-hud uppercase tracking-wider text-gray-400 mr-1 hidden sm:inline">Instrumento:</span>
 
         <button onclick="selectTool('scalpel')" id="tool-scalpel" class="btn-spatial btn-spatial-active px-3 py-1.5 rounded-xl text-xs font-hud font-bold flex items-center gap-1.5 text-cyan-300">
-          <span>⚡</span><span>Bisturi Plasma</span>
+          <span>Faca de Obsidiana</span>
         </button>
         <button onclick="selectTool('cautery')" id="tool-cautery" class="btn-spatial px-3 py-1.5 rounded-xl text-xs font-hud font-bold flex items-center gap-1.5 text-amber-300">
-          <span>🔥</span><span>Cautério</span>
+          <span>Cautério de Bronze</span>
         </button>
         <button onclick="selectTool('suction')" id="tool-suction" class="btn-spatial px-3 py-1.5 rounded-xl text-xs font-hud font-bold flex items-center gap-1.5 text-emerald-300">
-          <span>💨</span><span>Aspirador CUSA</span>
+          <span>Gancho de Bronze</span>
         </button>
         <button onclick="selectTool('laser')" id="tool-laser" class="btn-spatial px-3 py-1.5 rounded-xl text-xs font-hud font-bold flex items-center gap-1.5 text-pink-300">
-          <span>🎯</span><span>Laser Óptico</span>
+          <span>Disco Solar de Rá</span>
         </button>
       </div>
 
@@ -173,7 +197,7 @@
       }
     }
 
-    function playBeep(freq = 880) {
+    function playBeep() {
       if (!audioCtx || !isEcgAudioActive) return;
       try {
         const now = audioCtx.currentTime;
@@ -182,12 +206,13 @@
         osc.connect(gain);
         gain.connect(audioCtx.destination);
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, now);
-        osc.frequency.exponentialRampToValueAtTime(freq * 1.05, now + 0.07);
-        gain.gain.setValueAtTime(0.02, now);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
+        osc.frequency.setValueAtTime(120, now);
+        osc.frequency.exponentialRampToValueAtTime(52, now + 0.22);
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(0.18, now + 0.012);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.26);
         osc.start(now);
-        osc.stop(now + 0.08);
+        osc.stop(now + 0.27);
       } catch (e) {}
     }
 
@@ -233,13 +258,44 @@
       } catch (e) {}
     }
 
+    const labelBtns = {};
+    function paintLabelBtn(mesh, text, bg) {
+      const c = document.createElement('canvas'); c.width = 512; c.height = 128;
+      const g = c.getContext('2d');
+      g.fillStyle = bg; g.fillRect(0, 0, 512, 128);
+      g.strokeStyle = '#f0c850'; g.lineWidth = 8; g.strokeRect(4, 4, 504, 120);
+      g.fillStyle = '#fff4d0'; g.textAlign = 'center'; g.textBaseline = 'middle';
+      g.font = 'bold 48px Cinzel, Georgia, serif';
+      g.fillText(text, 256, 68, 480);
+      const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding;
+      if (mesh.material.map) mesh.material.map.dispose();
+      mesh.material.map = t; mesh.material.needsUpdate = true;
+    }
+    function makeLabelBtn(name, text, bg, w, h) {
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ toneMapped: false, fog: false, side: THREE.DoubleSide }));
+      m.name = name; labelBtns[name] = m; paintLabelBtn(m, text, bg); return m;
+    }
+    function syncHeartBtn3D() {
+      const m = labelBtns.btn_heart_toggle; if (!m) return;
+      paintLabelBtn(m, isEcgAudioActive ? 'BATIMENTO: LIGADO' : 'BATIMENTO: DESLIGADO', isEcgAudioActive ? '#1f6f58' : '#6b2a22');
+    }
+    function syncVideoBtns() {
+      if (!videoElement) return;
+      const playing = !videoElement.paused;
+      const pb = document.getElementById('btn-vid-play'); if (pb) pb.textContent = playing ? 'VÍDEO: PAUSAR' : 'VÍDEO: PLAY';
+      const mb = document.getElementById('btn-vid-mute'); if (mb) mb.textContent = videoElement.muted ? 'ÁUDIO DO VÍDEO: DESLIGADO' : 'ÁUDIO DO VÍDEO: LIGADO';
+      if (labelBtns.btn_video_toggle) paintLabelBtn(labelBtns.btn_video_toggle, playing ? 'PAUSAR VÍDEO' : 'PLAY VÍDEO', playing ? '#7a5a14' : '#1f6f58');
+      if (labelBtns.btn_video_mute) paintLabelBtn(labelBtns.btn_video_mute, videoElement.muted ? 'ÁUDIO: DESLIGADO' : 'ÁUDIO: LIGADO', videoElement.muted ? '#6b2a22' : '#1f5a8f');
+    }
+
     function toggleEcgAudio() {
       initAudio();
       isEcgAudioActive = !isEcgAudioActive;
       const btn = document.getElementById('btn-ecg-audio');
       if (btn) {
-        btn.textContent = isEcgAudioActive ? '🔊' : '🔇';
-        btn.className = isEcgAudioActive ? 'btn-spatial p-2 rounded-xl text-emerald-400' : 'btn-spatial p-2 rounded-xl text-gray-500';
+        btn.textContent = isEcgAudioActive ? 'BATIMENTO: LIGADO' : 'BATIMENTO: DESLIGADO';
+        syncHeartBtn3D();
+        btn.className = isEcgAudioActive ? 'btn-spatial px-3 py-1.5 rounded-xl text-xs font-mono-tech text-emerald-400' : 'btn-spatial px-3 py-1.5 rounded-xl text-xs font-mono-tech text-gray-500';
       }
     }
 
@@ -349,108 +405,7 @@
     let headRoot = null, headLocal = null, primitiveFaceParts = [], realHead = null;
     let toolEnvMap = null, toolFlashUntil = 0, videoUserPaused = false;
 
-    function setupORLighting() {
-      scene.add(new THREE.AmbientLight(0x3a4a66, 0.7));
 
-      const surgicalLight = new THREE.SpotLight(0xfff5ea, 1.6);
-      surgicalLight.position.set(0.1, 3.2, 0.4);
-      surgicalLight.target.position.set(0, 1.15, 0.2);
-      surgicalLight.angle = Math.PI / 4.5;
-      surgicalLight.penumbra = 0.35;
-      scene.add(surgicalLight);
-      scene.add(surgicalLight.target);
-
-      const dirLight = new THREE.DirectionalLight(0xe2e8f0, 0.6);
-      dirLight.position.set(2, 5, 2);
-      scene.add(dirLight);
-
-      const rimLight = new THREE.DirectionalLight(0x0ea5e9, 0.35);
-      rimLight.position.set(-3, 3, -3);
-      scene.add(rimLight);
-
-      const theaterPoint = new THREE.PointLight(0x00f0ff, 0.6, 8);
-      theaterPoint.position.set(2.4, 2.0, -0.6);
-      scene.add(theaterPoint);
-
-      const monitorPoint = new THREE.PointLight(0x10b981, 0.6, 8);
-      monitorPoint.position.set(-2.4, 2.0, -0.6);
-      scene.add(monitorPoint);
-    }
-
-    function buildArchitecturalRoom() {
-      const floor = new THREE.Mesh(
-        new THREE.PlaneGeometry(16, 16),
-        new THREE.MeshStandardMaterial({ color: 0x071120, roughness: 0.3, metalness: 0.2 })
-      );
-      floor.rotation.x = -Math.PI / 2;
-      scene.add(floor);
-
-      const grid = new THREE.GridHelper(16, 32, 0x0284c7, 0x1e293b);
-      grid.position.y = 0.005;
-      scene.add(grid);
-
-      const scialytic = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.5, 0.6, 0.1, 32),
-        new THREE.MeshStandardMaterial({ color: 0x64748b, metalness: 0.8, roughness: 0.2 })
-      );
-      scialytic.position.set(0.1, 3.2, 0.4);
-      scene.add(scialytic);
-
-      // ===== Parede do fundo com a placa de identificação do ambiente =====
-      const wallZ = -3.6;
-      const wall = new THREE.Mesh(
-        new THREE.PlaneGeometry(12, 4.2),
-        new THREE.MeshStandardMaterial({ color: 0x0b1626, roughness: 0.85, metalness: 0.1 })
-      );
-      wall.position.set(0, 2.1, wallZ - 0.02);
-      scene.add(wall);
-
-      const stripMat = new THREE.MeshBasicMaterial({ color: 0x00d9ff, toneMapped: false });
-      [0.05, 4.15].forEach(y => {
-        const strip = new THREE.Mesh(new THREE.BoxGeometry(12, 0.025, 0.02), stripMat);
-        strip.position.set(0, y, wallZ);
-        scene.add(strip);
-      });
-
-      const SIGN_TEXT = 'AMBIENTE VIRTUAL DO CURSO DE MEDICINA - UNIFAN';
-      const sc = document.createElement('canvas');
-      sc.width = 2048; sc.height = 320;
-      const g = sc.getContext('2d');
-      g.fillStyle = '#071526';
-      g.fillRect(0, 0, sc.width, sc.height);
-      g.strokeStyle = '#00d9ff';
-      g.lineWidth = 8;
-      g.strokeRect(14, 14, sc.width - 28, sc.height - 28);
-      g.strokeStyle = 'rgba(0,217,255,0.35)';
-      g.lineWidth = 2;
-      g.strokeRect(32, 32, sc.width - 64, sc.height - 64);
-      g.textAlign = 'center';
-      g.textBaseline = 'middle';
-      let fs = 96;
-      g.font = 'bold ' + fs + 'px "Chakra Petch", "Segoe UI", Arial, sans-serif';
-      while (g.measureText(SIGN_TEXT).width > sc.width - 160 && fs > 30) {
-        fs -= 2;
-        g.font = 'bold ' + fs + 'px "Chakra Petch", "Segoe UI", Arial, sans-serif';
-      }
-      g.shadowColor = 'rgba(0,217,255,0.9)';
-      g.shadowBlur = 24;
-      g.fillStyle = '#f8fdff';
-      g.fillText(SIGN_TEXT, sc.width / 2, sc.height / 2 + 4);
-
-      const signTex = new THREE.CanvasTexture(sc);
-      signTex.encoding = THREE.sRGBEncoding;
-      signTex.anisotropy = 8;
-      const sign = new THREE.Mesh(
-        new THREE.PlaneGeometry(5.6, 5.6 * 320 / 2048),
-        new THREE.MeshBasicMaterial({ map: signTex, toneMapped: false })
-      );
-      sign.position.set(0, 2.55, wallZ);
-      scene.add(sign);
-
-      const signGlow = new THREE.PointLight(0x00d9ff, 0.7, 7);
-      signGlow.position.set(0, 2.55, wallZ + 1.0);
-      scene.add(signGlow);
-    }
 
     // Helper: elipsoide (esfera escalada)
     function ellipsoid(sx, sy, sz, mat, x, y, z) {
@@ -543,7 +498,7 @@
       headLocal = headGroup;
 
       // Fixador de Mayfield
-      const titaniumMat = new THREE.MeshStandardMaterial({ color: 0xa1a1aa, metalness: 0.9, roughness: 0.2 });
+      const titaniumMat = new THREE.MeshStandardMaterial({ color: 0x9a6a2e, metalness: 0.85, roughness: 0.38 });
       const clampArc = new THREE.Mesh(new THREE.TorusGeometry(0.24, 0.016, 16, 32, Math.PI * 1.2), titaniumMat);
       clampArc.rotation.x = Math.PI / 2;
       clampArc.rotation.z = -Math.PI * 0.1;
@@ -642,6 +597,7 @@
           if (z < -1.86) y -= Math.min((-1.86 - z) * 6, 0.35);
 
           pos.setXYZ(i, x, y, z);
+          geo.attributes.uv.setXY(i, (x + sgn * Math.max(0, TABLE_TOP_Y + 0.004 - y)) / 0.32, z / 0.32);
           sheetBase[i * 3] = x; sheetBase[i * 3 + 1] = y; sheetBase[i * 3 + 2] = z;
 
           const w = (y > TABLE_TOP_Y + 0.02) ? smooth01(0.12, 0.0, z) * smooth01(-0.45, -0.2, z) : 0;
@@ -651,9 +607,10 @@
       geo.computeVertexNormals();
 
       sheetMesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({
-        color: 0x2f86c0, roughness: 0.92, metalness: 0.0, side: THREE.DoubleSide
+        color: 0xffffff, map: canvasTex(makeLinenCanvas(), 1, 1), roughness: 0.96, metalness: 0.0, side: THREE.DoubleSide
       }));
       bodyGroup.add(sheetMesh);
+      addEgyptianBodyDecor(bodyGroup);
       return bodyGroup;
     }
 
@@ -668,23 +625,934 @@
       pos.needsUpdate = true;
     }
 
+    // =====================================================================
+    // TEMA: TEMPLO DO EMBALSAMADOR — EGITO ANTIGO
+    // =====================================================================
+    let egyptFlames = [], egyptLights = [], dustPoints = null, dustSeed = [];
+    let papyrusBase = null;
+
+    function rng(seed) {
+      let a = seed >>> 0;
+      return function () {
+        a |= 0; a = a + 0x6D2B79F5 | 0;
+        let t = Math.imul(a ^ a >>> 15, 1 | a);
+        t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+        return ((t ^ t >>> 14) >>> 0) / 4294967296;
+      };
+    }
+    function mkCanvas(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
+    function canvasTex(c, repX, repY) {
+      const t = new THREE.CanvasTexture(c);
+      t.encoding = THREE.sRGBEncoding;
+      t.anisotropy = 8;
+      if (repX) { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(repX, repY); }
+      return t;
+    }
+    const EG_FONT = "'Cinzel', 'Palatino Linotype', Georgia, serif";
+
+    // ---------- Hieróglifos desenhados em vetor (não dependem de fonte) ----------
+    function drawGlyph(c, k, x, y, s, col) {
+      c.save();
+      c.translate(x, y);
+      c.strokeStyle = col; c.fillStyle = col;
+      c.lineWidth = Math.max(1.5, s * 0.085);
+      c.lineCap = 'round'; c.lineJoin = 'round';
+      const h = s / 2;
+      switch (k) {
+        case 0: // ankh
+          c.beginPath(); c.ellipse(0, -h * 0.45, h * 0.32, h * 0.42, 0, 0, Math.PI * 2); c.stroke();
+          c.beginPath(); c.moveTo(0, -h * 0.03); c.lineTo(0, h * 0.95); c.moveTo(-h * 0.5, h * 0.25); c.lineTo(h * 0.5, h * 0.25); c.stroke(); break;
+        case 1: // olho de Hórus
+          c.beginPath(); c.moveTo(-h * 0.9, 0); c.quadraticCurveTo(0, -h * 0.75, h * 0.9, 0); c.quadraticCurveTo(0, h * 0.45, -h * 0.9, 0); c.stroke();
+          c.beginPath(); c.arc(0, -h * 0.05, h * 0.2, 0, Math.PI * 2); c.fill();
+          c.beginPath(); c.moveTo(-h * 0.9, -h * 0.45); c.quadraticCurveTo(0, -h * 1.05, h * 0.9, -h * 0.4); c.stroke();
+          c.beginPath(); c.moveTo(-h * 0.2, h * 0.35); c.lineTo(-h * 0.25, h * 0.95); c.quadraticCurveTo(-h * 0.6, h * 0.95, -h * 0.55, h * 0.7); c.stroke(); break;
+        case 2: // disco solar
+          c.beginPath(); c.arc(0, 0, h * 0.7, 0, Math.PI * 2); c.stroke(); c.beginPath(); c.arc(0, 0, h * 0.2, 0, Math.PI * 2); c.fill(); break;
+        case 3: // água
+          for (let i = -1; i <= 1; i++) { c.beginPath(); c.moveTo(-h * 0.9, i * h * 0.4 + h * 0.1); c.lineTo(-h * 0.45, i * h * 0.4 - h * 0.15); c.lineTo(0, i * h * 0.4 + h * 0.1); c.lineTo(h * 0.45, i * h * 0.4 - h * 0.15); c.lineTo(h * 0.9, i * h * 0.4 + h * 0.1); c.stroke(); } break;
+        case 4: // djed
+          c.beginPath(); c.moveTo(0, -h * 0.9); c.lineTo(0, h * 0.9); c.stroke();
+          for (let i = 0; i < 4; i++) { c.beginPath(); c.moveTo(-h * 0.4, -h * 0.8 + i * h * 0.2); c.lineTo(h * 0.4, -h * 0.8 + i * h * 0.2); c.stroke(); }
+          c.beginPath(); c.moveTo(-h * 0.5, h * 0.9); c.lineTo(h * 0.5, h * 0.9); c.stroke(); break;
+        case 5: // pluma de Ma'at
+          c.beginPath(); c.ellipse(0, -h * 0.1, h * 0.28, h * 0.8, 0, 0, Math.PI * 2); c.stroke();
+          c.beginPath(); c.moveTo(0, -h * 0.9); c.lineTo(0, h * 0.95); c.stroke(); break;
+        case 6: // escaravelho
+          c.beginPath(); c.ellipse(0, h * 0.1, h * 0.5, h * 0.62, 0, 0, Math.PI * 2); c.stroke();
+          c.beginPath(); c.arc(0, -h * 0.7, h * 0.2, 0, Math.PI * 2); c.fill();
+          for (let i = -1; i <= 1; i++) {
+            c.beginPath(); c.moveTo(-h * 0.5, h * 0.1 + i * h * 0.3); c.lineTo(-h * 0.95, h * 0.25 + i * h * 0.35);
+            c.moveTo(h * 0.5, h * 0.1 + i * h * 0.3); c.lineTo(h * 0.95, h * 0.25 + i * h * 0.35); c.stroke();
+          } break;
+        case 7: // ave
+          c.beginPath(); c.ellipse(0, h * 0.15, h * 0.55, h * 0.35, -0.2, 0, Math.PI * 2); c.fill();
+          c.beginPath(); c.arc(h * 0.55, -h * 0.35, h * 0.22, 0, Math.PI * 2); c.fill();
+          c.beginPath(); c.moveTo(h * 0.72, -h * 0.38); c.lineTo(h * 1.0, -h * 0.2); c.lineTo(h * 0.7, -h * 0.2); c.fill();
+          c.beginPath(); c.moveTo(-h * 0.5, h * 0.2); c.lineTo(-h * 1.0, h * 0.45); c.stroke();
+          c.beginPath(); c.moveTo(-h * 0.05, h * 0.45); c.lineTo(-h * 0.05, h * 0.95); c.moveTo(h * 0.2, h * 0.45); c.lineTo(h * 0.2, h * 0.95); c.stroke(); break;
+        case 8: // folha de junco
+          c.beginPath(); c.moveTo(0, h * 0.9); c.quadraticCurveTo(-h * 0.5, 0, 0, -h * 0.9); c.quadraticCurveTo(h * 0.5, 0, 0, h * 0.9); c.stroke(); break;
+        case 9: // lótus
+          for (const a of [-0.6, 0, 0.6]) { c.save(); c.rotate(a); c.beginPath(); c.ellipse(0, -h * 0.35, h * 0.2, h * 0.5, 0, 0, Math.PI * 2); c.stroke(); c.restore(); }
+          c.beginPath(); c.moveTo(0, h * 0.1); c.lineTo(0, h * 0.95); c.stroke(); break;
+        case 10: // figura sentada
+          c.beginPath(); c.arc(0, -h * 0.65, h * 0.22, 0, Math.PI * 2); c.fill();
+          c.beginPath(); c.moveTo(0, -h * 0.4); c.lineTo(0, h * 0.35); c.lineTo(h * 0.6, h * 0.35); c.moveTo(0, h * 0.35); c.lineTo(0, h * 0.9); c.stroke();
+          c.beginPath(); c.moveTo(0, -h * 0.2); c.lineTo(h * 0.55, 0); c.stroke(); break;
+        default: // serpente
+          c.beginPath(); c.moveTo(-h * 0.8, h * 0.2); c.bezierCurveTo(-h * 0.4, -h * 0.5, 0, h * 0.7, h * 0.8, -h * 0.2); c.stroke();
+      }
+      c.restore();
+    }
+
+    // ---------- Pedra arenito ----------
+    function paintSandstone(g, w, h, r, base, bw, bh) {
+      g.fillStyle = 'rgb(' + base[0] + ',' + base[1] + ',' + base[2] + ')';
+      g.fillRect(0, 0, w, h);
+      for (let by = 0, row = 0; by < h; by += bh, row++) {
+        const off = row % 2 ? bw / 2 : 0;
+        for (let bx = -off; bx < w; bx += bw) {
+          const t = (r() - 0.5) * 26;
+          g.fillStyle = 'rgb(' + ((base[0] + t) | 0) + ',' + ((base[1] + t * 0.9) | 0) + ',' + ((base[2] + t * 0.7) | 0) + ')';
+          g.fillRect(bx, by, bw, bh);
+        }
+      }
+      for (let i = 0; i < w * h / 180; i++) {
+        const a = r() * 0.10;
+        g.fillStyle = r() < 0.5 ? 'rgba(60,40,20,' + a + ')' : 'rgba(255,235,190,' + a + ')';
+        g.fillRect(r() * w, r() * h, 1 + r() * 3, 1 + r() * 3);
+      }
+      g.strokeStyle = 'rgba(70,45,20,0.55)';
+      g.lineWidth = 3;
+      for (let by = 0, row = 0; by <= h; by += bh, row++) {
+        g.beginPath(); g.moveTo(0, by); g.lineTo(w, by); g.stroke();
+        const off = row % 2 ? bw / 2 : 0;
+        for (let bx = -off; bx < w; bx += bw) { g.beginPath(); g.moveTo(bx, by); g.lineTo(bx, by + bh); g.stroke(); }
+      }
+    }
+
+    function makeFriezeCanvas(w, h, seed) {
+      const r = rng(seed), c = mkCanvas(w, h), g = c.getContext('2d');
+      paintSandstone(g, w, h, r, [160, 124, 80], Math.round(h * 0.19), Math.round(h * 0.19));
+      const GCOL = ['#1d5f8f', '#a8332a', '#1b1b1b', '#b98a1f', '#1f8f86'];
+      const topH = h * 0.085;
+      g.fillStyle = '#16273f'; g.fillRect(0, 0, w, topH);
+      const barW = w / 120, kc = ['#1e63a5', '#b33a2c', '#d9a62e', '#f2ead2'];
+      for (let i = 0; i < 120; i++) { g.fillStyle = kc[i % 4]; g.fillRect(i * barW + 1, topH * 0.18, barW - 2, topH * 0.64); }
+      g.fillStyle = '#d9a62e'; g.fillRect(0, topH, w, h * 0.012);
+      const cell = h * 0.082, colW = cell * 1.35, y0 = h * 0.15, y1 = h * 0.80;
+      const rows = Math.floor((y1 - y0) / (cell * 1.2));
+      let n = 0;
+      for (let x = colW * 0.7; x < w - colW * 0.5; x += colW) {
+        if (n % 3 === 0) { g.strokeStyle = 'rgba(30,20,10,0.75)'; g.lineWidth = 4; g.beginPath(); g.moveTo(x - colW * 0.55, y0 - cell * 0.2); g.lineTo(x - colW * 0.55, y1); g.stroke(); }
+        for (let j = 0; j < rows; j++) drawGlyph(g, Math.floor(r() * 11), x, y0 + (j + 0.5) * cell * 1.2, cell * 0.78, GCOL[Math.floor(r() * GCOL.length)]);
+        n++;
+      }
+      const by = h * 0.84;
+      g.fillStyle = '#3a2410'; g.fillRect(0, by, w, h - by);
+      g.fillStyle = '#d9a62e'; g.fillRect(0, by, w, h * 0.012);
+      for (let x = h * 0.05, i = 0; x < w; x += h * 0.095, i++) drawGlyph(g, i % 2 ? 9 : 8, x, by + (h - by) * 0.55, (h - by) * 0.62, i % 2 ? '#c0392b' : '#2a85b8');
+      const vg = g.createLinearGradient(0, 0, 0, h);
+      vg.addColorStop(0, 'rgba(0,0,0,0.25)'); vg.addColorStop(0.5, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,0.35)');
+      g.fillStyle = vg; g.fillRect(0, 0, w, h);
+      return c;
+    }
+
+    function makeFloorCanvas() {
+      const c = mkCanvas(512, 512), g = c.getContext('2d'), r = rng(11);
+      paintSandstone(g, 512, 512, r, [138, 106, 68], 512, 512);
+      for (let i = 0; i < 90; i++) {
+        const x = r() * 512, y = r() * 512, rad = 12 + r() * 40;
+        const gr = g.createRadialGradient(x, y, 0, x, y, rad);
+        gr.addColorStop(0, 'rgba(240,215,160,0.10)'); gr.addColorStop(1, 'rgba(240,215,160,0)');
+        g.fillStyle = gr; g.fillRect(x - rad, y - rad, rad * 2, rad * 2);
+      }
+      return c;
+    }
+
+    function makeStoneCanvas(base) {
+      const c = mkCanvas(512, 512), g = c.getContext('2d'), r = rng(23);
+      g.fillStyle = base; g.fillRect(0, 0, 512, 512);
+      for (let i = 0; i < 5000; i++) {
+        const a = r() * 0.10;
+        g.fillStyle = r() < 0.5 ? 'rgba(60,40,20,' + a + ')' : 'rgba(255,235,190,' + a + ')';
+        g.fillRect(r() * 512, r() * 512, 1 + r() * 3, 1 + r() * 3);
+      }
+      return c;
+    }
+
+    function makeLinenCanvas() {
+      const w = 512, h = 512, c = mkCanvas(w, h), g = c.getContext('2d'), r = rng(7);
+      g.fillStyle = '#d9c9a2'; g.fillRect(0, 0, w, h);
+      const bandW = 64;
+      for (let k = -8; k < 16; k++) {
+        const t = (r() - 0.5) * 20;
+        g.save(); g.translate(0, k * bandW); g.transform(1, 0.5, 0, 1, 0, 0);
+        g.fillStyle = 'rgb(' + ((217 + t) | 0) + ',' + ((201 + t) | 0) + ',' + ((162 + t) | 0) + ')'; g.fillRect(0, 0, w, bandW - 3);
+        g.fillStyle = 'rgba(70,50,25,0.45)'; g.fillRect(0, bandW - 3, w, 3);
+        g.fillStyle = 'rgba(255,250,235,0.35)'; g.fillRect(0, 0, w, 2);
+        g.restore();
+      }
+      g.globalAlpha = 0.08; g.strokeStyle = '#5a4326'; g.lineWidth = 1;
+      for (let x = 0; x < w; x += 4) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, h); g.stroke(); }
+      for (let y = 0; y < h; y += 4) { g.beginPath(); g.moveTo(0, y); g.lineTo(w, y); g.stroke(); }
+      g.globalAlpha = 1;
+      for (let i = 0; i < 14; i++) {
+        const x = r() * w, y = r() * h, rad = 20 + r() * 60;
+        const gr = g.createRadialGradient(x, y, 0, x, y, rad);
+        gr.addColorStop(0, 'rgba(120,80,30,0.22)'); gr.addColorStop(1, 'rgba(120,80,30,0)');
+        g.fillStyle = gr; g.fillRect(x - rad, y - rad, rad * 2, rad * 2);
+      }
+      return c;
+    }
+
+    function makeCollarCanvas() {
+      const w = 512, h = 256, c = mkCanvas(w, h), g = c.getContext('2d');
+      const bands = [['#d9a62e', 0.14], ['#1f8f86', 0.16], ['#b33a2c', 0.14], ['#1e63a5', 0.18], ['#d9a62e', 0.14], ['#1f8f86', 0.12], ['#d9a62e', 0.12]];
+      let y = 0;
+      bands.forEach(([col, fh]) => {
+        const bh = fh * h;
+        g.fillStyle = col; g.fillRect(0, y, w, bh);
+        g.fillStyle = 'rgba(0,0,0,0.28)'; for (let x = 0; x < w; x += 16) g.fillRect(x, y, 2, bh);
+        g.fillStyle = 'rgba(255,255,255,0.28)'; g.fillRect(0, y, w, 3);
+        y += bh;
+      });
+      return c;
+    }
+
+    function makeWingedDiskCanvas() {
+      const w = 1024, h = 300, c = mkCanvas(w, h), g = c.getContext('2d');
+      const cols = ['#1e63a5', '#b33a2c', '#1f8f86', '#d9a62e'];
+      [-1, 1].forEach(s => {
+        for (let row = 0; row < 4; row++) {
+          for (let i = 0; i < 13; i++) {
+            const fx = 512 + s * (86 + i * 32), len = 70 + row * 20 - i * 2.2, y0 = 112 + row * 28 + i * 1.4;
+            g.fillStyle = cols[row];
+            g.beginPath(); g.moveTo(fx, y0); g.lineTo(fx + s * 27, y0 + 4); g.lineTo(fx + s * 25, y0 + len * 0.9);
+            g.quadraticCurveTo(fx + s * 12, y0 + len + 12, fx, y0 + len * 0.92); g.closePath(); g.fill();
+            g.strokeStyle = '#0d0a06'; g.lineWidth = 2; g.stroke();
+          }
+        }
+      });
+      const gr = g.createRadialGradient(512, 120, 5, 512, 120, 70);
+      gr.addColorStop(0, '#fff2b0'); gr.addColorStop(1, '#d9a62e');
+      g.fillStyle = gr; g.beginPath(); g.arc(512, 120, 66, 0, Math.PI * 2); g.fill();
+      g.strokeStyle = '#7a5415'; g.lineWidth = 5; g.stroke();
+      g.fillStyle = '#b33a2c'; g.beginPath(); g.arc(512, 120, 34, 0, Math.PI * 2); g.fill();
+      return c;
+    }
+
+    // ---------- Chamas e luzes ----------
+    function flameGeo(h, r) {
+      return new THREE.LatheGeometry([[0.001, 0], [0.55 * r, 0.05 * h], [r, 0.25 * h], [0.8 * r, 0.52 * h], [0.38 * r, 0.8 * h], [0.001, h]].map(p => new THREE.Vector2(p[0], p[1])), 14);
+    }
+    function makeFlame(h, r) {
+      const grp = new THREE.Group();
+      const mk = (g, col, op) => new THREE.Mesh(g, new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: op, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide, fog: false, toneMapped: false }));
+      grp.add(mk(flameGeo(h, r), 0xd93a05, 0.6));
+      grp.add(mk(flameGeo(h * 0.8, r * 0.62), 0xff8a10, 0.55));
+      grp.add(mk(flameGeo(h * 0.55, r * 0.34), 0xffc050, 0.6));
+      grp.userData.phase = Math.random() * 10;
+      egyptFlames.push(grp);
+      return grp;
+    }
+    function addFlameLight(parent, x, y, z, intensity, dist) {
+      const l = new THREE.PointLight(0xff9a3c, intensity, dist, 1.6);
+      l.position.set(x, y, z);
+      l.userData.base = intensity; l.userData.phase = Math.random() * 10;
+      parent.add(l);
+      egyptLights.push(l);
+      return l;
+    }
+
+    function updateEgyptFx(t) {
+      for (const f of egyptFlames) {
+        const p = f.userData.phase;
+        const s = 1 + 0.16 * Math.sin(t * 11 + p) + 0.09 * Math.sin(t * 19.3 + p * 2);
+        f.scale.set(1 - 0.07 * Math.sin(t * 13 + p), s, 1 - 0.07 * Math.cos(t * 15 + p));
+        f.rotation.y = t * 0.6 + p;
+      }
+      for (const l of egyptLights) {
+        const p = l.userData.phase;
+        l.intensity = l.userData.base * (0.86 + 0.14 * Math.sin(t * 13 + p) + 0.07 * Math.sin(t * 31 + p * 3));
+      }
+      if (dustPoints) {
+        const pos = dustPoints.geometry.attributes.position.array;
+        for (let i = 0; i < dustSeed.length; i++) {
+          const d = dustSeed[i];
+          pos[i * 3] = d.x + Math.sin(t * 0.15 + d.p) * 0.25;
+          pos[i * 3 + 1] = 0.2 + ((d.y + t * d.v) % 3.9);
+          pos[i * 3 + 2] = d.z + Math.cos(t * 0.12 + d.p) * 0.25;
+        }
+        dustPoints.geometry.attributes.position.needsUpdate = true;
+      }
+    }
+
+    // ---------- Adereços do templo ----------
+    function egMat(color, rough, metal, extra) {
+      return new THREE.MeshStandardMaterial(Object.assign({ color: color, roughness: rough, metalness: metal || 0 }, extra || {}));
+    }
+
+    function buildColumn(x, z, stoneTex) {
+      const grp = new THREE.Group();
+      const sand = egMat(0xd0b182, 0.85, 0, { map: stoneTex });
+      const blue = egMat(0x1f7a96, 0.6, 0.1);
+      const red = egMat(0xa83a2a, 0.6, 0.1);
+      const gold = egMat(0xd9a62e, 0.35, 0.9);
+      const base = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.48, 0.16, 24), sand); base.position.y = 0.08; grp.add(base);
+      for (let k = 0; k < 10; k++) {
+        const a = k / 10 * Math.PI * 2;
+        const st = new THREE.Mesh(new THREE.CylinderGeometry(0.115, 0.125, 3.0, 12), sand);
+        st.position.set(Math.cos(a) * 0.26, 1.66, Math.sin(a) * 0.26); grp.add(st);
+      }
+      [0.55, 1.0].forEach((y, i) => { const b = new THREE.Mesh(new THREE.CylinderGeometry(0.40, 0.40, 0.06, 24), i ? red : blue); b.position.y = y + 0.9; grp.add(b); });
+      const tie = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.4, 0.07, 24), gold); tie.position.y = 0.45; grp.add(tie);
+      const cap = new THREE.Mesh(new THREE.LatheGeometry([[0.36, 0], [0.5, 0.18], [0.62, 0.42], [0.58, 0.66], [0.40, 0.82], [0.46, 0.86]].map(p => new THREE.Vector2(p[0], p[1])), 24), sand);
+      cap.material.side = THREE.DoubleSide; cap.position.y = 3.15; grp.add(cap);
+      const band = new THREE.Mesh(new THREE.CylinderGeometry(0.40, 0.40, 0.05, 24), blue); band.position.y = 3.14; grp.add(band);
+      const abacus = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.18, 1.0), sand); abacus.position.y = 4.1; grp.add(abacus);
+      grp.position.set(x, 0, z);
+      return grp;
+    }
+
+    function buildTorch(x, y, z, withLight) {
+      const grp = new THREE.Group();
+      const wood = egMat(0x4a2e18, 0.8, 0);
+      const bronze = egMat(0xa87a3a, 0.4, 0.9);
+      const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.04, 0.9, 10), wood); pole.position.y = 0.45; grp.add(pole);
+      const cup = new THREE.Mesh(new THREE.LatheGeometry([[0.04, 0], [0.09, 0.05], [0.12, 0.14], [0.10, 0.16]].map(p => new THREE.Vector2(p[0], p[1])), 16), bronze);
+      cup.material.side = THREE.DoubleSide; cup.position.y = 0.88; grp.add(cup);
+      const fl = makeFlame(0.34, 0.1); fl.position.y = 1.0; grp.add(fl);
+      if (withLight) addFlameLight(grp, 0, 1.15, 0, 0.55, 7);
+      grp.position.set(x, y, z);
+      return grp;
+    }
+
+    function buildBrazier(x, z, withLight) {
+      const grp = new THREE.Group();
+      const bronze = egMat(0x9a6a2e, 0.4, 0.9);
+      for (let k = 0; k < 3; k++) {
+        const a = k / 3 * Math.PI * 2 + 0.4;
+        const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.035, 0.95, 8), bronze);
+        leg.position.set(Math.cos(a) * 0.17, 0.46, Math.sin(a) * 0.17);
+        leg.rotation.set(-Math.sin(a) * 0.18, 0, Math.cos(a) * 0.18);
+        grp.add(leg);
+      }
+      const bowl = new THREE.Mesh(new THREE.LatheGeometry([[0.0, 0], [0.12, 0.02], [0.24, 0.1], [0.3, 0.22], [0.28, 0.24], [0.0, 0.1]].map(p => new THREE.Vector2(p[0], p[1])), 24), bronze);
+      bowl.material.side = THREE.DoubleSide; bowl.position.y = 0.88; grp.add(bowl);
+      const coals = new THREE.Mesh(new THREE.SphereGeometry(0.26, 16, 8), new THREE.MeshBasicMaterial({ color: 0xff5a12, fog: false }));
+      coals.scale.y = 0.25; coals.position.y = 1.03; grp.add(coals);
+      const fl = makeFlame(0.55, 0.19); fl.position.y = 1.05; grp.add(fl);
+      if (withLight) addFlameLight(grp, 0, 1.5, 0, 0.65, 6);
+      grp.position.set(x, 0, z);
+      return grp;
+    }
+
+    function buildHangingLamp(x, y, z) {
+      const grp = new THREE.Group();
+      const bronze = egMat(0x9a6a2e, 0.4, 0.9);
+      const chainH = 4.4 - y;
+      for (let k = 0; k < 3; k++) {
+        const a = k / 3 * Math.PI * 2;
+        const ch = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, chainH, 6), bronze);
+        ch.position.set(Math.cos(a) * 0.25, chainH / 2, Math.sin(a) * 0.25);
+        ch.rotation.set(Math.sin(a) * 0.04, 0, -Math.cos(a) * 0.04);
+        grp.add(ch);
+      }
+      const bowl = new THREE.Mesh(new THREE.LatheGeometry([[0.0, 0], [0.18, 0.04], [0.36, 0.14], [0.42, 0.26], [0.38, 0.28], [0.0, 0.14]].map(p => new THREE.Vector2(p[0], p[1])), 28), bronze);
+      bowl.material.side = THREE.DoubleSide; grp.add(bowl);
+      const rim = new THREE.Mesh(new THREE.TorusGeometry(0.4, 0.014, 8, 36), egMat(0xe0b040, 0.3, 1));
+      rim.rotation.x = Math.PI / 2; rim.position.y = 0.27; grp.add(rim);
+      [[0, 0], [0.22, 0.1], [-0.2, 0.14], [0.05, -0.24]].forEach(p => { const fl = makeFlame(0.26, 0.07); fl.position.set(p[0], 0.14, p[1]); grp.add(fl); });
+      grp.position.set(x, y, z);
+      return grp;
+    }
+
+    function buildAnubis(x, z, rotY, stoneTex) {
+      const grp = new THREE.Group();
+      const black = egMat(0x0d0b0c, 0.3, 0.25);
+      const gold = egMat(0xe0b040, 0.28, 1.0);
+      const stone = egMat(0xc9ab7a, 0.85, 0, { map: stoneTex });
+      const ped = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.34, 1.0), stone); ped.position.y = 0.17; grp.add(ped);
+      const trim = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.03, 1.02), gold); trim.position.y = 0.35; grp.add(trim);
+      const body = new THREE.Mesh(new THREE.SphereGeometry(1, 20, 16), black); body.scale.set(0.2, 0.42, 0.19); body.position.set(0, 0.8, -0.1); body.rotation.x = -0.12; grp.add(body);
+      const haunch = new THREE.Mesh(new THREE.SphereGeometry(1, 20, 16), black); haunch.scale.set(0.24, 0.2, 0.34); haunch.position.set(0, 0.5, -0.22); grp.add(haunch);
+      [-0.1, 0.1].forEach(sx => {
+        const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.05, 0.5, 12), black); leg.position.set(sx, 0.6, 0.2); leg.rotation.x = 0.1; grp.add(leg);
+        const paw = new THREE.Mesh(new THREE.SphereGeometry(0.055, 12, 10), black); paw.scale.set(1, 0.6, 1.5); paw.position.set(sx, 0.37, 0.27); grp.add(paw);
+      });
+      const tail = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3([new THREE.Vector3(0, 0.45, -0.45), new THREE.Vector3(0.02, 0.36, -0.7), new THREE.Vector3(0.05, 0.37, -0.88)]), 20, 0.03, 8, false), black);
+      grp.add(tail);
+      const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.1, 0.22, 14), black); neck.position.set(0, 1.18, -0.02); grp.add(neck);
+      const head = new THREE.Mesh(new THREE.SphereGeometry(1, 20, 16), black); head.scale.set(0.095, 0.1, 0.13); head.position.set(0, 1.36, 0.0); grp.add(head);
+      const snout = new THREE.Mesh(new THREE.ConeGeometry(0.058, 0.3, 14), black); snout.rotation.x = Math.PI / 2 + 0.12; snout.position.set(0, 1.325, 0.2); grp.add(snout);
+      const nose = new THREE.Mesh(new THREE.SphereGeometry(0.022, 10, 8), black); nose.position.set(0, 1.31, 0.35); grp.add(nose);
+      [-1, 1].forEach(s => {
+        const ear = new THREE.Mesh(new THREE.ConeGeometry(0.045, 0.3, 4), black); ear.position.set(s * 0.065, 1.55, -0.03); ear.rotation.z = -s * 0.1; grp.add(ear);
+        const eye = new THREE.Mesh(new THREE.SphereGeometry(0.016, 8, 8), gold); eye.position.set(s * 0.06, 1.385, 0.095); grp.add(eye);
+      });
+      const collar = new THREE.Mesh(new THREE.TorusGeometry(0.115, 0.03, 10, 28), gold); collar.rotation.x = Math.PI / 2 - 0.2; collar.position.set(0, 1.1, 0.02); grp.add(collar);
+      grp.position.set(x, 0, z); grp.rotation.y = rotY;
+      return grp;
+    }
+
+    function makeSarcoCanvas() {
+      const w = 512, h = 1024, c = mkCanvas(w, h), g = c.getContext('2d'), r = rng(31);
+      g.fillStyle = '#d9a62e'; g.fillRect(0, 0, w, h);
+      for (let i = 0; i < 3000; i++) { g.fillStyle = 'rgba(120,80,10,' + (r() * 0.08) + ')'; g.fillRect(r() * w, r() * h, 2, 2); }
+      const cx = w / 2;
+      // colar largo
+      const cols = ['#1e63a5', '#b33a2c', '#1f8f86', '#f2ead2'];
+      for (let k = 0; k < 4; k++) {
+        g.strokeStyle = cols[k]; g.lineWidth = 16;
+        g.beginPath(); g.ellipse(cx, 120 + k * 6, 150 - k * 22, 100 - k * 16, 0, 0, Math.PI); g.stroke();
+      }
+      // faixa central de hieróglifos
+      g.fillStyle = '#16273f'; g.fillRect(cx - 38, 260, 76, 560);
+      for (let j = 0; j < 8; j++) drawGlyph(g, [0, 1, 5, 6, 4, 2, 9, 7][j], cx, 295 + j * 68, 46, '#e8c35a');
+      // faixas horizontais
+      [[330, '#1e63a5'], [520, '#b33a2c'], [700, '#1f8f86']].forEach(([y, col]) => { g.fillStyle = col; g.fillRect(0, y, w, 14); });
+      // asas de Ísis na base
+      for (let s of [-1, 1]) for (let i = 0; i < 8; i++) { g.fillStyle = cols[i % 3]; g.fillRect(cx + s * (50 + i * 22) - 8, 830 + i * 8, 16, 90 - i * 6); }
+      return c;
+    }
+
+    function buildSarcophagus(x, z, rotY) {
+      const grp = new THREE.Group();
+      const body = new THREE.Mesh(new THREE.LatheGeometry([[0.0, 0.0], [0.17, 0.0], [0.2, 0.2], [0.26, 0.7], [0.30, 1.05], [0.29, 1.35], [0.22, 1.5], [0.17, 1.58]].map(p => new THREE.Vector2(p[0], p[1])), 36),
+        new THREE.MeshStandardMaterial({ map: canvasTex(makeSarcoCanvas()), roughness: 0.4, metalness: 0.55 }));
+      body.material.side = THREE.DoubleSide;
+      body.scale.z = 0.7; body.rotation.y = Math.PI;
+      grp.add(body);
+      const gold = egMat(0xe0b040, 0.25, 1.0);
+      const blue = egMat(0x1e63a5, 0.5, 0.2);
+      const black = egMat(0x0a0a0a, 0.3, 0.2);
+      const face = new THREE.Mesh(new THREE.SphereGeometry(1, 24, 20), gold); face.scale.set(0.16, 0.2, 0.15); face.position.set(0, 1.74, 0.02); grp.add(face);
+      const nemes = new THREE.Mesh(new THREE.SphereGeometry(1, 24, 20), blue); nemes.scale.set(0.2, 0.22, 0.2); nemes.position.set(0, 1.78, -0.04); grp.add(nemes);
+      [-1, 1].forEach(s => {
+        const flap = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.32, 0.16), blue); flap.position.set(s * 0.19, 1.55, 0.0); grp.add(flap);
+        const stripe = new THREE.Mesh(new THREE.BoxGeometry(0.072, 0.02, 0.162), gold);
+        for (let k = 0; k < 5; k++) { const sp = stripe.clone(); sp.position.set(s * 0.19, 1.43 + k * 0.06, 0.0); grp.add(sp); }
+        const eye = new THREE.Mesh(new THREE.SphereGeometry(0.022, 10, 8), black); eye.scale.set(1.2, 0.7, 0.5); eye.position.set(s * 0.058, 1.77, 0.155); grp.add(eye);
+        const brow = new THREE.Mesh(new THREE.BoxGeometry(0.075, 0.012, 0.012), black); brow.position.set(s * 0.058, 1.805, 0.155); grp.add(brow);
+      });
+      const nose = new THREE.Mesh(new THREE.ConeGeometry(0.022, 0.06, 8), gold); nose.rotation.x = Math.PI / 2; nose.position.set(0, 1.725, 0.17); grp.add(nose);
+      const beard = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.03, 0.18, 8), blue); beard.position.set(0, 1.5, 0.16); beard.rotation.x = 0.15; grp.add(beard);
+      const uraeus = new THREE.Mesh(new THREE.ConeGeometry(0.025, 0.07, 8), gold); uraeus.position.set(0, 1.99, 0.12); grp.add(uraeus);
+      grp.position.set(x, 0, z); grp.rotation.y = rotY;
+      return grp;
+    }
+
+    function makeJarCanvas() {
+      const c = mkCanvas(256, 256), g = c.getContext('2d');
+      g.fillStyle = '#e6d9b8'; g.fillRect(0, 0, 256, 256);
+      g.fillStyle = '#1e63a5'; g.fillRect(0, 70, 256, 10); g.fillRect(0, 190, 256, 10);
+      g.fillStyle = '#d9a62e'; g.fillRect(0, 82, 256, 4); g.fillRect(0, 186, 256, 4);
+      [0, 5, 6].forEach((k, i) => drawGlyph(g, k, 128, 112 + i * 26, 22, i % 2 ? '#a8332a' : '#1d5f8f'));
+      return c;
+    }
+
+    function buildCanopicJar(kind) {
+      const grp = new THREE.Group();
+      const alabaster = new THREE.MeshStandardMaterial({ color: 0xffffff, map: canvasTex(makeJarCanvas()), roughness: 0.35 });
+      alabaster.side = THREE.DoubleSide;
+      const jar = new THREE.Mesh(new THREE.LatheGeometry([[0.0, 0], [0.07, 0], [0.095, 0.06], [0.105, 0.17], [0.09, 0.26], [0.065, 0.31], [0.07, 0.33]].map(p => new THREE.Vector2(p[0], p[1])), 28), alabaster);
+      grp.add(jar);
+      const lid = egMat(0xe6d9b8, 0.35, 0);
+      const dark = egMat(0x15110d, 0.4, 0);
+      const gold = egMat(0xe0b040, 0.3, 1);
+      const head = new THREE.Mesh(new THREE.SphereGeometry(0.07, 18, 14), lid); head.position.y = 0.38; grp.add(head);
+      const eyeOff = [-0.03, 0.03];
+      eyeOff.forEach(ex => { const e = new THREE.Mesh(new THREE.SphereGeometry(0.009, 8, 8), dark); e.position.set(ex, 0.395, 0.062); grp.add(e); });
+      if (kind === 0) { // humano (Imsety) com peruca
+        const wig = new THREE.Mesh(new THREE.SphereGeometry(0.076, 18, 14, 0, Math.PI * 2, 0, Math.PI * 0.62), egMat(0x1e63a5, 0.5, 0.2)); wig.position.y = 0.385; grp.add(wig);
+      } else if (kind === 1) { // babuíno (Hapi)
+        const sn = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.04, 0.05), lid); sn.position.set(0, 0.37, 0.075); grp.add(sn);
+      } else if (kind === 2) { // chacal (Duamutef)
+        const sn = new THREE.Mesh(new THREE.ConeGeometry(0.028, 0.1, 10), lid); sn.rotation.x = Math.PI / 2; sn.position.set(0, 0.375, 0.1); grp.add(sn);
+        [-1, 1].forEach(s => { const ear = new THREE.Mesh(new THREE.ConeGeometry(0.018, 0.07, 6), lid); ear.position.set(s * 0.04, 0.46, -0.01); grp.add(ear); });
+      } else { // falcão (Qebehsenuef)
+        const bk = new THREE.Mesh(new THREE.ConeGeometry(0.02, 0.055, 8), gold); bk.rotation.x = Math.PI / 2 + 0.3; bk.position.set(0, 0.375, 0.085); grp.add(bk);
+      }
+      return grp;
+    }
+
+    function buildNatronTub() {
+      const grp = new THREE.Group();
+      const wood = egMat(0x5a3a1e, 0.8, 0);
+      const W = 0.7, D = 1.0, H = 0.22;
+      [[0, H / 2, D / 2, W, H, 0.04], [0, H / 2, -D / 2, W, H, 0.04], [W / 2, H / 2, 0, 0.04, H, D], [-W / 2, H / 2, 0, 0.04, H, D]].forEach(p => {
+        const b = new THREE.Mesh(new THREE.BoxGeometry(p[3], p[4], p[5]), wood); b.position.set(p[0], p[1], p[2]); grp.add(b);
+      });
+      const bottom = new THREE.Mesh(new THREE.BoxGeometry(W, 0.03, D), wood); bottom.position.y = 0.015; grp.add(bottom);
+      const r = rng(5);
+      const inst = new THREE.InstancedMesh(new THREE.BoxGeometry(0.05, 0.035, 0.05), new THREE.MeshStandardMaterial({ color: 0xf3ead6, roughness: 0.95 }), 260);
+      const m = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), sc = new THREE.Vector3(), pos = new THREE.Vector3();
+      for (let i = 0; i < 260; i++) {
+        pos.set((r() - 0.5) * (W - 0.08), 0.045 + r() * 0.12 * (1 - Math.abs(r() - 0.5)), (r() - 0.5) * (D - 0.08));
+        e.set(r() * 3, r() * 3, r() * 3); q.setFromEuler(e);
+        const s = 0.6 + r() * 0.9; sc.set(s, s, s);
+        m.compose(pos, q, sc); inst.setMatrixAt(i, m);
+        inst.setColorAt && inst.setColorAt(i, new THREE.Color().setHSL(0.1, 0.25, 0.82 + r() * 0.15));
+      }
+      grp.add(inst);
+      return grp;
+    }
+
+    function buildEmbalmingTable(stoneTex) {
+      const grp = new THREE.Group();
+      const stone = egMat(0xd2b88a, 0.8, 0, { map: stoneTex });
+      const gold = egMat(0xe0b040, 0.3, 1.0);
+      const slab = new THREE.Mesh(new THREE.BoxGeometry(0.86, 0.14, 2.5), stone);
+      slab.position.set(0, TABLE_TOP_Y - 0.07, -0.65); grp.add(slab);
+      [[-0.28, 0.45], [0.28, 0.45], [-0.28, -1.65], [0.28, -1.65]].forEach(([lx, lz]) => {
+        const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.085, 0.07, 0.96, 12), stone); leg.position.set(lx, 0.5, lz); grp.add(leg);
+        const paw = new THREE.Mesh(new THREE.SphereGeometry(0.1, 14, 10), stone); paw.scale.set(1, 0.55, 1.5); paw.position.set(lx, 0.055, lz + 0.04); grp.add(paw);
+        for (let k = -1; k <= 1; k++) { const claw = new THREE.Mesh(new THREE.SphereGeometry(0.018, 8, 6), gold); claw.position.set(lx + k * 0.04, 0.025, lz + 0.15); grp.add(claw); }
+        const ring = new THREE.Mesh(new THREE.TorusGeometry(0.083, 0.012, 8, 20), gold); ring.rotation.x = Math.PI / 2; ring.position.set(lx, 0.34, lz); grp.add(ring);
+      });
+      return grp;
+    }
+
+    function setupORLighting() {
+      scene.add(new THREE.AmbientLight(0xffcf99, 0.09));
+
+      const surgicalLight = new THREE.SpotLight(0xffe1b0, 1.5);
+      surgicalLight.position.set(0.1, 3.2, 0.4);
+      surgicalLight.target.position.set(0, 1.15, 0.2);
+      surgicalLight.angle = Math.PI / 4.5;
+      surgicalLight.penumbra = 0.4;
+      scene.add(surgicalLight);
+      scene.add(surgicalLight.target);
+
+      const dirLight = new THREE.DirectionalLight(0xffc690, 0.1);
+      dirLight.position.set(2, 5, 2);
+      scene.add(dirLight);
+
+      const fillLight = new THREE.DirectionalLight(0xb0703c, 0.08);
+      fillLight.position.set(-3, 3, -3);
+      scene.add(fillLight);
+
+      const theaterPoint = new THREE.PointLight(0xffb060, 0.3, 6);
+      theaterPoint.position.set(2.4, 2.0, -0.6);
+      scene.add(theaterPoint);
+
+      const monitorPoint = new THREE.PointLight(0xffb060, 0.3, 6);
+      monitorPoint.position.set(-2.4, 2.0, -0.6);
+      scene.add(monitorPoint);
+    }
+
+    const SIGN_TEXT = 'AMBIENTE VIRTUAL DO CURSO DE MEDICINA - UNIFAN';
+    let signCanvasRef = null, signTexRef = null;
+
+    function drawSignCanvas(sc) {
+      const g = sc.getContext('2d'), w = sc.width, h = sc.height;
+      const gr = g.createLinearGradient(0, 0, 0, h);
+      gr.addColorStop(0, '#1a3a66'); gr.addColorStop(1, '#0e2240');
+      g.fillStyle = gr; g.fillRect(0, 0, w, h);
+      g.strokeStyle = '#e0b040'; g.lineWidth = 14; g.strokeRect(10, 10, w - 20, h - 20);
+      g.strokeStyle = '#8a5a1a'; g.lineWidth = 3; g.strokeRect(34, 34, w - 68, h - 68);
+      drawGlyph(g, 1, 118, h / 2, 130, '#e0b040'); drawGlyph(g, 0, w - 118, h / 2, 130, '#e0b040');
+      drawGlyph(g, 2, 250, h / 2, 70, '#d9a62e'); drawGlyph(g, 2, w - 250, h / 2, 70, '#d9a62e');
+      g.textAlign = 'center'; g.textBaseline = 'middle';
+      let fs = 70;
+      g.font = 'bold ' + fs + 'px ' + EG_FONT;
+      while (g.measureText(SIGN_TEXT).width > w - 640 && fs > 24) { fs -= 2; g.font = 'bold ' + fs + 'px ' + EG_FONT; }
+      g.shadowColor = 'rgba(255,190,70,0.85)'; g.shadowBlur = 22;
+      g.fillStyle = '#ffe9b0';
+      g.fillText(SIGN_TEXT, w / 2, h / 2 + 4);
+    }
+
+    function addWingedDisk(parent, y, width) {
+      const tex = canvasTex(makeWingedDiskCanvas());
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(width, width * 300 / 1024),
+        new THREE.MeshBasicMaterial({ map: tex, transparent: true, alphaTest: 0.05, side: THREE.DoubleSide, color: 0xe8e8e8, fog: false }));
+      m.position.set(0, y, 0.03);
+      parent.add(m);
+    }
+
+    function buildArchitecturalRoom() {
+      egyptFlames = []; egyptLights = [];
+      const stoneTex = canvasTex(makeStoneCanvas('#cdb185'), 2, 2);
+
+      // chão de lajes
+      const floor = new THREE.Mesh(new THREE.PlaneGeometry(14, 12),
+        new THREE.MeshStandardMaterial({ map: canvasTex(makeFloorCanvas(), 14, 12), roughness: 0.9, metalness: 0 }));
+      floor.rotation.x = -Math.PI / 2; floor.position.set(0, 0, 0.5); scene.add(floor);
+
+      // paredes com frisos de hieróglifos
+      const wallZ = -3.6;
+      const mkWall = (cw, ch, seed, pw, ph) => {
+        const m = new THREE.Mesh(new THREE.PlaneGeometry(pw, ph),
+          new THREE.MeshStandardMaterial({ map: canvasTex(makeFriezeCanvas(cw, ch, seed)), roughness: 0.92, metalness: 0 }));
+        return m;
+      };
+      const back = mkWall(2048, 752, 3, 12, 4.4); back.position.set(0, 2.2, wallZ - 0.02); scene.add(back);
+      const front = mkWall(2048, 752, 9, 12, 4.4); front.position.set(0, 2.2, 4.62); front.rotation.y = Math.PI; scene.add(front);
+      const left = mkWall(1536, 824, 5, 8.2, 4.4); left.position.set(-6, 2.2, 0.5); left.rotation.y = Math.PI / 2; scene.add(left);
+      const right = mkWall(1536, 824, 6, 8.2, 4.4); right.position.set(6, 2.2, 0.5); right.rotation.y = -Math.PI / 2; scene.add(right);
+
+      // teto com vigas
+      const ceil = new THREE.Mesh(new THREE.PlaneGeometry(14, 12), egMat(0x2a1a10, 0.95, 0));
+      ceil.rotation.x = Math.PI / 2; ceil.position.set(0, 4.4, 0.5); scene.add(ceil);
+      const beamMat = egMat(0x5a3a1e, 0.85, 0);
+      for (let z = -3; z <= 4; z += 1.75) { const b = new THREE.Mesh(new THREE.BoxGeometry(12, 0.22, 0.3), beamMat); b.position.set(0, 4.29, z); scene.add(b); }
+
+      // colunas de papiro
+      [-4.5, 4.5].forEach(x => [-2.6, 0.9, 4.0].forEach(z => scene.add(buildColumn(x, z, stoneTex))));
+
+      // luminária pendente sobre a mesa (substitui o foco cirúrgico)
+      scene.add(buildHangingLamp(0.1, 3.2, 0.4));
+
+      // tochas nas paredes
+      const bracket = egMat(0x9a6a2e, 0.4, 0.9);
+      [[-5.7, -2.0, true], [5.7, -2.0, true], [-5.7, 2.4, false], [5.7, 2.4, false], [-3.6, -3.4, false], [3.6, -3.4, false]].forEach(([tx, tz, lt]) => {
+        scene.add(buildTorch(tx, 1.1, tz, lt));
+        const arm = new THREE.Mesh(new THREE.BoxGeometry(Math.abs(tx) > 5 ? 0.3 : 0.04, 0.05, Math.abs(tx) > 5 ? 0.04 : 0.3), bracket);
+        arm.position.set(tx + (Math.abs(tx) > 5 ? Math.sign(tx) * 0.15 : 0), 1.6, tz + (Math.abs(tx) > 5 ? 0 : -0.15)); scene.add(arm);
+      });
+
+      // braseiros ao lado da cabeceira
+      scene.add(buildBrazier(-1.8, 1.9, true));
+      scene.add(buildBrazier(1.8, 1.9, true));
+
+      // estátuas de Anúbis e sarcófagos no fundo
+      scene.add(buildAnubis(-2.1, -3.1, 0, stoneTex));
+      scene.add(buildAnubis(2.1, -3.1, 0, stoneTex));
+      scene.add(buildSarcophagus(-4.0, -3.1, 0));
+      scene.add(buildSarcophagus(4.0, -3.1, 0));
+
+      // vasos canopos sobre um altar baixo
+      const altar = new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.4, 0.55), egMat(0xcdb185, 0.85, 0, { map: stoneTex }));
+      altar.position.set(-1.55, 0.2, -1.15); scene.add(altar);
+      for (let k = 0; k < 4; k++) {
+        const jar = buildCanopicJar(k);
+        jar.position.set(-1.55 - 0.5 + k * 0.33, 0.4, -1.15);
+        jar.rotation.y = 0.5; scene.add(jar);
+      }
+
+      // tina de natrão
+      const tub = buildNatronTub(); tub.position.set(1.55, 0, -1.0); scene.add(tub);
+
+      // mesa de embalsamamento (laje de calcário com patas de leão)
+      scene.add(buildEmbalmingTable(stoneTex));
+
+      // placa de identificação do ambiente
+      const sc = document.createElement('canvas');
+      sc.width = 2048; sc.height = 420;
+      drawSignCanvas(sc);
+      signCanvasRef = sc;
+      signTexRef = canvasTex(sc);
+      const signW = 5.8, signH = signW * 420 / 2048;
+      const sign = new THREE.Mesh(new THREE.PlaneGeometry(signW, signH),
+        new THREE.MeshBasicMaterial({ map: signTexRef, toneMapped: false, fog: false }));
+      sign.position.set(0, 3.45, wallZ); scene.add(sign);
+      const signLight = new THREE.PointLight(0xffc060, 0.5, 7);
+      signLight.position.set(0, 3.4, wallZ + 1.2); scene.add(signLight);
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.load('bold 40px Cinzel').then(() => document.fonts.ready).then(() => {
+          drawSignCanvas(signCanvasRef); signTexRef.needsUpdate = true; papyrusBase = null;
+        }).catch(() => {});
+      }
+
+      // poeira em suspensão na luz das tochas
+      const N = 320, arr = new Float32Array(N * 3), r = rng(99);
+      dustSeed = [];
+      for (let i = 0; i < N; i++) {
+        const d = { x: (r() - 0.5) * 10, y: r() * 3.9, z: -3 + r() * 7, p: r() * 10, v: 0.015 + r() * 0.03 };
+        dustSeed.push(d); arr[i * 3] = d.x; arr[i * 3 + 1] = d.y; arr[i * 3 + 2] = d.z;
+      }
+      const dg = new THREE.BufferGeometry(); dg.setAttribute('position', new THREE.BufferAttribute(arr, 3));
+      dustPoints = new THREE.Points(dg, new THREE.PointsMaterial({ color: 0xffd9a0, size: 0.018, transparent: true, opacity: 0.45, blending: THREE.AdditiveBlending, depthWrite: false }));
+      dustPoints.frustumCulled = false;
+      scene.add(dustPoints);
+    }
+
+    // ===== Instrumentos do antigo Egito =====
+    function toolBronze() { return toolMat(0xb5803c, 0.92, 0.32); }
+
+    // Faca de obsidiana
+    function buildScalpel(g, glows) {
+      const obs = new THREE.MeshPhysicalMaterial({ color: 0x08080c, roughness: 0.06, metalness: 0.15, clearcoat: 1.0, clearcoatRoughness: 0.05 });
+      if (toolEnvMap) { obs.envMap = toolEnvMap; obs.envMapIntensity = 1.6; }
+      const wood = toolMat(0x3a2412, 0.05, 0.6);
+      const gold = toolMat(0xe3b341, 1.0, 0.22);
+      const cord = toolMat(0xd8c8a0, 0.0, 0.95);
+
+      const sh = new THREE.Shape();
+      sh.moveTo(0, 0);
+      sh.quadraticCurveTo(0.0125, 0.02, 0.0048, 0.056);
+      sh.lineTo(-0.0048, 0.056);
+      sh.quadraticCurveTo(-0.0125, 0.02, 0, 0);
+      const bg = new THREE.ExtrudeGeometry(sh, { depth: 0.0022, bevelEnabled: true, bevelThickness: 0.0009, bevelSize: 0.0007, bevelSegments: 2, steps: 1 });
+      bg.translate(0, 0, -0.0011);
+      const blade = new THREE.Mesh(bg, obs); blade.position.y = TIP_Y; g.add(blade);
+
+      const cy = TIP_Y + 0.052;
+      g.add(latheMesh([[0.0045, cy - 0.004], [0.0062, cy], [0.0062, cy + 0.012], [0.0048, cy + 0.016]], gold));
+      for (let k = 0; k < 4; k++) g.add(ringMesh(0.0066, 0.0006, cy - 0.002 + k * 0.0035, cord));
+      g.add(latheMesh([[0.0046, cy + 0.016], [0.0075, cy + 0.03], [0.0088, cy + 0.07], [0.0085, cy + 0.12], [0.0098, cy + 0.135], [0.0072, cy + 0.145], [0.0005, cy + 0.148]], wood));
+      [0.045, 0.075, 0.105].forEach(o => g.add(ringMesh(0.0089, 0.0007, cy + o, gold)));
+      const pom = new THREE.Mesh(new THREE.SphereGeometry(0.0075, 16, 12), gold); pom.position.y = cy + 0.153; g.add(pom);
+      addGlow(g, glows, 0xffd37a, 0.0024, 0.55, 0, TIP_Y, 0);
+    }
+
+    // Cautério de bronze em brasa
+    function buildCautery(g, glows) {
+      const wood = toolMat(0x4a2e18, 0.05, 0.65);
+      const gold = toolMat(0xe3b341, 1.0, 0.22);
+      const cord = toolMat(0xd8c8a0, 0.0, 0.95);
+      const bronze = toolBronze();
+      const hot = new THREE.MeshStandardMaterial({ color: 0xff6a1a, emissive: 0xff4a08, emissiveIntensity: 1.7, roughness: 0.5 });
+
+      const tip = new THREE.Mesh(new THREE.CylinderGeometry(0.0026, 0.0012, 0.05, 14), hot); tip.position.y = TIP_Y + 0.025; g.add(tip);
+      const ball = new THREE.Mesh(new THREE.SphereGeometry(0.0013, 10, 8), hot); ball.position.y = TIP_Y; g.add(ball);
+      const rod = new THREE.Mesh(new THREE.CylinderGeometry(0.0026, 0.0026, 0.085, 14), bronze); rod.position.y = TIP_Y + 0.05 + 0.0425; g.add(rod);
+      g.add(latheMesh([[0.0055, -0.022], [0.0085, -0.01], [0.0095, 0.04], [0.0085, 0.095], [0.0062, 0.105], [0.0005, 0.107]], wood));
+      [-0.018, 0.1].forEach(y => g.add(ringMesh(0.0088, 0.0008, y, gold)));
+      for (let k = 0; k < 6; k++) g.add(ringMesh(0.0094, 0.0005, 0.0 + k * 0.0045, cord));
+      addGlow(g, glows, 0xff6a1a, 0.0032, 0.85, 0, TIP_Y, 0);
+      addGlow(g, glows, 0xff9a40, 0.008, 0.28, 0, TIP_Y, 0);
+    }
+
+    // Gancho de bronze (extração do cérebro)
+    function buildSuction(g, glows) {
+      const bronze = toolBronze();
+      const wood = toolMat(0x3a2412, 0.05, 0.6);
+      const gold = toolMat(0xe3b341, 1.0, 0.22);
+      const pts = [[0, 0.0, 0], [0, -0.05, 0], [0, -0.10, 0], [0, -0.135, 0], [0.0012, -0.1485, 0], [0.0045, -0.1550, 0], [0.0075, -0.1520, 0], [0.0082, -0.1470, 0]].map(p => new THREE.Vector3(p[0], p[1], p[2]));
+      g.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 60, 0.0017, 10, false), bronze));
+      g.add(latheMesh([[0.0030, -0.01], [0.0075, 0.0], [0.0092, 0.02], [0.0092, 0.09], [0.0075, 0.108], [0.0035, 0.114], [0.0005, 0.115]], wood));
+      [0.0, 0.05, 0.095].forEach(y => g.add(ringMesh(0.0094, 0.0008, y, gold)));
+      const bud = new THREE.Mesh(new THREE.SphereGeometry(0.0062, 14, 10), gold); bud.scale.y = 1.4; bud.position.y = 0.122; g.add(bud);
+      addGlow(g, glows, 0xffc864, 0.0022, 0.4, 0.0045, TIP_Y, 0);
+    }
+
+    // Disco solar de Rá (feixe de luz concentrada)
+    function buildLaser(g, glows, standoff) {
+      const gold = toolMat(0xe3b341, 1.0, 0.2);
+      const bronze = toolBronze();
+      const stalk = toolMat(0x6f8a3a, 0.0, 0.8);
+      const fy = TIP_Y - standoff;
+      const dy = fy + 0.055;
+
+      const disc = new THREE.Mesh(new THREE.CylinderGeometry(0.023, 0.023, 0.0028, 40), gold); disc.position.y = dy; g.add(disc);
+      g.add(ringMesh(0.023, 0.0018, dy, gold));
+      g.add(ringMesh(0.014, 0.0008, dy - 0.0016, bronze));
+      const cone = new THREE.Mesh(new THREE.CylinderGeometry(0.021, 0.0007, 0.055, 32, 1, true), glowMat(0xffd27a, 0.16));
+      cone.position.y = fy + 0.0275; g.add(cone);
+      const core = new THREE.Mesh(new THREE.CylinderGeometry(0.0006, 0.0006, 0.055, 8), glowMat(0xfff0b0, 0.9));
+      core.position.y = fy + 0.0275; g.add(core);
+
+      const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.0045, 0.0055, 0.12, 12), stalk); handle.position.y = dy + 0.0014 + 0.06; g.add(handle);
+      [0.03, 0.06, 0.09].forEach(o => g.add(ringMesh(0.0058, 0.0007, dy + o, gold)));
+      for (const a of [-0.5, 0, 0.5]) {
+        const petal = new THREE.Mesh(new THREE.SphereGeometry(0.006, 10, 8), gold);
+        petal.scale.set(0.6, 1.5, 0.6); petal.position.set(Math.sin(a) * 0.006, dy + 0.13, 0); petal.rotation.z = -a; g.add(petal);
+      }
+      addGlow(g, glows, 0xffd37a, 0.004, 0.9, 0, fy, 0);
+      addGlow(g, glows, 0xffd37a, 0.011, 0.25, 0, fy, 0);
+    }
+
+    // ===== Telão (vídeo) com moldura dourada =====
+    function buildRightSideTheaterScreen() {
+      videoTheaterGroup = new THREE.Group();
+      videoTheaterGroup.position.set(2.4, 1.8, -0.6);
+      videoTheaterGroup.rotation.y = -Math.PI / 4.5;
+
+      videoElement = document.createElement('video');
+      videoElement.crossOrigin = "anonymous";
+      videoElement.playsInline = true;
+      videoElement.loop = true;
+      videoElement.muted = true;
+      try {
+        const bin = atob(TELAO_VIDEO_B64);
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        videoElement.src = URL.createObjectURL(new Blob([bytes], { type: 'video/mp4' }));
+      } catch (e) { console.warn('Vídeo do telão indisponível:', e); }
+      videoElement.preload = 'auto';
+      videoElement.addEventListener('loadeddata', () => { videoElement.play().catch(() => {}); });
+      window.addEventListener('pointerdown', () => { if (videoElement.paused && !videoUserPaused) videoElement.play().catch(() => {}); }, { once: true });
+
+      videoTexture = new THREE.VideoTexture(videoElement);
+      videoTexture.minFilter = THREE.LinearFilter;
+      videoTexture.magFilter = THREE.LinearFilter;
+      videoTexture.generateMipmaps = false;
+      videoTexture.encoding = THREE.sRGBEncoding;
+
+      const w = 2.6, h = 2.6 * 9 / 16;
+      videoScreenMesh = new THREE.Mesh(
+        new THREE.PlaneGeometry(w, h),
+        new THREE.MeshBasicMaterial({ map: videoTexture, side: THREE.DoubleSide, toneMapped: false, fog: false })
+      );
+      videoTheaterGroup.add(videoScreenMesh);
+
+      const goldFrame = egMat(0xe0b040, 0.3, 0.95);
+      const wood = egMat(0x3a2412, 0.8, 0);
+      const back = new THREE.Mesh(new THREE.BoxGeometry(w + 0.22, h + 0.22, 0.05), wood); back.position.z = -0.04; videoTheaterGroup.add(back);
+      [[0, h / 2 + 0.06, w + 0.2, 0.1], [0, -h / 2 - 0.06, w + 0.2, 0.1]].forEach(p => { const b = new THREE.Mesh(new THREE.BoxGeometry(p[2], p[3], 0.08), goldFrame); b.position.set(p[0], p[1], -0.005); videoTheaterGroup.add(b); });
+      [-1, 1].forEach(s => { const b = new THREE.Mesh(new THREE.BoxGeometry(0.1, h + 0.2, 0.08), goldFrame); b.position.set(s * (w / 2 + 0.06), 0, -0.005); videoTheaterGroup.add(b); });
+      const cornice = new THREE.Mesh(new THREE.BoxGeometry(w + 0.45, 0.1, 0.16), egMat(0x1e63a5, 0.5, 0.3)); cornice.position.set(0, h / 2 + 0.17, 0.0); videoTheaterGroup.add(cornice);
+      const cornice2 = new THREE.Mesh(new THREE.BoxGeometry(w + 0.45, 0.025, 0.17), goldFrame); cornice2.position.set(0, h / 2 + 0.23, 0.0); videoTheaterGroup.add(cornice2);
+      addWingedDisk(videoTheaterGroup, h / 2 + 0.52, 1.5);
+
+      const playBtn = makeLabelBtn("btn_video_toggle", "PAUSAR VÍDEO", '#7a5a14', 0.78, 0.2);
+      playBtn.position.set(-0.45, -h / 2 - 0.27, 0.02);
+      videoTheaterGroup.add(playBtn);
+      const muteBtn = makeLabelBtn("btn_video_mute", "ÁUDIO: LIGADO", '#1f5a8f', 0.78, 0.2);
+      muteBtn.position.set(0.45, -h / 2 - 0.27, 0.02);
+      videoTheaterGroup.add(muteBtn);
+      ['play', 'pause', 'volumechange'].forEach(ev => videoElement.addEventListener(ev, syncVideoBtns));
+      syncVideoBtns();
+
+      scene.add(videoTheaterGroup);
+    }
+
+    // ===== Rolo de papiro (registro da operação) =====
+    function buildLeftSideTelemetryMonitor() {
+      telemetryBoardGroup = new THREE.Group();
+      telemetryBoardGroup.position.set(-2.4, 1.8, -0.6);
+      telemetryBoardGroup.rotation.y = Math.PI / 4.5;
+
+      telemetryCanvas = document.createElement('canvas');
+      telemetryCanvas.width = 1024;
+      telemetryCanvas.height = 768;
+      telemetryCtx = telemetryCanvas.getContext('2d');
+
+      telemetryTexture = new THREE.CanvasTexture(telemetryCanvas);
+      telemetryTexture.minFilter = THREE.LinearFilter;
+      telemetryTexture.encoding = THREE.sRGBEncoding;
+
+      const boardMesh = new THREE.Mesh(
+        new THREE.PlaneGeometry(2.4, 1.8),
+        new THREE.MeshBasicMaterial({ map: telemetryTexture, side: THREE.DoubleSide, toneMapped: false, fog: false })
+      );
+      telemetryBoardGroup.add(boardMesh);
+
+      const wood = egMat(0x3a2412, 0.8, 0);
+      const gold = egMat(0xe0b040, 0.3, 0.95);
+      const back = new THREE.Mesh(new THREE.BoxGeometry(2.55, 1.95, 0.05), wood); back.position.z = -0.04; telemetryBoardGroup.add(back);
+      [-1, 1].forEach(s => {
+        const roll = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.075, 2.6, 16), egMat(0xc9a86a, 0.7, 0));
+        roll.rotation.z = Math.PI / 2; roll.position.set(0, s * 0.93, 0.03); telemetryBoardGroup.add(roll);
+        [-1, 1].forEach(e => { const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.07, 16), gold); cap.rotation.z = Math.PI / 2; cap.position.set(e * 1.32, s * 0.93, 0.03); telemetryBoardGroup.add(cap); });
+      });
+      addWingedDisk(telemetryBoardGroup, 1.35, 1.5);
+      const heartBtn = makeLabelBtn('btn_heart_toggle', 'BATIMENTO: LIGADO', '#1f6f58', 0.9, 0.22);
+      heartBtn.position.set(0, -1.18, 0.02); telemetryBoardGroup.add(heartBtn);
+
+      scene.add(telemetryBoardGroup);
+      updateTelemetryCanvas();
+    }
+
+    function buildPapyrusBase() {
+      const w = 1024, h = 768, c = mkCanvas(w, h), g = c.getContext('2d'), r = rng(17);
+      const gr = g.createLinearGradient(0, 0, w, h);
+      gr.addColorStop(0, '#dcc48a'); gr.addColorStop(0.5, '#d2b476'); gr.addColorStop(1, '#c4a367');
+      g.fillStyle = gr; g.fillRect(0, 0, w, h);
+      g.globalAlpha = 0.12; g.strokeStyle = '#7a5a2a'; g.lineWidth = 1;
+      for (let y = 0; y < h; y += 3) { g.beginPath(); g.moveTo(0, y + r() * 2); g.lineTo(w, y + r() * 2); g.stroke(); }
+      g.strokeStyle = '#8a6a34';
+      for (let x = 0; x < w; x += 70 + r() * 60) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x + (r() - 0.5) * 8, h); g.stroke(); }
+      g.globalAlpha = 1;
+      const vg = g.createRadialGradient(w / 2, h / 2, h * 0.35, w / 2, h / 2, h * 0.85);
+      vg.addColorStop(0, 'rgba(60,35,10,0)'); vg.addColorStop(1, 'rgba(60,35,10,0.55)');
+      g.fillStyle = vg; g.fillRect(0, 0, w, h);
+      for (let i = 0; i < 10; i++) {
+        const x = r() * w, y = r() * h, rad = 20 + r() * 70;
+        const rg = g.createRadialGradient(x, y, 0, x, y, rad);
+        rg.addColorStop(0, 'rgba(90,55,15,0.18)'); rg.addColorStop(1, 'rgba(90,55,15,0)');
+        g.fillStyle = rg; g.fillRect(x - rad, y - rad, rad * 2, rad * 2);
+      }
+      g.strokeStyle = '#8c2f22'; g.lineWidth = 6; g.strokeRect(28, 28, w - 56, h - 56);
+      g.strokeStyle = '#1b1b1b'; g.lineWidth = 2; g.strokeRect(40, 40, w - 80, h - 80);
+      g.fillStyle = '#1b120a'; g.textAlign = 'center'; g.textBaseline = 'middle';
+      g.font = 'bold 40px ' + EG_FONT; g.fillText('PAPIRO DO EMBALSAMADOR', w / 2, 84);
+      g.font = '22px ' + EG_FONT; g.fillStyle = '#5a2a1a'; g.fillText('REGISTRO DA OPERAÇÃO • TEMPLO DE ANÚBIS', w / 2, 124);
+      const gc = ['#1d5f8f', '#a8332a', '#1b1b1b', '#b98a1f', '#1f8f86'];
+      const strip = [0, 1, 2, 5, 6, 3, 4, 7, 8, 9, 10, 0, 1, 5];
+      for (let i = 0; i < 14; i++) drawGlyph(g, strip[i], 120 + i * 60.5, 162, 34, gc[i % 5]);
+      const L = [1, 0, 5, 6, 2, 4, 9, 7, 3], R = [3, 7, 9, 4, 2, 6, 5, 0, 1];
+      for (let j = 0; j < 9; j++) { drawGlyph(g, L[j], 72, 235 + j * 56, 34, gc[j % 5]); drawGlyph(g, R[j], w - 72, 235 + j * 56, 34, gc[(j + 2) % 5]); }
+      return c;
+    }
+
+    let ecgTick = 0;
+    function updateTelemetryCanvas() {
+      if (!telemetryCtx) return;
+      if (!papyrusBase) papyrusBase = buildPapyrusBase();
+      const ctx = telemetryCtx, w = telemetryCanvas.width;
+      ctx.drawImage(papyrusBase, 0, 0);
+      const ink = '#1b120a', red = '#8c2f22';
+      ctx.textBaseline = 'alphabetic';
+      ctx.textAlign = 'left'; ctx.fillStyle = red; ctx.font = 'bold 32px ' + EG_FONT; ctx.fillText('CORAÇÃO (IB)', 110, 236);
+      ctx.textAlign = 'right'; ctx.fillStyle = ink; ctx.fillText('72 BATIMENTOS/MIN', w - 110, 236);
+      ctx.textAlign = 'left';
+
+      ctx.strokeStyle = ink; ctx.lineWidth = 4; ctx.lineJoin = 'round';
+      ctx.beginPath(); ctx.moveTo(110, 320);
+      ecgTick += 4; if (ecgTick > w - 80) ecgTick = 0;
+      for (let x = 110; x < w - 110; x += 8) {
+        const relX = (x + ecgTick) % 240;
+        let y = 320;
+        if (relX > 60 && relX < 80) y -= 15;
+        else if (relX >= 90 && relX < 100) y += 10;
+        else if (relX >= 100 && relX < 115) y -= 75;
+        else if (relX >= 115 && relX < 125) y += 25;
+        else if (relX >= 150 && relX < 180) y -= 25;
+        ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      ctx.font = '26px ' + EG_FONT; ctx.fillStyle = ink;
+      ctx.fillText('RESPIRAÇÃO: SERENA', 110, 408);
+      ctx.fillText('SANGUE: CONTIDO', 560, 408);
+
+      ctx.font = 'bold 28px ' + EG_FONT; ctx.fillStyle = red;
+      ctx.fillText('VOLUME DA MASSA (TUMOR): ' + tumorHealth + '%', 110, 478);
+      ctx.fillStyle = 'rgba(40,25,10,0.85)'; ctx.fillRect(110, 498, w - 220, 38);
+      const gr = ctx.createLinearGradient(110, 0, w - 110, 0);
+      gr.addColorStop(0, '#8c2f22'); gr.addColorStop(1, '#d9a62e');
+      ctx.fillStyle = gr; ctx.fillRect(110, 498, (w - 220) * (tumorHealth / 100), 38);
+      ctx.strokeStyle = ink; ctx.lineWidth = 3; ctx.strokeRect(110, 498, w - 220, 38);
+
+      ctx.font = '21px ' + EG_FONT; ctx.fillStyle = ink;
+      ctx.fillText('Preserve o coração (ib): sede da alma e da memória.', 110, 600);
+      ctx.fillText('O cérebro será retirado com o gancho de bronze.', 110, 642);
+      ctx.fillText('Limpe o corpo com natrão e óleos sagrados.', 110, 684);
+      drawGlyph(ctx, 5, w - 105, 640, 58, '#1d5f8f');
+
+      telemetryTexture.needsUpdate = true;
+    }
+
+    // ===== Colar largo (usekh) e escaravelho sobre o linho =====
+    function addEgyptianBodyDecor(bodyGroup) {
+      const NR = 10, NA = 56;
+      const geo = new THREE.PlaneGeometry(1, 1, NA, NR);
+      const pos = geo.attributes.position;
+      for (let iy = 0; iy <= NR; iy++) {
+        for (let ix = 0; ix <= NA; ix++) {
+          const a = -1.25 + 2.5 * ix / NA;
+          const rr = 0.12 + 0.11 * (iy / NR);
+          const x = rr * Math.sin(a), z = 0.20 - rr * Math.cos(a);
+          pos.setXYZ(iy * (NA + 1) + ix, x, TABLE_TOP_Y + 0.004 + sheetSurface(x, z) + 0.006, z);
+        }
+      }
+      geo.computeVertexNormals();
+      const collar = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ map: canvasTex(makeCollarCanvas()), roughness: 0.35, metalness: 0.5, side: THREE.DoubleSide }));
+      bodyGroup.add(collar);
+
+      const gold = egMat(0xe0b040, 0.25, 1.0);
+      const sy = TABLE_TOP_Y + 0.004 + sheetSurface(0, -0.15) + 0.014;
+      const scarab = new THREE.Mesh(new THREE.SphereGeometry(1, 16, 12), gold); scarab.scale.set(0.03, 0.012, 0.042); scarab.position.set(0, sy, -0.15); bodyGroup.add(scarab);
+      const head = new THREE.Mesh(new THREE.SphereGeometry(0.014, 10, 8), egMat(0x1e63a5, 0.4, 0.3)); head.position.set(0, sy, -0.112); bodyGroup.add(head);
+    }
+
     function buildCentralSurgicalField() {
       surgicalFieldGroup = new THREE.Group();
 
-      // Coluna hidráulica e colchonete da mesa
-      const tableBase = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.34, 0.42, 0.94, 32),
-        new THREE.MeshStandardMaterial({ color: 0x0f172a, metalness: 0.9, roughness: 0.2 })
-      );
-      tableBase.position.set(0, 0.47, -0.65);
-      surgicalFieldGroup.add(tableBase);
-
-      const mattress = new THREE.Mesh(
-        new THREE.BoxGeometry(0.86, 0.1, 2.4),
-        new THREE.MeshStandardMaterial({ color: 0x0b111e, roughness: 0.6 })
-      );
-      mattress.position.set(0, TABLE_TOP_Y - 0.05, -0.65);
-      surgicalFieldGroup.add(mattress);
 
       surgicalFieldGroup.add(buildPatientHead());
       surgicalFieldGroup.add(buildPatientBody());
@@ -751,18 +1619,18 @@
     function buildToolEnvMap() {
       try {
         const envScene = new THREE.Scene();
-        envScene.background = new THREE.Color(0x6b7686);
+        envScene.background = new THREE.Color(0x3a2a1c);
         const panel = (w, h, p, color) => {
           const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color, side: THREE.DoubleSide }));
           m.position.set(p[0], p[1], p[2]);
           m.lookAt(0, 0, 0);
           envScene.add(m);
         };
-        panel(6, 6, [0, 5, 0], 0xffffff);
-        panel(4, 6, [5, 2, 2], 0xdfe9ff);
-        panel(4, 6, [-5, 2, -2], 0xfff1dd);
-        panel(8, 3, [0, 1, -6], 0xb8d4ff);
-        panel(8, 2, [0, -4, 0], 0x2a3342);
+        panel(6, 6, [0, 5, 0], 0xffe6c0);
+        panel(4, 6, [5, 2, 2], 0xffd090);
+        panel(4, 6, [-5, 2, -2], 0xfff0d0);
+        panel(8, 3, [0, 1, -6], 0xd9a060);
+        panel(8, 2, [0, -4, 0], 0x1a120a);
         const pm = new THREE.PMREMGenerator(renderer);
         toolEnvMap = pm.fromScene(envScene, 0.03).texture;
         pm.dispose();
@@ -811,126 +1679,12 @@
     }
 
     // Bisturi de plasma: caneta eletrocirúrgica com eletrodo fino e arco de plasma
-    function buildScalpel(g, glows) {
-      const white = toolMat(0xe8edf2, 0.1, 0.35);
-      const steel = toolMat(0xd5dbe3, 0.95, 0.2);
-      const dark = toolMat(0x1b2028, 0.3, 0.55);
-      const rubber = toolMat(0x111418, 0.0, 0.85);
-
-      const blade = new THREE.Mesh(new THREE.BoxGeometry(0.0012, 0.026, 0.0055), steel);
-      blade.position.y = TIP_Y + 0.016;
-      g.add(blade);
-      const edge = new THREE.Mesh(new THREE.ConeGeometry(0.0006, 0.004, 8), steel);
-      edge.rotation.x = Math.PI;
-      edge.position.y = TIP_Y + 0.002;
-      g.add(edge);
-
-      g.add(latheMesh([
-        [0.0016, -0.128], [0.0042, -0.121], [0.0072, -0.105], [0.0086, -0.08], [0.0092, -0.03],
-        [0.0092, 0.02], [0.0084, 0.05], [0.006, 0.064], [0.0035, 0.068]
-      ], white));
-
-      for (let k = 0; k < 6; k++) g.add(ringMesh(0.0089, 0.0004, -0.095 + k * 0.009, dark));
-
-      const btnBlue = new THREE.Mesh(new THREE.BoxGeometry(0.005, 0.009, 0.002), toolMat(0x2563eb, 0.1, 0.4));
-      btnBlue.position.set(0, -0.012, 0.0094);
-      g.add(btnBlue);
-      const btnYellow = new THREE.Mesh(new THREE.BoxGeometry(0.005, 0.009, 0.002), toolMat(0xfacc15, 0.1, 0.4));
-      btnYellow.position.set(0, 0.008, 0.0094);
-      g.add(btnYellow);
-
-      g.add(tubeMesh([[0, 0.066, 0], [0.004, 0.09, 0.004], [0.025, 0.12, 0.012], [0.06, 0.12, 0], [0.1, 0.1, -0.02]], 0.0022, rubber, 50));
-
-      addGlow(g, glows, 0x00f0ff, 0.0035, 0.8, 0, TIP_Y, 0);
-      addGlow(g, glows, 0x38bdf8, 0.008, 0.25, 0, TIP_Y, 0);
-    }
 
     // Cautério: pinça bipolar baionetada com cabos isolados
-    function buildCautery(g, glows) {
-      const steel = toolMat(0xd5dbe3, 0.95, 0.22);
-      const insul = toolMat(0x1f3b57, 0.15, 0.5);
-      const dark = toolMat(0x2a2f38, 0.4, 0.5);
-      const rubber = toolMat(0x111418, 0.0, 0.85);
-
-      [-1, 1].forEach(s => {
-        const pts = [
-          [s * 0.0075, 0.085, -0.012], [s * 0.0065, 0.03, -0.012], [s * 0.0045, -0.01, -0.005],
-          [s * 0.0035, -0.07, 0], [s * 0.0013, -0.14, 0], [s * 0.0007, TIP_Y, 0]
-        ];
-        const curve = new THREE.CatmullRomCurve3(pts.map(p => new THREE.Vector3(p[0], p[1], p[2])));
-        g.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 60, 0.0017, 10, false), steel));
-        const dense = curve.getPoints(80).slice(0, 46);
-        g.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(dense), 50, 0.0026, 10, false), insul));
-        addGlow(g, glows, 0xf59e0b, 0.0022, 0.85, s * 0.0007, TIP_Y, 0);
-      });
-
-      const block = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.012, 0.012), dark);
-      block.position.set(0, 0.092, -0.012);
-      g.add(block);
-      g.add(tubeMesh([[0, 0.098, -0.012], [0.005, 0.12, -0.016], [0.03, 0.14, -0.01], [0.07, 0.13, 0.0]], 0.0022, rubber, 40));
-    }
 
     // Aspirador ultrassônico (CUSA): peça de mão, ponta tubular, irrigação e aspiração
-    function buildSuction(g, glows) {
-      const ti = toolMat(0xb9c2cc, 0.9, 0.28);
-      const steel = toolMat(0xd5dbe3, 0.95, 0.2);
-      const dark = toolMat(0x1b2028, 0.3, 0.55);
-      const gray = toolMat(0x4b5563, 0.1, 0.7);
-
-      g.add(latheMesh([
-        [0.0036, -0.092], [0.0062, -0.084], [0.0105, -0.062], [0.0122, -0.03], [0.0125, 0],
-        [0.0125, 0.06], [0.0108, 0.074], [0.006, 0.08], [0.004, 0.082]
-      ], ti));
-      g.add(ringMesh(0.0127, 0.0012, 0.012, toolMat(0x14b8a6, 0.3, 0.4)));
-      g.add(ringMesh(0.0127, 0.0010, 0.045, dark));
-
-      const tipTube = new THREE.Mesh(new THREE.CylinderGeometry(0.0034, 0.0034, 0.066, 24, 1, true), toolMat(0xc7cdd6, 0.9, 0.25, { side: THREE.DoubleSide }));
-      tipTube.position.y = TIP_Y + 0.033;
-      g.add(tipTube);
-      g.add(ringMesh(0.0034, 0.0006, TIP_Y, steel));
-      const bore = new THREE.Mesh(new THREE.CylinderGeometry(0.0027, 0.0027, 0.04, 16, 1, true),
-        new THREE.MeshBasicMaterial({ color: 0x06080b, side: THREE.BackSide }));
-      bore.position.y = TIP_Y + 0.02;
-      g.add(bore);
-
-      const flue = new THREE.Mesh(new THREE.CylinderGeometry(0.0052, 0.0052, 0.03, 24, 1, true),
-        new THREE.MeshStandardMaterial({ color: 0x5eead4, transparent: true, opacity: 0.35, roughness: 0.2, side: THREE.DoubleSide }));
-      flue.position.y = -0.105;
-      g.add(flue);
-
-      g.add(tubeMesh([[0.010, 0.0, 0.004], [0.022, 0.02, 0.012], [0.04, 0.05, 0.025], [0.07, 0.07, 0.02]], 0.0022, toolMat(0x16a34a, 0.0, 0.5), 40));
-      g.add(tubeMesh([[0, 0.082, 0], [0, 0.11, 0.004], [-0.02, 0.14, 0.02], [-0.06, 0.15, 0.03]], 0.0048,
-        new THREE.MeshStandardMaterial({ color: 0xdbeafe, transparent: true, opacity: 0.4, roughness: 0.1 }), 40));
-      g.add(tubeMesh([[-0.011, 0.03, 0], [-0.03, 0.04, 0.01], [-0.06, 0.06, 0.0]], 0.002, gray, 30));
-
-      addGlow(g, glows, 0x2dd4bf, 0.003, 0.35, 0, TIP_Y, 0);
-    }
 
     // Laser óptico: peça de mão fina com fibra óptica e feixe de mira
-    function buildLaser(g, glows, standoff) {
-      const black = toolMat(0x15181e, 0.6, 0.35);
-      const steel = toolMat(0xd5dbe3, 0.95, 0.2);
-
-      g.add(latheMesh([
-        [0.0016, -0.12], [0.0028, -0.112], [0.0062, -0.092], [0.0072, -0.05], [0.0072, 0.04],
-        [0.0056, 0.062], [0.0034, 0.07]
-      ], black));
-      [-0.07, -0.045, -0.02].forEach(y => g.add(ringMesh(0.0074, 0.0007, y, steel)));
-      g.add(ringMesh(0.0074, 0.0007, 0.02, new THREE.MeshStandardMaterial({ color: 0xec4899, emissive: 0xec4899, emissiveIntensity: 0.9 })));
-
-      const fiber = new THREE.Mesh(new THREE.CylinderGeometry(0.0005, 0.0005, 0.03, 10), toolMat(0xf1f5f9, 0.2, 0.1));
-      fiber.position.y = -0.14;
-      g.add(fiber);
-
-      g.add(tubeMesh([[0, 0.07, 0], [0.003, 0.09, 0.004], [0.02, 0.13, 0.01], [0.06, 0.14, 0]], 0.0016, toolMat(0xfbbf24, 0.0, 0.5), 40));
-
-      const beam = new THREE.Mesh(new THREE.CylinderGeometry(0.0005, 0.0005, standoff, 8), glowMat(0xff2d95, 0.85));
-      beam.position.y = TIP_Y - standoff / 2;
-      g.add(beam);
-
-      addGlow(g, glows, 0xff2d95, 0.0022, 0.9, 0, TIP_Y - standoff, 0);
-      addGlow(g, glows, 0xff2d95, 0.0012, 0.9, 0, TIP_Y, 0);
-    }
 
     function buildActive3DTool() {
       if (tool3DMesh && surgicalFieldGroup) surgicalFieldGroup.remove(tool3DMesh);
@@ -953,163 +1707,8 @@
       if (surgicalFieldGroup) surgicalFieldGroup.add(tool3DMesh);
     }
 
-    function buildRightSideTheaterScreen() {
-      videoTheaterGroup = new THREE.Group();
-      videoTheaterGroup.position.set(2.4, 1.8, -0.6);
-      videoTheaterGroup.rotation.y = -Math.PI / 4.5;
 
-      videoElement = document.createElement('video');
-      videoElement.crossOrigin = "anonymous";
-      videoElement.playsInline = true;
-      videoElement.loop = true;
-      videoElement.muted = true;
-      try {
-        const bin = atob(TELAO_VIDEO_B64);
-        const bytes = new Uint8Array(bin.length);
-        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-        videoElement.src = URL.createObjectURL(new Blob([bytes], { type: 'video/mp4' }));
-      } catch (e) { console.warn('Vídeo do telão indisponível:', e); }
-      videoElement.preload = 'auto';
-      videoElement.addEventListener('loadeddata', () => { videoElement.play().catch(() => {}); });
-      // alguns navegadores só liberam a reprodução após o primeiro clique
-      window.addEventListener('pointerdown', () => { if (videoElement.paused && !videoUserPaused) videoElement.play().catch(() => {}); }, { once: true });
 
-      videoTexture = new THREE.VideoTexture(videoElement);
-      videoTexture.minFilter = THREE.LinearFilter;
-      videoTexture.magFilter = THREE.LinearFilter;
-      videoTexture.generateMipmaps = false;
-      videoTexture.encoding = THREE.sRGBEncoding;
-
-      const w = 2.6, h = 2.6 * 9 / 16; // vídeo 16:9, sem distorção
-      videoScreenMesh = new THREE.Mesh(
-        new THREE.PlaneGeometry(w, h),
-        new THREE.MeshBasicMaterial({ map: videoTexture, side: THREE.DoubleSide, toneMapped: false })
-      );
-      videoTheaterGroup.add(videoScreenMesh);
-
-      const frame = new THREE.Mesh(
-        new THREE.BoxGeometry(w + 0.1, h + 0.1, 0.04),
-        new THREE.MeshStandardMaterial({ color: 0x00f0ff, emissive: 0x0284c7, emissiveIntensity: 0.3, metalness: 0.8 })
-      );
-      frame.position.z = -0.025;
-      videoTheaterGroup.add(frame);
-
-      const playBtn = new THREE.Mesh(new THREE.BoxGeometry(0.45, 0.12, 0.04), new THREE.MeshStandardMaterial({ color: 0x0284c7, metalness: 0.7 }));
-      playBtn.position.set(-0.3, -h / 2 - 0.15, 0);
-      playBtn.name = "btn_video_toggle";
-      videoTheaterGroup.add(playBtn);
-
-      const muteBtn = new THREE.Mesh(new THREE.BoxGeometry(0.45, 0.12, 0.04), new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.7 }));
-      muteBtn.position.set(0.3, -h / 2 - 0.15, 0);
-      muteBtn.name = "btn_video_mute";
-      videoTheaterGroup.add(muteBtn);
-
-      scene.add(videoTheaterGroup);
-    }
-
-    function buildLeftSideTelemetryMonitor() {
-      telemetryBoardGroup = new THREE.Group();
-      telemetryBoardGroup.position.set(-2.4, 1.8, -0.6);
-      telemetryBoardGroup.rotation.y = Math.PI / 4.5;
-
-      telemetryCanvas = document.createElement('canvas');
-      telemetryCanvas.width = 1024;
-      telemetryCanvas.height = 768;
-      telemetryCtx = telemetryCanvas.getContext('2d');
-
-      telemetryTexture = new THREE.CanvasTexture(telemetryCanvas);
-      telemetryTexture.minFilter = THREE.LinearFilter;
-      telemetryTexture.encoding = THREE.sRGBEncoding;
-
-      const boardMesh = new THREE.Mesh(
-        new THREE.PlaneGeometry(2.4, 1.8),
-        new THREE.MeshBasicMaterial({ map: telemetryTexture, side: THREE.DoubleSide })
-      );
-      telemetryBoardGroup.add(boardMesh);
-
-      const frame = new THREE.Mesh(
-        new THREE.BoxGeometry(2.46, 1.86, 0.04),
-        new THREE.MeshStandardMaterial({ color: 0x0f172a, metalness: 0.8, roughness: 0.3 })
-      );
-      frame.position.z = -0.025;
-      telemetryBoardGroup.add(frame);
-
-      scene.add(telemetryBoardGroup);
-      updateTelemetryCanvas();
-    }
-
-    let ecgTick = 0;
-    function updateTelemetryCanvas() {
-      if (!telemetryCtx) return;
-      const ctx = telemetryCtx;
-      const w = telemetryCanvas.width;
-      const h = telemetryCanvas.height;
-
-      ctx.fillStyle = '#060d1f';
-      ctx.fillRect(0, 0, w, h);
-
-      ctx.fillStyle = '#00f0ff';
-      ctx.font = 'bold 36px monospace';
-      ctx.fillText("TELEMETRIA CIRÚRGICA // PACIENTE ID-894", 40, 60);
-
-      ctx.fillStyle = '#64748b';
-      ctx.font = '24px monospace';
-      ctx.fillText("UTI NEUROCIRÚRGICA • NAVEGAÇÃO ATIVA", 40, 100);
-
-      ctx.strokeStyle = '#00f0ff';
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(40, 120);
-      ctx.lineTo(w - 40, 120);
-      ctx.stroke();
-
-      ctx.fillStyle = '#10b981';
-      ctx.font = 'bold 44px monospace';
-      ctx.fillText("ECG DERIVAÇÃO II", 40, 180);
-      ctx.fillText("72 BPM", w - 240, 180);
-
-      ctx.strokeStyle = '#10b981';
-      ctx.lineWidth = 4;
-      ctx.beginPath();
-      ctx.moveTo(40, 270);
-
-      ecgTick += 4;
-      if (ecgTick > w - 80) ecgTick = 0;
-
-      for (let x = 40; x < w - 40; x += 10) {
-        const relX = (x + ecgTick) % 240;
-        let y = 270;
-        if (relX > 60 && relX < 80) y -= 15;
-        else if (relX >= 90 && relX < 100) y += 10;
-        else if (relX >= 100 && relX < 115) y -= 75;
-        else if (relX >= 115 && relX < 125) y += 25;
-        else if (relX >= 150 && relX < 180) y -= 25;
-        ctx.lineTo(x, y);
-      }
-      ctx.stroke();
-
-      ctx.fillStyle = '#38bdf8';
-      ctx.font = 'bold 34px monospace';
-      ctx.fillText("PA: 120/80 mmHg", 40, 380);
-      ctx.fillText("SpO₂: 99%", 440, 380);
-      ctx.fillText("PIC: 11.4 mmHg", 720, 380);
-
-      ctx.fillStyle = '#f8fafc';
-      ctx.font = 'bold 30px sans-serif';
-      ctx.fillText(`VOLUME DA LESÃO (GLIOMA): ${tumorHealth}%`, 40, 480);
-
-      ctx.fillStyle = '#1e293b';
-      ctx.fillRect(40, 510, w - 80, 40);
-      ctx.fillStyle = tumorHealth > 30 ? '#10b981' : '#00f0ff';
-      ctx.fillRect(40, 510, (w - 80) * (tumorHealth / 100), 40);
-
-      ctx.fillStyle = '#e2e8f0';
-      ctx.font = '28px sans-serif';
-      ctx.fillText("Conduta: Mantenha a hemostasia e aspire a margem com CUSA.", 40, 620);
-      ctx.fillText("Status da Hemostasia: 100% sob controle estéril.", 40, 670);
-
-      telemetryTexture.needsUpdate = true;
-    }
 
     function selectTool(toolKey) {
       currentTool = toolKey;
@@ -1124,7 +1723,7 @@
 
       buildActive3DTool();
       playToolSound(toolKey);
-      showToast(`Instrumento Ativo: ${toolKey.toUpperCase()}`);
+      showToast('Instrumento ativo: ' + ({ scalpel: 'FACA DE OBSIDIANA', cautery: 'CAUTÉRIO DE BRONZE', suction: 'GANCHO DE BRONZE', laser: 'DISCO SOLAR DE RÁ' })[toolKey]);
     }
 
     function executeSurgicalAction() {
@@ -1170,10 +1769,11 @@
       }
 
       if (videoTheaterGroup) {
-        const hits = raycaster.intersectObjects(videoTheaterGroup.children, true);
+        const hits = raycaster.intersectObjects([videoTheaterGroup, telemetryBoardGroup].filter(Boolean), true);
         if (hits.length > 0) {
           const hitObj = hits[0].object;
-          if (hitObj.name === "btn_video_toggle") toggleVideoPlayback();
+          if (hitObj.name === "btn_heart_toggle") toggleEcgAudio();
+          else if (hitObj.name === "btn_video_toggle") toggleVideoPlayback();
           else if (hitObj.name === "btn_video_mute") toggleVideoMute();
         }
       }
@@ -1214,8 +1814,8 @@
 
     // ===== Craniotomia realista: buraco no couro cabeludo + camadas (pele, osso, dura-máter, cérebro) =====
     const CRANI = { Rs: 0.04, Rb: 0.027, Rd: 0.021, Rc: 0.0215, kappa: 4.0 };
-    const TUMOR_COLOR = 0xd0607a;     // massa tumoral
-    const TUMOR_EMISSIVE = 0xff2a5f;  // fluorescência rosa-avermelhada do 5-ALA sob luz azul
+    const TUMOR_COLOR = 0x9a3a3a;     // massa tumoral
+    const TUMOR_EMISSIVE = 0xff5a1f;  // fluorescência rosa-avermelhada do 5-ALA sob luz azul
     let brainMesh = null, brainBaseY = 0, currentCamView = 'surgery';
 
     function craniBend(r) { return -CRANI.kappa * r * r; }
@@ -1486,7 +2086,7 @@
       craniGroup.add(brainTumorMesh);
 
       // --- Afastadores de cérebro (lâminas + hastes) e cotonoides ---
-      const steel = toolMat(0xd5dbe3, 0.95, 0.22);
+      const steel = toolMat(0xb5803c, 0.92, 0.32);
       [2.1, 5.2].forEach(th => {
         const rc = 0.0155;
         const bx = rc * Math.cos(th), bz = rc * Math.sin(th);
@@ -1652,18 +2252,18 @@
       if (videoElement.paused) {
         videoUserPaused = false;
         videoElement.play();
-        showToast("🎬 Telão: Reproduzindo vídeo");
+        showToast("Telão: reproduzindo vídeo");
       } else {
         videoUserPaused = true;
         videoElement.pause();
-        showToast("⏸️ Telão: Pausado");
+        showToast("Telão: vídeo pausado");
       }
     }
 
     function toggleVideoMute() {
       if (!videoElement) return;
       videoElement.muted = !videoElement.muted;
-      showToast(videoElement.muted ? "🔇 Telão no Mudo" : "🔊 Áudio do Telão Ativado");
+      showToast(videoElement.muted ? "Áudio do vídeo desligado" : "Áudio do vídeo ligado");
     }
 
     let toastTimeout = null;
@@ -1714,14 +2314,14 @@
         camera.position.set(craniAnchor.x, craniAnchor.y + 0.26, craniAnchor.z + 0.2);
         controls.target.copy(craniAnchor);
       } else if (viewKey === 'theater') {
-        camera.position.set(0.6, 1.7, 0.8);
-        controls.target.set(2.4, 1.8, -0.6);
+        camera.position.set(0.5, 1.75, 1.3);
+        controls.target.set(2.4, 1.55, -0.6);
       } else if (viewKey === 'monitor') {
-        camera.position.set(-0.6, 1.7, 0.8);
-        controls.target.set(-2.4, 1.8, -0.6);
+        camera.position.set(-0.5, 1.75, 1.3);
+        controls.target.set(-2.4, 1.6, -0.6);
       } else if (viewKey === 'overview') {
-        camera.position.set(1.5, 2.2, 2.6);
-        controls.target.set(0, 1.55, -1.4);
+        camera.position.set(0.0, 2.5, 4.4);
+        controls.target.set(0, 1.7, -1.4);
       } else if (viewKey === 'patient') {
         // Vista lateral do paciente inteiro
         camera.position.set(2.2, 1.7, -0.5);
@@ -1736,7 +2336,8 @@
       const height = window.innerHeight || document.documentElement.clientHeight;
 
       scene = new THREE.Scene();
-      scene.background = new THREE.Color(0x050b14);
+      scene.background = new THREE.Color(0x0b0603);
+      scene.fog = new THREE.FogExp2(0x120a04, 0.05);
 
       camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 100);
       camera.position.set(0, 1.78, 1.05);
@@ -1747,7 +2348,7 @@
       renderer.xr.enabled = true;
       renderer.outputEncoding = THREE.sRGBEncoding;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 0.9;
+      renderer.toneMappingExposure = 0.62;
       container.appendChild(renderer.domElement);
 
       const vrBtn = VRButtonHelper.createButton(renderer);
@@ -1785,6 +2386,7 @@
 
       // Respiração torácica (o lençol sobe e desce sobre o tórax)
       updateSheetBreath(time);
+      updateEgyptFx(time);
 
       // Brilho/pulsação na ponta do instrumento ativo
       if (tool3DMesh && tool3DMesh.userData.glows) {
